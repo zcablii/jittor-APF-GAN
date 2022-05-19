@@ -1,0 +1,100 @@
+----------------- Options ---------------
+            D_steps_per_G: 1                             
+             aspect_ratio: 1.3333333333333333            
+                batchSize: 32                            
+                    beta1: 0.0                           
+                    beta2: 0.9                           
+      cache_filelist_read: True                          
+     cache_filelist_write: True                          
+          checkpoints_dir: ./checkpoints                 
+   contain_dontcare_label: False                         
+           continue_train: True                          	[default: False]
+                crop_size: 256                           
+                 dataroot: ./datasets/coco_stuff/        
+             dataset_mode: custom                        
+                    debug: False                         
+             display_freq: 10000                         
+          display_winsize: 256                           
+           fade_in_epochs: 50                            
+                 gan_mode: hinge                         
+                  gpu_ids: 0                             
+                image_dir: ../data/train/imgs            
+                init_type: xavier                        
+            init_variance: 0.02                          
+             instance_dir:                               
+                  isTrain: True                          	[default: None]
+                label_dir: ../data/train/gray_label      	[default: ../data/train/labels]
+                 label_nc: 29                            
+              lambda_feat: 10.0                          
+               lambda_kld: 0.05                          
+               lambda_vgg: 10.0                          
+       load_from_opt_file: False                         
+                load_size: 256                           
+                       lr: 0.0002                        
+         max_dataset_size: 9223372036854775807           
+                    model: pix2pix                       
+                 nThreads: 8                             
+               n_layers_D: 4                             
+                     name: label2img                     
+                      ndf: 64                            
+                      nef: 16                            
+                     netD: multiscale                    
+             netD_subarch: n_layer                       
+                     netG: spade                         
+                      ngf: 64                            
+                    niter: 200                           
+              niter_decay: 0                             
+                  no_TTUR: False                         
+                  no_flip: False                         
+          no_ganFeat_loss: False                         
+                  no_html: False                         
+              no_instance: True                          
+         no_pairing_check: False                         
+              no_vgg_loss: False                         
+                   norm_D: spectralinstance              
+                   norm_E: spectralinstance              
+                   norm_G: spectralspadesyncbatch3x3     
+                    num_D: 2                             
+    num_upsampling_layers: normal                        
+                optimizer: adam                          
+                output_nc: 3                             
+                    phase: train                         
+          preprocess_mode: fixed                         
+               print_freq: 100                           
+          save_epoch_freq: 10                            
+         save_latest_freq: 500000                        
+           serial_batches: False                         
+                   tf_log: False                         
+                  use_vae: False                         
+              which_epoch: latest                        
+                    z_dim: 256                           
+----------------- End -------------------
+train.py --label_dir=../data/train/gray_label --image_dir=../data/train/imgs --continue_train
+dataset [CustomDataset] of size 10000 was created
+Network [SPADEGenerator] was created. Total number of parameters: 93.3 million. To see the architecture, do print(network).
+Network [MultiscaleDiscriminator] was created. Total number of parameters: 5.6 million. To see the architecture, do print(network).
+Resuming from epoch 301 at iteration 0
+create web directory ./checkpoints/label2img/web...
+Total epochs:  451
+/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/upsampling.py:129: UserWarning: nn.Upsample is deprecated. Use nn.functional.interpolate instead.
+  warnings.warn("nn.{} is deprecated. Use nn.functional.interpolate instead.".format(self.name))
+data:  torch.Size([32, 29, 192, 256]) torch.Size([32, 3, 192, 256])
+G epoch:  300 resolution_level:  3 fade_weight:  1
+Traceback (most recent call last):
+  File "train.py", line 47, in <module>
+    trainer.run_generator_one_step(data_i,epoch-1 )
+  File "/home/lyx/CGAN/SPADE/trainers/pix2pix_trainer.py", line 35, in run_generator_one_step
+    g_losses, generated = self.pix2pix_model(data, epoch, mode='generator') 
+  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/parallel/data_parallel.py", line 141, in forward
+    return self.module(*inputs[0], **kwargs[0])
+  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/module.py", line 489, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/lyx/CGAN/SPADE/models/pix2pix_model.py", line 47, in forward
+    input_semantics, real_image, epoch)
+  File "/home/lyx/CGAN/SPADE/models/pix2pix_model.py", line 143, in compute_generator_loss
+    input_semantics, fake_image, real_image, epoch)
+  File "/home/lyx/CGAN/SPADE/models/pix2pix_model.py", line 220, in discriminate
+    fake_and_real = torch.cat([fake_concat, real_concat], dim=0)
+RuntimeError: invalid argument 0: Sizes of tensors must match except in dimension 0. Got 32 and 93 in dimension 1 at /opt/conda/conda-bld/pytorch_1544199946412/work/aten/src/THC/generic/THCTensorMath.cu:83

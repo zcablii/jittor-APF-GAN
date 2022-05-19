@@ -1,0 +1,1726 @@
+[38;5;2m[i 0506 09:59:38.150985 24 compiler.py:951] Jittor(1.3.3.13) src: /home/lyx/anaconda3/envs/jittor/lib/python3.8/site-packages/jittor[m
+[38;5;2m[i 0506 09:59:38.156723 24 compiler.py:952] g++ at /usr/bin/g++(7.5.0)[m
+[38;5;2m[i 0506 09:59:38.156821 24 compiler.py:953] cache_path: /home/lyx/.cache/jittor/jt1.3.3/g++7.5.0/py3.8.13/Linux-5.4.0-97x8e/IntelRXeonRGolx85/default[m
+[38;5;2m[i 0506 09:59:38.171331 24 install_cuda.py:53] cuda_driver_version: [11, 4][m
+[38;5;2m[i 0506 09:59:38.178387 24 __init__.py:411] Found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/bin/nvcc(11.2.152) at /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/bin/nvcc.[m
+[38;5;2m[i 0506 09:59:38.251539 24 __init__.py:411] Found gdb(8.1.0) at /usr/bin/gdb.[m
+[38;5;2m[i 0506 09:59:38.257975 24 __init__.py:411] Found addr2line(2.30) at /usr/bin/addr2line.[m
+[38;5;2m[i 0506 09:59:38.476739 24 compiler.py:1006] cuda key:cu11.2.152_sm_75[m
+[38;5;2m[i 0506 09:59:38.696253 24 __init__.py:227] Total mem: 376.56GB, using 16 procs for compiling.[m
+[38;5;2m[i 0506 09:59:38.800853 24 jit_compiler.cc:28] Load cc_path: /usr/bin/g++[m
+[38;5;2m[i 0506 09:59:39.035473 24 init.cc:62] Found cuda archs: [75,][m
+[38;5;2m[i 0506 09:59:39.755968 24 compile_extern.py:516] mpicc not found, distribution disabled.[m
+[38;5;2m[i 0506 09:59:39.817692 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/include/cublas.h[m
+[38;5;2m[i 0506 09:59:39.831433 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcublas.so[m
+[38;5;2m[i 0506 09:59:39.831563 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcublasLt.so.11[m
+[38;5;2m[i 0506 09:59:40.576150 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/include/cudnn.h[m
+[38;5;2m[i 0506 09:59:40.608878 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcudnn.so.8[m
+[38;5;2m[i 0506 09:59:40.609047 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcudnn_ops_infer.so.8[m
+[38;5;2m[i 0506 09:59:40.612842 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcudnn_ops_train.so.8[m
+[38;5;2m[i 0506 09:59:40.613543 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcudnn_cnn_infer.so.8[m
+[38;5;2m[i 0506 09:59:40.643786 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcudnn_cnn_train.so.8[m
+[38;5;2m[i 0506 09:59:41.515658 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/include/curand.h[m
+[38;5;2m[i 0506 09:59:41.560760 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcurand.so[m
+[38;5;2m[i 0506 09:59:41.583928 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/include/cufft.h[m
+[38;5;2m[i 0506 09:59:41.629762 24 compile_extern.py:30] found /home/lyx/.cache/jittor/jtcuda/cuda11.2_cudnn8_linux/lib64/libcufft.so[m
+[38;5;2m[i 0506 09:59:41.897471 24 cuda_flags.cc:32] CUDA enabled.[m
+Namespace(b1=0.5, b2=0.999, batch_size=128, channels=3, checkpoint_interval=5, data_path='../data', decay_epoch=100, epoch=0, input_hight=192, input_width=256, lr=0.0002, model='mae_vit_base_patch16', n_cpu=8, n_epochs=400, output_path='./MAE_force_enhanced', resume='../pretrained/mae_visualize_vit_base.pth', sample_interval=500)
+Resume checkpoint ../pretrained/mae_visualize_vit_base.pth
+from train split load 10000 images.
+from train_sample split load 10 images.
+from eval split load 1000 images.
+Most similiar photos:  535142162_836d4c2641_b, 2124612342_5750189d39_b, 1901997554_8dfb6f70f3_b, 8872490126_12b1ddb3a2_b, 38656988244_1cb7b1b300_b, 14286866423_d4d0499a8a_b, 307942600_ea7ff1bc99_b, 15027147556_f60a440b15_b, 44735692144_bea9f59c0e_b, 1027766307_ad08518768_b
+[Epoch 0/400] [Batch 0/79] [G loss: 0.312895] ETA: 12 days, 7:56:39.361515
+[Epoch 0/400] [Batch 5/79] [G loss: 0.234669] ETA: 20:53:56.336488
+[Epoch 0/400] [Batch 10/79] [G loss: 0.199498] ETA: 21:01:35.157802
+[Epoch 0/400] [Batch 15/79] [G loss: 0.170061] ETA: 21:04:11.023147
+[Epoch 0/400] [Batch 20/79] [G loss: 0.179588] ETA: 21:11:27.495999
+[Epoch 0/400] [Batch 25/79] [G loss: 0.163981] ETA: 21:19:18.553809
+[Epoch 0/400] [Batch 30/79] [G loss: 0.146124] ETA: 21:22:37.384672
+[Epoch 0/400] [Batch 35/79] [G loss: 0.159924] ETA: 21:22:28.620485
+[Epoch 0/400] [Batch 40/79] [G loss: 0.160057] ETA: 21:23:22.752428
+[Epoch 0/400] [Batch 45/79] [G loss: 0.152454] ETA: 21:30:15.213100
+[Epoch 0/400] [Batch 50/79] [G loss: 0.130207] ETA: 21:24:06.910059
+[Epoch 0/400] [Batch 55/79] [G loss: 0.158134] ETA: 21:29:14.601853
+[Epoch 0/400] [Batch 60/79] [G loss: 0.162508] ETA: 21:24:21.419086
+[Epoch 0/400] [Batch 65/79] [G loss: 0.154378] ETA: 21:26:21.912199
+[Epoch 0/400] [Batch 70/79] [G loss: 0.144723] ETA: 21:26:56.470127
+[Epoch 0/400] [Batch 75/79] [G loss: 0.155768] ETA: 21:32:19.670789
+Most similiar photos:  535142162_836d4c2641_b, 2124612342_5750189d39_b, 1901997554_8dfb6f70f3_b, 8872490126_12b1ddb3a2_b, 38656988244_1cb7b1b300_b, 14286866423_d4d0499a8a_b, 307942600_ea7ff1bc99_b, 15027147556_f60a440b15_b, 44735692144_bea9f59c0e_b, 1027766307_ad08518768_b
+[Epoch 1/400] [Batch 1/79] [G loss: 0.151695] ETA: 21:11:46.290398
+[Epoch 1/400] [Batch 6/79] [G loss: 0.154648] ETA: 21:17:44.080939
+[Epoch 1/400] [Batch 11/79] [G loss: 0.157969] ETA: 21:19:10.219800
+[Epoch 1/400] [Batch 16/79] [G loss: 0.144844] ETA: 21:20:25.743934
+[Epoch 1/400] [Batch 21/79] [G loss: 0.157433] ETA: 21:25:13.755941
+[Epoch 1/400] [Batch 26/79] [G loss: 0.148607] ETA: 21:27:05.909643
+[Epoch 1/400] [Batch 31/79] [G loss: 0.140830] ETA: 21:33:35.429590
+[Epoch 1/400] [Batch 36/79] [G loss: 0.153541] ETA: 21:24:53.834896
+[Epoch 1/400] [Batch 41/79] [G loss: 0.149113] ETA: 21:24:58.268986
+[Epoch 1/400] [Batch 46/79] [G loss: 0.160425] ETA: 21:23:33.915294
+[Epoch 1/400] [Batch 51/79] [G loss: 0.150400] ETA: 21:30:22.668815
+[Epoch 1/400] [Batch 56/79] [G loss: 0.147441] ETA: 21:31:55.776149
+[Epoch 1/400] [Batch 61/79] [G loss: 0.130238] ETA: 21:24:35.231347
+[Epoch 1/400] [Batch 66/79] [G loss: 0.165848] ETA: 21:33:43.550996
+[Epoch 1/400] [Batch 71/79] [G loss: 0.159407] ETA: 21:19:49.874792
+[Epoch 1/400] [Batch 76/79] [G loss: 0.147829] ETA: 21:20:09.828985
+[Epoch 2/400] [Batch 2/79] [G loss: 0.136143] ETA: 21:22:55.507851
+[Epoch 2/400] [Batch 7/79] [G loss: 0.150105] ETA: 21:33:29.173403
+[Epoch 2/400] [Batch 12/79] [G loss: 0.159187] ETA: 21:08:16.548698
+[Epoch 2/400] [Batch 17/79] [G loss: 0.138186] ETA: 21:27:13.440220
+[Epoch 2/400] [Batch 22/79] [G loss: 0.156348] ETA: 21:31:14.126530
+[Epoch 2/400] [Batch 27/79] [G loss: 0.140531] ETA: 21:23:26.260824
+[Epoch 2/400] [Batch 32/79] [G loss: 0.132759] ETA: 21:25:09.271030
+[Epoch 2/400] [Batch 37/79] [G loss: 0.138002] ETA: 21:21:09.802104
+[Epoch 2/400] [Batch 42/79] [G loss: 0.150261] ETA: 21:19:29.322109
+[Epoch 2/400] [Batch 47/79] [G loss: 0.132158] ETA: 21:21:42.676402
+[Epoch 2/400] [Batch 52/79] [G loss: 0.151033] ETA: 21:30:14.216139
+[Epoch 2/400] [Batch 57/79] [G loss: 0.139608] ETA: 21:22:07.230742
+[Epoch 2/400] [Batch 62/79] [G loss: 0.151304] ETA: 21:30:35.850062
+[Epoch 2/400] [Batch 67/79] [G loss: 0.132532] ETA: 21:17:59.984033
+[Epoch 2/400] [Batch 72/79] [G loss: 0.141365] ETA: 21:17:21.437364
+[Epoch 2/400] [Batch 77/79] [G loss: 0.131399] ETA: 21:19:15.173575
+[Epoch 3/400] [Batch 3/79] [G loss: 0.131877] ETA: 21:30:11.424103
+[Epoch 3/400] [Batch 8/79] [G loss: 0.140294] ETA: 21:20:55.088725
+[Epoch 3/400] [Batch 13/79] [G loss: 0.135672] ETA: 21:19:24.082575
+[Epoch 3/400] [Batch 18/79] [G loss: 0.113221] ETA: 21:17:49.604073
+[Epoch 3/400] [Batch 23/79] [G loss: 0.124391] ETA: 21:20:13.711572
+[Epoch 3/400] [Batch 28/79] [G loss: 0.127481] ETA: 21:24:57.182647
+[Epoch 3/400] [Batch 33/79] [G loss: 0.146694] ETA: 21:17:25.044918
+[Epoch 3/400] [Batch 38/79] [G loss: 0.120337] ETA: 21:18:54.413981
+[Epoch 3/400] [Batch 43/79] [G loss: 0.136447] ETA: 21:17:32.197552
+[Epoch 3/400] [Batch 48/79] [G loss: 0.117053] ETA: 21:17:50.138497
+[Epoch 3/400] [Batch 53/79] [G loss: 0.122079] ETA: 21:17:59.223917
+[Epoch 3/400] [Batch 58/79] [G loss: 0.122800] ETA: 21:15:55.665225
+[Epoch 3/400] [Batch 63/79] [G loss: 0.123182] ETA: 21:22:08.077555
+[Epoch 3/400] [Batch 68/79] [G loss: 0.135023] ETA: 21:17:05.566171
+[Epoch 3/400] [Batch 73/79] [G loss: 0.113597] ETA: 21:15:27.084754
+[Epoch 3/400] [Batch 78/79] [G loss: 0.099862] ETA: 2:59:20.983995
+[Epoch 4/400] [Batch 4/79] [G loss: 0.121612] ETA: 21:17:13.980446
+[Epoch 4/400] [Batch 9/79] [G loss: 0.122502] ETA: 21:22:48.735820
+[Epoch 4/400] [Batch 14/79] [G loss: 0.110173] ETA: 21:17:41.347954
+[Epoch 4/400] [Batch 19/79] [G loss: 0.114518] ETA: 21:14:14.842110
+[Epoch 4/400] [Batch 24/79] [G loss: 0.103769] ETA: 21:10:55.553241
+[Epoch 4/400] [Batch 29/79] [G loss: 0.116800] ETA: 21:15:17.626201
+[Epoch 4/400] [Batch 34/79] [G loss: 0.116893] ETA: 21:15:24.794102
+[Epoch 4/400] [Batch 39/79] [G loss: 0.101765] ETA: 21:26:44.702618
+[Epoch 4/400] [Batch 44/79] [G loss: 0.113800] ETA: 21:23:13.399115
+[Epoch 4/400] [Batch 49/79] [G loss: 0.111570] ETA: 21:13:24.342978
+[Epoch 4/400] [Batch 54/79] [G loss: 0.114819] ETA: 21:12:35.047159
+[Epoch 4/400] [Batch 59/79] [G loss: 0.109398] ETA: 21:22:58.779203
+[Epoch 4/400] [Batch 64/79] [G loss: 0.098847] ETA: 21:11:23.890386
+[Epoch 4/400] [Batch 69/79] [G loss: 0.117193] ETA: 21:38:43.871942
+[Epoch 4/400] [Batch 74/79] [G loss: 0.112851] ETA: 21:19:19.084973
+[Epoch 5/400] [Batch 0/79] [G loss: 0.110041] ETA: 21:14:11.529822
+[Epoch 5/400] [Batch 5/79] [G loss: 0.098857] ETA: 21:12:42.706375
+[Epoch 5/400] [Batch 10/79] [G loss: 0.116821] ETA: 21:20:08.044080
+[Epoch 5/400] [Batch 15/79] [G loss: 0.098808] ETA: 21:14:07.477472
+[Epoch 5/400] [Batch 20/79] [G loss: 0.108117] ETA: 21:13:23.705027
+[Epoch 5/400] [Batch 25/79] [G loss: 0.110489] ETA: 21:13:32.061701
+[Epoch 5/400] [Batch 30/79] [G loss: 0.108025] ETA: 21:12:54.708098
+[Epoch 5/400] [Batch 35/79] [G loss: 0.110478] ETA: 21:19:32.113144
+[Epoch 5/400] [Batch 40/79] [G loss: 0.115671] ETA: 21:13:53.057407
+[Epoch 5/400] [Batch 45/79] [G loss: 0.100997] ETA: 21:10:49.924936
+[Epoch 5/400] [Batch 50/79] [G loss: 0.109386] ETA: 21:07:47.493532
+[Epoch 5/400] [Batch 55/79] [G loss: 0.102696] ETA: 21:23:45.470209
+[Epoch 5/400] [Batch 60/79] [G loss: 0.100276] ETA: 21:07:46.861736
+[Epoch 5/400] [Batch 65/79] [G loss: 0.116804] ETA: 21:08:33.629079
+[Epoch 5/400] [Batch 70/79] [G loss: 0.105105] ETA: 21:09:48.496422
+[Epoch 5/400] [Batch 75/79] [G loss: 0.101590] ETA: 21:07:37.955029
+Most similiar photos:  535142162_836d4c2641_b, 2124612342_5750189d39_b, 1901997554_8dfb6f70f3_b, 8485334348_2a56d71b13_b, 18535649322_d896f63196_b, 18690135234_ea0be7a84c_b, 955477624_20a3759dff_b, 15027147556_f60a440b15_b, 4286840651_be8f4c40a9_b, 1027766307_ad08518768_b
+[Epoch 6/400] [Batch 1/79] [G loss: 0.105616] ETA: 21:05:36.668247
+[Epoch 6/400] [Batch 6/79] [G loss: 0.109937] ETA: 21:02:06.737614
+[Epoch 6/400] [Batch 11/79] [G loss: 0.097755] ETA: 21:07:21.914779
+[Epoch 6/400] [Batch 16/79] [G loss: 0.098794] ETA: 21:08:43.396797
+[Epoch 6/400] [Batch 21/79] [G loss: 0.102667] ETA: 21:11:49.028803
+[Epoch 6/400] [Batch 26/79] [G loss: 0.106724] ETA: 21:18:35.150952
+[Epoch 6/400] [Batch 31/79] [G loss: 0.103336] ETA: 21:05:47.502311
+[Epoch 6/400] [Batch 36/79] [G loss: 0.096013] ETA: 21:08:50.422454
+[Epoch 6/400] [Batch 41/79] [G loss: 0.095837] ETA: 21:06:15.067825
+[Epoch 6/400] [Batch 46/79] [G loss: 0.097448] ETA: 21:06:07.952814
+[Epoch 6/400] [Batch 51/79] [G loss: 0.094263] ETA: 21:08:50.158186
+[Epoch 6/400] [Batch 56/79] [G loss: 0.096811] ETA: 21:09:12.443299
+[Epoch 6/400] [Batch 61/79] [G loss: 0.097456] ETA: 21:09:04.284099
+[Epoch 6/400] [Batch 66/79] [G loss: 0.095081] ETA: 21:08:50.851021
+[Epoch 6/400] [Batch 71/79] [G loss: 0.090455] ETA: 20:51:42.917454
+[Epoch 6/400] [Batch 76/79] [G loss: 0.095144] ETA: 21:04:49.886820
+[Epoch 7/400] [Batch 2/79] [G loss: 0.092247] ETA: 21:06:11.978749
+[Epoch 7/400] [Batch 7/79] [G loss: 0.095183] ETA: 21:04:11.547470
+[Epoch 7/400] [Batch 12/79] [G loss: 0.089878] ETA: 21:04:04.878606
+[Epoch 7/400] [Batch 17/79] [G loss: 0.084204] ETA: 21:13:44.324684
+[Epoch 7/400] [Batch 22/79] [G loss: 0.103253] ETA: 21:06:23.505571
+[Epoch 7/400] [Batch 27/79] [G loss: 0.091572] ETA: 21:15:15.505471
+[Epoch 7/400] [Batch 32/79] [G loss: 0.080570] ETA: 21:12:53.782343
+[Epoch 7/400] [Batch 37/79] [G loss: 0.085541] ETA: 21:04:49.108169
+[Epoch 7/400] [Batch 42/79] [G loss: 0.088313] ETA: 21:03:56.525484
+[Epoch 7/400] [Batch 47/79] [G loss: 0.092012] ETA: 21:06:31.827011
+[Epoch 7/400] [Batch 52/79] [G loss: 0.088418] ETA: 21:05:14.192847
+[Epoch 7/400] [Batch 57/79] [G loss: 0.085497] ETA: 21:05:36.473536
+[Epoch 7/400] [Batch 62/79] [G loss: 0.085333] ETA: 21:06:32.111969
+[Epoch 7/400] [Batch 67/79] [G loss: 0.087984] ETA: 21:04:38.022985
+[Epoch 7/400] [Batch 72/79] [G loss: 0.092854] ETA: 21:04:05.549136
+[Epoch 7/400] [Batch 77/79] [G loss: 0.087281] ETA: 20:59:45.032432
+[Epoch 8/400] [Batch 3/79] [G loss: 0.085815] ETA: 21:03:56.359895
+[Epoch 8/400] [Batch 8/79] [G loss: 0.095311] ETA: 21:12:03.631153
+[Epoch 8/400] [Batch 13/79] [G loss: 0.087128] ETA: 21:03:09.801964
+[Epoch 8/400] [Batch 18/79] [G loss: 0.085286] ETA: 21:06:12.499907
+[Epoch 8/400] [Batch 23/79] [G loss: 0.085140] ETA: 21:12:29.600576
+[Epoch 8/400] [Batch 28/79] [G loss: 0.079202] ETA: 21:02:24.585619
+[Epoch 8/400] [Batch 33/79] [G loss: 0.084933] ETA: 21:00:38.152820
+[Epoch 8/400] [Batch 38/79] [G loss: 0.080779] ETA: 21:00:06.157022
+[Epoch 8/400] [Batch 43/79] [G loss: 0.074717] ETA: 21:00:57.763761
+[Epoch 8/400] [Batch 48/79] [G loss: 0.086847] ETA: 20:58:29.342775
+[Epoch 8/400] [Batch 53/79] [G loss: 0.091843] ETA: 20:59:51.388983
+[Epoch 8/400] [Batch 58/79] [G loss: 0.086999] ETA: 21:07:48.771987
+[Epoch 8/400] [Batch 63/79] [G loss: 0.090545] ETA: 21:00:15.178051
+[Epoch 8/400] [Batch 68/79] [G loss: 0.091290] ETA: 21:17:25.880270
+[Epoch 8/400] [Batch 73/79] [G loss: 0.074404] ETA: 21:00:16.631829
+[Epoch 8/400] [Batch 78/79] [G loss: 0.091688] ETA: 2:57:10.427313
+[Epoch 9/400] [Batch 4/79] [G loss: 0.078456] ETA: 20:57:34.804022
+[Epoch 9/400] [Batch 9/79] [G loss: 0.075819] ETA: 20:59:15.784950
+[Epoch 9/400] [Batch 14/79] [G loss: 0.079482] ETA: 20:58:53.444285
+[Epoch 9/400] [Batch 19/79] [G loss: 0.079796] ETA: 21:00:46.118395
+[Epoch 9/400] [Batch 24/79] [G loss: 0.082589] ETA: 20:59:39.020970
+[Epoch 9/400] [Batch 29/79] [G loss: 0.077178] ETA: 21:09:59.788375
+[Epoch 9/400] [Batch 34/79] [G loss: 0.081956] ETA: 20:58:21.634094
+[Epoch 9/400] [Batch 39/79] [G loss: 0.095583] ETA: 20:59:19.678245
+[Epoch 9/400] [Batch 44/79] [G loss: 0.081651] ETA: 20:59:40.679473
+[Epoch 9/400] [Batch 49/79] [G loss: 0.079464] ETA: 21:08:57.948503
+[Epoch 9/400] [Batch 54/79] [G loss: 0.084068] ETA: 20:57:50.603038
+[Epoch 9/400] [Batch 59/79] [G loss: 0.077870] ETA: 20:56:43.802872
+[Epoch 9/400] [Batch 64/79] [G loss: 0.083330] ETA: 21:01:04.694184
+[Epoch 9/400] [Batch 69/79] [G loss: 0.081443] ETA: 20:57:49.983268
+[Epoch 9/400] [Batch 74/79] [G loss: 0.080267] ETA: 20:56:34.828362
+[Epoch 10/400] [Batch 0/79] [G loss: 0.077963] ETA: 20:57:59.917767
+[Epoch 10/400] [Batch 5/79] [G loss: 0.082899] ETA: 20:56:48.618857
+[Epoch 10/400] [Batch 10/79] [G loss: 0.087233] ETA: 21:03:10.559769
+[Epoch 10/400] [Batch 15/79] [G loss: 0.070632] ETA: 20:59:57.023706
+[Epoch 10/400] [Batch 20/79] [G loss: 0.079147] ETA: 20:55:43.975027
+[Epoch 10/400] [Batch 25/79] [G loss: 0.088398] ETA: 21:04:55.129147
+[Epoch 10/400] [Batch 30/79] [G loss: 0.088672] ETA: 20:55:02.105112
+[Epoch 10/400] [Batch 35/79] [G loss: 0.083317] ETA: 20:52:51.910518
+[Epoch 10/400] [Batch 40/79] [G loss: 0.077316] ETA: 20:57:19.864547
+[Epoch 10/400] [Batch 45/79] [G loss: 0.083362] ETA: 20:59:03.439368
+[Epoch 10/400] [Batch 50/79] [G loss: 0.076708] ETA: 20:54:31.693602
+[Epoch 10/400] [Batch 55/79] [G loss: 0.081213] ETA: 21:03:20.168839
+[Epoch 10/400] [Batch 60/79] [G loss: 0.079567] ETA: 20:53:35.566099
+[Epoch 10/400] [Batch 65/79] [G loss: 0.072418] ETA: 20:53:13.205618
+[Epoch 10/400] [Batch 70/79] [G loss: 0.087889] ETA: 21:00:49.226079
+[Epoch 10/400] [Batch 75/79] [G loss: 0.074943] ETA: 20:53:36.042155
+Most similiar photos:  535142162_836d4c2641_b, 2124612342_5750189d39_b, 1901997554_8dfb6f70f3_b, 8485334348_2a56d71b13_b, 18535649322_d896f63196_b, 18690135234_ea0be7a84c_b, 955477624_20a3759dff_b, 3364408729_9e4f14edba_b, 44735692144_bea9f59c0e_b, 3371762888_bbb418fa12_b
+[Epoch 11/400] [Batch 1/79] [G loss: 0.076908] ETA: 20:41:38.510504
+[Epoch 11/400] [Batch 6/79] [G loss: 0.081852] ETA: 20:48:58.293636
+[Epoch 11/400] [Batch 11/79] [G loss: 0.080338] ETA: 20:58:41.271973
+[Epoch 11/400] [Batch 16/79] [G loss: 0.076526] ETA: 20:48:06.918277
+[Epoch 11/400] [Batch 21/79] [G loss: 0.075028] ETA: 20:49:14.323330
+[Epoch 11/400] [Batch 26/79] [G loss: 0.081281] ETA: 20:53:18.920578
+[Epoch 11/400] [Batch 31/79] [G loss: 0.090706] ETA: 20:52:39.029627
+[Epoch 11/400] [Batch 36/79] [G loss: 0.088319] ETA: 20:53:32.645749
+[Epoch 11/400] [Batch 41/79] [G loss: 0.082557] ETA: 20:50:40.201607
+[Epoch 11/400] [Batch 46/79] [G loss: 0.069188] ETA: 21:08:21.880568
+[Epoch 11/400] [Batch 51/79] [G loss: 0.077494] ETA: 20:52:20.224524
+[Epoch 11/400] [Batch 56/79] [G loss: 0.073697] ETA: 20:51:16.864743
+[Epoch 11/400] [Batch 61/79] [G loss: 0.081636] ETA: 20:49:00.142717
+[Epoch 11/400] [Batch 66/79] [G loss: 0.078973] ETA: 20:49:52.248652
+[Epoch 11/400] [Batch 71/79] [G loss: 0.077202] ETA: 20:55:35.509400
+[Epoch 11/400] [Batch 76/79] [G loss: 0.073700] ETA: 20:52:33.332534
+[Epoch 12/400] [Batch 2/79] [G loss: 0.077747] ETA: 20:57:36.409121
+[Epoch 12/400] [Batch 7/79] [G loss: 0.076815] ETA: 20:51:19.491602
+[Epoch 12/400] [Batch 12/79] [G loss: 0.075629] ETA: 20:55:13.257103
+[Epoch 12/400] [Batch 17/79] [G loss: 0.070067] ETA: 20:54:57.066770
+[Epoch 12/400] [Batch 22/79] [G loss: 0.069742] ETA: 20:57:32.441475
+[Epoch 12/400] [Batch 27/79] [G loss: 0.080321] ETA: 20:48:12.127365
+[Epoch 12/400] [Batch 32/79] [G loss: 0.083280] ETA: 20:49:02.792826
+[Epoch 12/400] [Batch 37/79] [G loss: 0.078225] ETA: 20:49:54.218760
+[Epoch 12/400] [Batch 42/79] [G loss: 0.082924] ETA: 20:51:37.600203
+[Epoch 12/400] [Batch 47/79] [G loss: 0.071109] ETA: 20:55:10.848281
+[Epoch 12/400] [Batch 52/79] [G loss: 0.066752] ETA: 20:56:08.662691
+[Epoch 12/400] [Batch 57/79] [G loss: 0.068056] ETA: 20:55:10.669914
+[Epoch 12/400] [Batch 62/79] [G loss: 0.066722] ETA: 20:47:54.713423
+[Epoch 12/400] [Batch 67/79] [G loss: 0.066073] ETA: 20:47:59.144579
+[Epoch 12/400] [Batch 72/79] [G loss: 0.081538] ETA: 20:46:16.876130
+[Epoch 12/400] [Batch 77/79] [G loss: 0.076827] ETA: 20:48:48.214818
+[Epoch 13/400] [Batch 3/79] [G loss: 0.071794] ETA: 20:46:54.579213
+[Epoch 13/400] [Batch 8/79] [G loss: 0.074606] ETA: 20:47:50.923052
+[Epoch 13/400] [Batch 13/79] [G loss: 0.072563] ETA: 20:46:18.280716
+[Epoch 13/400] [Batch 18/79] [G loss: 0.066836] ETA: 20:44:41.934829
+[Epoch 13/400] [Batch 23/79] [G loss: 0.070491] ETA: 20:47:43.139534
+[Epoch 13/400] [Batch 28/79] [G loss: 0.063660] ETA: 20:44:23.195218
+[Epoch 13/400] [Batch 33/79] [G loss: 0.068888] ETA: 20:52:21.296353
+[Epoch 13/400] [Batch 38/79] [G loss: 0.073670] ETA: 20:46:31.080595
+[Epoch 13/400] [Batch 43/79] [G loss: 0.069792] ETA: 20:59:11.309118
+[Epoch 13/400] [Batch 48/79] [G loss: 0.078084] ETA: 20:46:09.614571
+[Epoch 13/400] [Batch 53/79] [G loss: 0.081830] ETA: 20:47:03.685637
+[Epoch 13/400] [Batch 58/79] [G loss: 0.060321] ETA: 20:47:39.713948
+[Epoch 13/400] [Batch 63/79] [G loss: 0.073764] ETA: 20:49:47.715347
+[Epoch 13/400] [Batch 68/79] [G loss: 0.081559] ETA: 20:52:16.289610
+[Epoch 13/400] [Batch 73/79] [G loss: 0.065043] ETA: 20:45:55.382895
+[Epoch 13/400] [Batch 78/79] [G loss: 0.064144] ETA: 2:54:21.171702
+[Epoch 14/400] [Batch 4/79] [G loss: 0.073244] ETA: 20:43:16.520207
+[Epoch 14/400] [Batch 9/79] [G loss: 0.074262] ETA: 20:43:14.215606
+[Epoch 14/400] [Batch 14/79] [G loss: 0.072473] ETA: 20:43:32.800369
+[Epoch 14/400] [Batch 19/79] [G loss: 0.074863] ETA: 20:42:07.197891
+[Epoch 14/400] [Batch 24/79] [G loss: 0.074541] ETA: 20:51:36.509919
+[Epoch 14/400] [Batch 29/79] [G loss: 0.083607] ETA: 20:42:56.430116
+[Epoch 14/400] [Batch 34/79] [G loss: 0.079273] ETA: 20:45:42.979264
+[Epoch 14/400] [Batch 39/79] [G loss: 0.076323] ETA: 20:39:00.066391
+[Epoch 14/400] [Batch 44/79] [G loss: 0.072519] ETA: 20:39:12.058554
+[Epoch 14/400] [Batch 49/79] [G loss: 0.070213] ETA: 20:44:03.297693
+[Epoch 14/400] [Batch 54/79] [G loss: 0.070339] ETA: 20:44:44.889345
+[Epoch 14/400] [Batch 59/79] [G loss: 0.074690] ETA: 20:42:02.670979
+[Epoch 14/400] [Batch 64/79] [G loss: 0.074045] ETA: 20:39:17.744954
+[Epoch 14/400] [Batch 69/79] [G loss: 0.064600] ETA: 20:50:58.228600
+[Epoch 14/400] [Batch 74/79] [G loss: 0.072020] ETA: 20:41:50.137196
+[Epoch 15/400] [Batch 0/79] [G loss: 0.073410] ETA: 20:43:18.852946
+[Epoch 15/400] [Batch 5/79] [G loss: 0.064464] ETA: 20:39:54.463511
+[Epoch 15/400] [Batch 10/79] [G loss: 0.075625] ETA: 20:40:07.146817
+[Epoch 15/400] [Batch 15/79] [G loss: 0.061251] ETA: 20:38:47.954483
+[Epoch 15/400] [Batch 20/79] [G loss: 0.079046] ETA: 20:43:30.483097
+[Epoch 15/400] [Batch 25/79] [G loss: 0.066903] ETA: 20:38:31.126807
+[Epoch 15/400] [Batch 30/79] [G loss: 0.073860] ETA: 20:38:49.631087
+[Epoch 15/400] [Batch 35/79] [G loss: 0.067857] ETA: 20:47:57.150912
+[Epoch 15/400] [Batch 40/79] [G loss: 0.070739] ETA: 20:40:16.122615
+[Epoch 15/400] [Batch 45/79] [G loss: 0.075729] ETA: 20:36:19.119477
+[Epoch 15/400] [Batch 50/79] [G loss: 0.075026] ETA: 20:48:25.018307
+[Epoch 15/400] [Batch 55/79] [G loss: 0.067020] ETA: 20:36:32.811699
+[Epoch 15/400] [Batch 60/79] [G loss: 0.073836] ETA: 20:38:30.449864
+[Epoch 15/400] [Batch 65/79] [G loss: 0.065930] ETA: 20:39:50.114117
+[Epoch 15/400] [Batch 70/79] [G loss: 0.069284] ETA: 20:46:55.890423
+[Epoch 15/400] [Batch 75/79] [G loss: 0.077012] ETA: 20:39:40.367188
+Most similiar photos:  535142162_836d4c2641_b, 2124612342_5750189d39_b, 1901997554_8dfb6f70f3_b, 16893028003_737c554fcd_b, 18535649322_d896f63196_b, 18690135234_ea0be7a84c_b, 955477624_20a3759dff_b, 4354017170_3ba30e7125_b, 25743317_c7012edd72_b, 3371762888_bbb418fa12_b
+[Epoch 16/400] [Batch 1/79] [G loss: 0.063544] ETA: 20:11:21.818261
+[Epoch 16/400] [Batch 6/79] [G loss: 0.070214] ETA: 20:29:27.814736
+[Epoch 16/400] [Batch 11/79] [G loss: 0.083872] ETA: 20:34:00.560961
+[Epoch 16/400] [Batch 16/79] [G loss: 0.069890] ETA: 20:41:40.628433
+[Epoch 16/400] [Batch 21/79] [G loss: 0.068536] ETA: 20:44:43.120898
+[Epoch 16/400] [Batch 26/79] [G loss: 0.073100] ETA: 20:37:51.981554
+[Epoch 16/400] [Batch 31/79] [G loss: 0.076025] ETA: 20:35:48.828748
+[Epoch 16/400] [Batch 36/79] [G loss: 0.070740] ETA: 20:42:09.252791
+[Epoch 16/400] [Batch 41/79] [G loss: 0.066527] ETA: 20:34:00.517908
+[Epoch 16/400] [Batch 46/79] [G loss: 0.069072] ETA: 20:37:48.852770
+[Epoch 16/400] [Batch 51/79] [G loss: 0.068263] ETA: 20:43:11.711293
+[Epoch 16/400] [Batch 56/79] [G loss: 0.080820] ETA: 20:35:42.764969
+[Epoch 16/400] [Batch 61/79] [G loss: 0.072611] ETA: 20:40:50.566441
+[Epoch 16/400] [Batch 66/79] [G loss: 0.057432] ETA: 20:34:34.609601
+[Epoch 16/400] [Batch 71/79] [G loss: 0.073481] ETA: 20:33:56.144745
+[Epoch 16/400] [Batch 76/79] [G loss: 0.066404] ETA: 20:34:05.326204
+[Epoch 17/400] [Batch 2/79] [G loss: 0.068012] ETA: 20:37:11.501870
+[Epoch 17/400] [Batch 7/79] [G loss: 0.067212] ETA: 20:36:26.642468
+[Epoch 17/400] [Batch 12/79] [G loss: 0.062610] ETA: 20:35:44.065295
+[Epoch 17/400] [Batch 17/79] [G loss: 0.071809] ETA: 20:30:50.641136
+[Epoch 17/400] [Batch 22/79] [G loss: 0.062393] ETA: 20:30:19.998028
+[Epoch 17/400] [Batch 27/79] [G loss: 0.068787] ETA: 20:34:19.004028
+[Epoch 17/400] [Batch 32/79] [G loss: 0.069700] ETA: 20:30:52.756619
+[Epoch 17/400] [Batch 37/79] [G loss: 0.060710] ETA: 20:33:35.664415
+[Epoch 17/400] [Batch 42/79] [G loss: 0.067643] ETA: 20:35:53.819575
+[Epoch 17/400] [Batch 47/79] [G loss: 0.061070] ETA: 20:35:02.661574
+[Epoch 17/400] [Batch 52/79] [G loss: 0.071448] ETA: 20:34:29.714466
+[Epoch 17/400] [Batch 57/79] [G loss: 0.065647] ETA: 20:31:13.443937
+[Epoch 17/400] [Batch 62/79] [G loss: 0.066174] ETA: 20:42:23.740672
+[Epoch 17/400] [Batch 67/79] [G loss: 0.059926] ETA: 20:33:23.758049
+[Epoch 17/400] [Batch 72/79] [G loss: 0.066229] ETA: 20:32:04.997333
+[Epoch 17/400] [Batch 77/79] [G loss: 0.063933] ETA: 20:32:03.322163
+[Epoch 18/400] [Batch 3/79] [G loss: 0.070460] ETA: 20:32:09.039210
+[Epoch 18/400] [Batch 8/79] [G loss: 0.071971] ETA: 20:25:54.710665
+[Epoch 18/400] [Batch 13/79] [G loss: 0.064533] ETA: 20:44:17.667317
+[Epoch 18/400] [Batch 18/79] [G loss: 0.071630] ETA: 20:44:43.129921
+[Epoch 18/400] [Batch 23/79] [G loss: 0.064191] ETA: 20:47:40.192413
+[Epoch 18/400] [Batch 28/79] [G loss: 0.067578] ETA: 20:39:24.451575
+[Epoch 18/400] [Batch 33/79] [G loss: 0.060630] ETA: 20:32:01.739559
+[Epoch 18/400] [Batch 38/79] [G loss: 0.057645] ETA: 20:33:47.327881
+[Epoch 18/400] [Batch 43/79] [G loss: 0.070613] ETA: 20:41:29.685853
+[Epoch 18/400] [Batch 48/79] [G loss: 0.060663] ETA: 20:30:55.381792
+[Epoch 18/400] [Batch 53/79] [G loss: 0.071110] ETA: 20:28:55.095799
+[Epoch 18/400] [Batch 58/79] [G loss: 0.073029] ETA: 20:35:56.205168
+[Epoch 18/400] [Batch 63/79] [G loss: 0.065324] ETA: 20:37:02.896311
+[Epoch 18/400] [Batch 68/79] [G loss: 0.062856] ETA: 20:38:12.016366
+[Epoch 18/400] [Batch 73/79] [G loss: 0.070111] ETA: 20:32:50.117261
+[Epoch 18/400] [Batch 78/79] [G loss: 0.087869] ETA: 2:52:24.557023
+[Epoch 19/400] [Batch 4/79] [G loss: 0.063245] ETA: 20:29:31.885015
+[Epoch 19/400] [Batch 9/79] [G loss: 0.063687] ETA: 20:26:33.342018
+[Epoch 19/400] [Batch 14/79] [G loss: 0.061743] ETA: 20:26:36.176076
+[Epoch 19/400] [Batch 19/79] [G loss: 0.060881] ETA: 20:31:01.493988
+[Epoch 19/400] [Batch 24/79] [G loss: 0.066480] ETA: 20:32:11.877297
+[Epoch 19/400] [Batch 29/79] [G loss: 0.067320] ETA: 20:26:54.771185
+[Epoch 19/400] [Batch 34/79] [G loss: 0.060901] ETA: 20:24:12.531908
+[Epoch 19/400] [Batch 39/79] [G loss: 0.067361] ETA: 20:23:14.319363
+[Epoch 19/400] [Batch 44/79] [G loss: 0.068706] ETA: 20:24:18.196480
+[Epoch 19/400] [Batch 49/79] [G loss: 0.070588] ETA: 20:24:37.019536
+[Epoch 19/400] [Batch 54/79] [G loss: 0.062832] ETA: 20:23:38.755302
+[Epoch 19/400] [Batch 59/79] [G loss: 0.060502] ETA: 20:23:30.590916
+[Epoch 19/400] [Batch 64/79] [G loss: 0.066573] ETA: 20:23:15.622323
+[Epoch 19/400] [Batch 69/79] [G loss: 0.065462] ETA: 20:23:21.475081
+[Epoch 19/400] [Batch 74/79] [G loss: 0.068493] ETA: 20:21:48.942312
+[Epoch 20/400] [Batch 0/79] [G loss: 0.059392] ETA: 20:25:05.814128
+[Epoch 20/400] [Batch 5/79] [G loss: 0.059785] ETA: 20:21:16.783408
+[Epoch 20/400] [Batch 10/79] [G loss: 0.062579] ETA: 20:22:37.576644
+[Epoch 20/400] [Batch 15/79] [G loss: 0.060307] ETA: 20:21:41.423280
+[Epoch 20/400] [Batch 20/79] [G loss: 0.065343] ETA: 20:21:34.765949
+[Epoch 20/400] [Batch 25/79] [G loss: 0.058775] ETA: 20:22:32.926741
+[Epoch 20/400] [Batch 30/79] [G loss: 0.069520] ETA: 20:21:14.302707
+[Epoch 20/400] [Batch 35/79] [G loss: 0.060407] ETA: 20:21:52.150565
+[Epoch 20/400] [Batch 40/79] [G loss: 0.063645] ETA: 20:21:12.749867
+[Epoch 20/400] [Batch 45/79] [G loss: 0.075177] ETA: 20:20:09.545773
+[Epoch 20/400] [Batch 50/79] [G loss: 0.062373] ETA: 20:21:10.753040
+[Epoch 20/400] [Batch 55/79] [G loss: 0.060755] ETA: 20:19:24.332579
+[Epoch 20/400] [Batch 60/79] [G loss: 0.064286] ETA: 20:18:35.609159
+[Epoch 20/400] [Batch 65/79] [G loss: 0.064006] ETA: 20:19:43.852512
+[Epoch 20/400] [Batch 70/79] [G loss: 0.061828] ETA: 20:17:26.047366
+[Epoch 20/400] [Batch 75/79] [G loss: 0.065933] ETA: 20:07:17.066547
+Most similiar photos:  535142162_836d4c2641_b, 2124612342_5750189d39_b, 1901997554_8dfb6f70f3_b, 16893028003_737c554fcd_b, 18535649322_d896f63196_b, 18690135234_ea0be7a84c_b, 955477624_20a3759dff_b, 10875154203_0aee0d4f17_b, 25743317_c7012edd72_b, 4286840651_be8f4c40a9_b
+[Epoch 21/400] [Batch 1/79] [G loss: 0.065295] ETA: 20:07:31.547241
+[Epoch 21/400] [Batch 6/79] [G loss: 0.065372] ETA: 20:10:47.114824
+[Epoch 21/400] [Batch 11/79] [G loss: 0.067753] ETA: 20:15:29.670625
+[Epoch 21/400] [Batch 16/79] [G loss: 0.071050] ETA: 20:16:41.776314
+[Epoch 21/400] [Batch 21/79] [G loss: 0.061378] ETA: 20:24:06.927910
+[Epoch 21/400] [Batch 26/79] [G loss: 0.065843] ETA: 20:17:10.866457
+[Epoch 21/400] [Batch 31/79] [G loss: 0.067367] ETA: 20:16:56.656222
+[Epoch 21/400] [Batch 36/79] [G loss: 0.066586] ETA: 20:19:00.282031
+[Epoch 21/400] [Batch 41/79] [G loss: 0.066980] ETA: 20:18:31.749887
+[Epoch 21/400] [Batch 46/79] [G loss: 0.066519] ETA: 20:10:44.780720
+[Epoch 21/400] [Batch 51/79] [G loss: 0.074076] ETA: 20:19:20.777400
+[Epoch 21/400] [Batch 56/79] [G loss: 0.067684] ETA: 20:19:55.016346
+[Epoch 21/400] [Batch 61/79] [G loss: 0.069215] ETA: 20:18:24.542170
+[Epoch 21/400] [Batch 66/79] [G loss: 0.064999] ETA: 20:20:33.888149
+[Epoch 21/400] [Batch 71/79] [G loss: 0.062115] ETA: 20:18:53.210106
+[Epoch 21/400] [Batch 76/79] [G loss: 0.070125] ETA: 20:17:22.936045
+[Epoch 22/400] [Batch 2/79] [G loss: 0.062009] ETA: 20:17:21.877184
+[Epoch 22/400] [Batch 7/79] [G loss: 0.057068] ETA: 20:17:33.598486
+[Epoch 22/400] [Batch 12/79] [G loss: 0.060426] ETA: 20:33:04.431553
+[Epoch 22/400] [Batch 17/79] [G loss: 0.063938] ETA: 20:17:39.918230
+[Epoch 22/400] [Batch 22/79] [G loss: 0.052210] ETA: 20:16:59.775620
+[Epoch 22/400] [Batch 27/79] [G loss: 0.063816] ETA: 20:17:01.375612
+[Epoch 22/400] [Batch 32/79] [G loss: 0.057260] ETA: 20:16:51.669958
+[Epoch 22/400] [Batch 37/79] [G loss: 0.053138] ETA: 20:16:26.248511
+[Epoch 22/400] [Batch 42/79] [G loss: 0.055920] ETA: 20:17:08.892088
+[Epoch 22/400] [Batch 47/79] [G loss: 0.067612] ETA: 20:23:43.897341
+[Epoch 22/400] [Batch 52/79] [G loss: 0.065870] ETA: 20:23:01.683860
+[Epoch 22/400] [Batch 57/79] [G loss: 0.066446] ETA: 20:19:21.601371
+[Epoch 22/400] [Batch 62/79] [G loss: 0.059659] ETA: 20:17:56.503038
+[Epoch 22/400] [Batch 67/79] [G loss: 0.058203] ETA: 20:11:48.063287
+[Epoch 22/400] [Batch 72/79] [G loss: 0.070432] ETA: 20:12:28.342195
+[Epoch 22/400] [Batch 77/79] [G loss: 0.064739] ETA: 20:13:33.188177
+[Epoch 23/400] [Batch 3/79] [G loss: 0.065372] ETA: 20:15:02.901258
+[Epoch 23/400] [Batch 8/79] [G loss: 0.060733] ETA: 20:14:27.610842
+[Epoch 23/400] [Batch 13/79] [G loss: 0.066598] ETA: 20:16:08.178549
+[Epoch 23/400] [Batch 18/79] [G loss: 0.072783] ETA: 20:15:15.600750
+[Epoch 23/400] [Batch 23/79] [G loss: 0.066347] ETA: 20:11:53.864136
+[Epoch 23/400] [Batch 28/79] [G loss: 0.054868] ETA: 20:13:42.311734
+[Epoch 23/400] [Batch 33/79] [G loss: 0.057134] ETA: 20:12:11.321692
+[Epoch 23/400] [Batch 38/79] [G loss: 0.063348] ETA: 20:12:33.961036
+[Epoch 23/400] [Batch 43/79] [G loss: 0.057275] ETA: 20:13:11.819201
+[Epoch 23/400] [Batch 48/79] [G loss: 0.056120] ETA: 20:11:15.324798
+[Epoch 23/400] [Batch 53/79] [G loss: 0.052523] ETA: 20:08:50.243368
+[Epoch 23/400] [Batch 58/79] [G loss: 0.066762] ETA: 20:09:25.095752
+[Epoch 23/400] [Batch 63/79] [G loss: 0.053076] ETA: 20:12:53.803673
+[Epoch 23/400] [Batch 68/79] [G loss: 0.063443] ETA: 20:09:19.549921
+[Epoch 23/400] [Batch 73/79] [G loss: 0.061727] ETA: 20:11:07.716246
+[Epoch 23/400] [Batch 78/79] [G loss: 0.047224] ETA: 2:47:49.279299
+[Epoch 24/400] [Batch 4/79] [G loss: 0.056587] ETA: 20:09:36.086569
+[Epoch 24/400] [Batch 9/79] [G loss: 0.056146] ETA: 20:09:30.672098
+[Epoch 24/400] [Batch 14/79] [G loss: 0.057439] ETA: 20:09:41.288474
+[Epoch 24/400] [Batch 19/79] [G loss: 0.062679] ETA: 20:08:11.963485
+[Epoch 24/400] [Batch 24/79] [G loss: 0.059524] ETA: 20:07:42.395210
+[Epoch 24/400] [Batch 29/79] [G loss: 0.060056] ETA: 20:07:32.020377
+[Epoch 24/400] [Batch 34/79] [G loss: 0.057413] ETA: 20:07:16.763949
+[Epoch 24/400] [Batch 39/79] [G loss: 0.064012] ETA: 20:09:58.926907
+[Epoch 24/400] [Batch 44/79] [G loss: 0.063339] ETA: 20:06:28.702726
+[Epoch 24/400] [Batch 49/79] [G loss: 0.062174] ETA: 20:08:35.289688
+[Epoch 24/400] [Batch 54/79] [G loss: 0.056055] ETA: 20:08:56.316299
+[Epoch 24/400] [Batch 59/79] [G loss: 0.071821] ETA: 20:05:05.841010
+[Epoch 24/400] [Batch 64/79] [G loss: 0.059247] ETA: 20:07:19.276829
+[Epoch 24/400] [Batch 69/79] [G loss: 0.056493] ETA: 20:05:27.560120
+[Epoch 24/400] [Batch 74/79] [G loss: 0.057185] ETA: 20:04:41.504726
+[Epoch 25/400] [Batch 0/79] [G loss: 0.056854] ETA: 20:05:51.225793
+[Epoch 25/400] [Batch 5/79] [G loss: 0.059141] ETA: 20:04:47.264585
+[Epoch 25/400] [Batch 10/79] [G loss: 0.065496] ETA: 20:04:32.845063
+[Epoch 25/400] [Batch 15/79] [G loss: 0.064663] ETA: 20:05:32.587116
+[Epoch 25/400] [Batch 20/79] [G loss: 0.050790] ETA: 20:04:27.505618
+[Epoch 25/400] [Batch 25/79] [G loss: 0.064048] ETA: 20:04:36.556587
+[Epoch 25/400] [Batch 30/79] [G loss: 0.061866] ETA: 20:04:27.783980
+[Epoch 25/400] [Batch 35/79] [G loss: 0.061232] ETA: 20:03:46.487558
+[Epoch 25/400] [Batch 40/79] [G loss: 0.063413] ETA: 20:05:25.638413
+[Epoch 25/400] [Batch 45/79] [G loss: 0.062236] ETA: 20:04:28.004508
+[Epoch 25/400] [Batch 50/79] [G loss: 0.055070] ETA: 20:04:49.119983
+[Epoch 25/400] [Batch 55/79] [G loss: 0.057165] ETA: 20:04:44.251850
+[Epoch 25/400] [Batch 60/79] [G loss: 0.061307] ETA: 20:06:51.194637
+[Epoch 25/400] [Batch 65/79] [G loss: 0.056363] ETA: 20:05:15.588894
+[Epoch 25/400] [Batch 70/79] [G loss: 0.065605] ETA: 20:05:58.537730
+[Epoch 25/400] [Batch 75/79] [G loss: 0.055432] ETA: 20:06:36.050084
+Most similiar photos:  535142162_836d4c2641_b, 2744046608_4d0e6f8615_b, 1901997554_8dfb6f70f3_b, 5723035472_40d79223e8_b, 18535649322_d896f63196_b, 18690135234_ea0be7a84c_b, 7814972518_85009cb1a6_b, 10875154203_0aee0d4f17_b, 25743317_c7012edd72_b, 4286840651_be8f4c40a9_b
+[Epoch 26/400] [Batch 1/79] [G loss: 0.055801] ETA: 19:56:38.240303
+[Epoch 26/400] [Batch 6/79] [G loss: 0.059259] ETA: 19:57:06.156616
+[Epoch 26/400] [Batch 11/79] [G loss: 0.057961] ETA: 20:00:28.003260
+[Epoch 26/400] [Batch 16/79] [G loss: 0.063285] ETA: 20:14:50.556593
+[Epoch 26/400] [Batch 21/79] [G loss: 0.057928] ETA: 20:05:00.329816
+[Epoch 26/400] [Batch 26/79] [G loss: 0.058646] ETA: 20:03:33.411484
+[Epoch 26/400] [Batch 31/79] [G loss: 0.062997] ETA: 20:06:57.671193
+[Epoch 26/400] [Batch 36/79] [G loss: 0.054837] ETA: 20:03:33.060400
+[Epoch 26/400] [Batch 41/79] [G loss: 0.061066] ETA: 20:04:52.245930
+[Epoch 26/400] [Batch 46/79] [G loss: 0.062324] ETA: 20:03:37.349052
+[Epoch 26/400] [Batch 51/79] [G loss: 0.062132] ETA: 20:06:52.065175
+[Epoch 26/400] [Batch 56/79] [G loss: 0.070304] ETA: 20:09:58.351314
+[Epoch 26/400] [Batch 61/79] [G loss: 0.065904] ETA: 20:00:57.213693
+[Epoch 26/400] [Batch 66/79] [G loss: 0.059540] ETA: 20:01:47.260580
+[Epoch 26/400] [Batch 71/79] [G loss: 0.062066] ETA: 20:03:29.921479
+[Epoch 26/400] [Batch 76/79] [G loss: 0.063635] ETA: 20:02:22.762411
+[Epoch 27/400] [Batch 2/79] [G loss: 0.055530] ETA: 20:01:20.904777
+[Epoch 27/400] [Batch 7/79] [G loss: 0.063900] ETA: 20:00:57.975898
+[Epoch 27/400] [Batch 12/79] [G loss: 0.052352] ETA: 20:01:49.040966
+[Epoch 27/400] [Batch 17/79] [G loss: 0.056867] ETA: 20:00:00.340056
+[Epoch 27/400] [Batch 22/79] [G loss: 0.059921] ETA: 20:08:52.064763
+[Epoch 27/400] [Batch 27/79] [G loss: 0.061356] ETA: 20:01:28.484192
+[Epoch 27/400] [Batch 32/79] [G loss: 0.053439] ETA: 20:01:46.052734
+[Epoch 27/400] [Batch 37/79] [G loss: 0.057263] ETA: 20:01:31.895850
+[Epoch 27/400] [Batch 42/79] [G loss: 0.060197] ETA: 20:02:52.532600
+[Epoch 27/400] [Batch 47/79] [G loss: 0.056385] ETA: 20:00:27.081742
+[Epoch 27/400] [Batch 52/79] [G loss: 0.070367] ETA: 20:02:10.893055
+[Epoch 27/400] [Batch 57/79] [G loss: 0.066207] ETA: 19:59:23.297744
+[Epoch 27/400] [Batch 62/79] [G loss: 0.057338] ETA: 20:01:30.295718
+[Epoch 27/400] [Batch 67/79] [G loss: 0.060617] ETA: 20:04:56.348619
+[Epoch 27/400] [Batch 72/79] [G loss: 0.053213] ETA: 20:03:28.307463
+[Epoch 27/400] [Batch 77/79] [G loss: 0.057939] ETA: 19:57:10.449479
+[Epoch 28/400] [Batch 3/79] [G loss: 0.058678] ETA: 20:00:07.431403
+[Epoch 28/400] [Batch 8/79] [G loss: 0.060306] ETA: 19:57:52.743177
+[Epoch 28/400] [Batch 13/79] [G loss: 0.049697] ETA: 19:56:17.988821
+[Epoch 28/400] [Batch 18/79] [G loss: 0.056367] ETA: 19:56:45.663700
+[Epoch 28/400] [Batch 23/79] [G loss: 0.052619] ETA: 19:56:05.287708
+[Epoch 28/400] [Batch 28/79] [G loss: 0.056800] ETA: 19:55:30.647278
+[Epoch 28/400] [Batch 33/79] [G loss: 0.056262] ETA: 19:54:43.843610
+[Epoch 28/400] [Batch 38/79] [G loss: 0.057787] ETA: 19:54:28.463886
+[Epoch 28/400] [Batch 43/79] [G loss: 0.053047] ETA: 19:53:09.453045
+[Epoch 28/400] [Batch 48/79] [G loss: 0.069374] ETA: 19:53:38.540826
+[Epoch 28/400] [Batch 53/79] [G loss: 0.066367] ETA: 19:53:30.658191
+[Epoch 28/400] [Batch 58/79] [G loss: 0.058461] ETA: 19:57:09.117582
+[Epoch 28/400] [Batch 63/79] [G loss: 0.053168] ETA: 19:55:08.649230
+[Epoch 28/400] [Batch 68/79] [G loss: 0.055857] ETA: 19:54:15.535650
+[Epoch 28/400] [Batch 73/79] [G loss: 0.054360] ETA: 19:52:35.188749
+[Epoch 28/400] [Batch 78/79] [G loss: 0.049863] ETA: 2:45:58.521245
+[Epoch 29/400] [Batch 4/79] [G loss: 0.058832] ETA: 19:55:53.835071
+[Epoch 29/400] [Batch 9/79] [G loss: 0.058305] ETA: 19:52:24.659615
+[Epoch 29/400] [Batch 14/79] [G loss: 0.053490] ETA: 19:52:05.731566
+[Epoch 29/400] [Batch 19/79] [G loss: 0.061086] ETA: 19:51:56.324022
+[Epoch 29/400] [Batch 24/79] [G loss: 0.053245] ETA: 19:51:33.991677
+[Epoch 29/400] [Batch 29/79] [G loss: 0.059292] ETA: 19:54:39.176903
+[Epoch 29/400] [Batch 34/79] [G loss: 0.058473] ETA: 19:51:38.355818
+[Epoch 29/400] [Batch 39/79] [G loss: 0.055562] ETA: 19:52:24.317188
+[Epoch 29/400] [Batch 44/79] [G loss: 0.058817] ETA: 20:01:13.486916
+[Epoch 29/400] [Batch 49/79] [G loss: 0.059975] ETA: 19:53:49.043727
+[Epoch 29/400] [Batch 54/79] [G loss: 0.055367] ETA: 19:52:38.848891
+[Epoch 29/400] [Batch 59/79] [G loss: 0.057005] ETA: 19:53:23.489578
+[Epoch 29/400] [Batch 64/79] [G loss: 0.057433] ETA: 19:53:43.163033
+[Epoch 29/400] [Batch 69/79] [G loss: 0.051356] ETA: 19:50:34.730501
+[Epoch 29/400] [Batch 74/79] [G loss: 0.056885] ETA: 19:51:15.941591
+[Epoch 30/400] [Batch 0/79] [G loss: 0.051144] ETA: 19:52:07.908442
+[Epoch 30/400] [Batch 5/79] [G loss: 0.054008] ETA: 19:51:15.441104
+[Epoch 30/400] [Batch 10/79] [G loss: 0.060947] ETA: 19:50:15.909476
+[Epoch 30/400] [Batch 15/79] [G loss: 0.053791] ETA: 19:49:41.142099
+[Epoch 30/400] [Batch 20/79] [G loss: 0.049481] ETA: 19:51:20.345919
+[Epoch 30/400] [Batch 25/79] [G loss: 0.053197] ETA: 19:51:41.358719
+[Epoch 30/400] [Batch 30/79] [G loss: 0.063165] ETA: 19:50:55.603218
+[Epoch 30/400] [Batch 35/79] [G loss: 0.053109] ETA: 19:49:26.752011
+[Epoch 30/400] [Batch 40/79] [G loss: 0.057345] ETA: 19:49:25.337591
+[Epoch 30/400] [Batch 45/79] [G loss: 0.064229] ETA: 19:50:05.780278
+[Epoch 30/400] [Batch 50/79] [G loss: 0.063688] ETA: 19:48:55.532103
+[Epoch 30/400] [Batch 55/79] [G loss: 0.052000] ETA: 19:49:16.356043
+[Epoch 30/400] [Batch 60/79] [G loss: 0.051621] ETA: 19:55:58.249795
+[Epoch 30/400] [Batch 65/79] [G loss: 0.059150] ETA: 19:50:59.063197
+[Epoch 30/400] [Batch 70/79] [G loss: 0.057669] ETA: 19:48:01.250639
+[Epoch 30/400] [Batch 75/79] [G loss: 0.052475] ETA: 19:47:51.057922
+Most similiar photos:  37143103522_3af1d6d204_b, 25492325136_e1446259db_b, 1901997554_8dfb6f70f3_b, 5005611405_992361817f_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 31107177_5d057c6012_b, 25743317_c7012edd72_b, 4286840651_be8f4c40a9_b
+[Epoch 31/400] [Batch 1/79] [G loss: 0.053878] ETA: 19:37:49.942176
+[Epoch 31/400] [Batch 6/79] [G loss: 0.059117] ETA: 19:44:26.022341
+[Epoch 31/400] [Batch 11/79] [G loss: 0.052148] ETA: 19:49:52.480326
+[Epoch 31/400] [Batch 16/79] [G loss: 0.058557] ETA: 19:47:33.723938
+[Epoch 31/400] [Batch 21/79] [G loss: 0.052034] ETA: 19:46:45.276868
+[Epoch 31/400] [Batch 26/79] [G loss: 0.050659] ETA: 19:46:31.305012
+[Epoch 31/400] [Batch 31/79] [G loss: 0.058637] ETA: 19:48:47.984467
+[Epoch 31/400] [Batch 36/79] [G loss: 0.053729] ETA: 19:46:24.111414
+[Epoch 31/400] [Batch 41/79] [G loss: 0.063853] ETA: 19:46:21.311784
+[Epoch 31/400] [Batch 46/79] [G loss: 0.057160] ETA: 19:47:17.512702
+[Epoch 31/400] [Batch 51/79] [G loss: 0.059838] ETA: 19:48:07.674880
+[Epoch 31/400] [Batch 56/79] [G loss: 0.058220] ETA: 19:48:37.352089
+[Epoch 31/400] [Batch 61/79] [G loss: 0.059512] ETA: 19:46:21.004450
+[Epoch 31/400] [Batch 66/79] [G loss: 0.054091] ETA: 19:45:15.437329
+[Epoch 31/400] [Batch 71/79] [G loss: 0.057961] ETA: 19:46:12.329073
+[Epoch 31/400] [Batch 76/79] [G loss: 0.062530] ETA: 19:46:28.554615
+[Epoch 32/400] [Batch 2/79] [G loss: 0.054284] ETA: 19:45:33.188775
+[Epoch 32/400] [Batch 7/79] [G loss: 0.059672] ETA: 19:45:38.548310
+[Epoch 32/400] [Batch 12/79] [G loss: 0.063435] ETA: 19:46:00.467701
+[Epoch 32/400] [Batch 17/79] [G loss: 0.062013] ETA: 19:45:54.998839
+[Epoch 32/400] [Batch 22/79] [G loss: 0.051314] ETA: 19:45:50.441885
+[Epoch 32/400] [Batch 27/79] [G loss: 0.050187] ETA: 19:44:31.800051
+[Epoch 32/400] [Batch 32/79] [G loss: 0.057137] ETA: 19:44:17.141991
+[Epoch 32/400] [Batch 37/79] [G loss: 0.064206] ETA: 19:45:04.081023
+[Epoch 32/400] [Batch 42/79] [G loss: 0.055924] ETA: 19:45:03.263528
+[Epoch 32/400] [Batch 47/79] [G loss: 0.053715] ETA: 19:46:13.774481
+[Epoch 32/400] [Batch 52/79] [G loss: 0.054226] ETA: 19:44:33.581319
+[Epoch 32/400] [Batch 57/79] [G loss: 0.057732] ETA: 19:44:49.497716
+[Epoch 32/400] [Batch 62/79] [G loss: 0.062776] ETA: 19:42:16.613581
+[Epoch 32/400] [Batch 67/79] [G loss: 0.052653] ETA: 19:43:03.209151
+[Epoch 32/400] [Batch 72/79] [G loss: 0.057201] ETA: 19:43:00.265379
+[Epoch 32/400] [Batch 77/79] [G loss: 0.057271] ETA: 19:44:52.619441
+[Epoch 33/400] [Batch 3/79] [G loss: 0.060161] ETA: 19:45:58.020453
+[Epoch 33/400] [Batch 8/79] [G loss: 0.054531] ETA: 19:44:42.377739
+[Epoch 33/400] [Batch 13/79] [G loss: 0.054251] ETA: 19:40:58.295245
+[Epoch 33/400] [Batch 18/79] [G loss: 0.055561] ETA: 19:42:01.058142
+[Epoch 33/400] [Batch 23/79] [G loss: 0.056948] ETA: 19:42:56.453032
+[Epoch 33/400] [Batch 28/79] [G loss: 0.049841] ETA: 19:42:46.910112
+[Epoch 33/400] [Batch 33/79] [G loss: 0.058525] ETA: 19:37:42.581177
+[Epoch 33/400] [Batch 38/79] [G loss: 0.058387] ETA: 19:40:00.426761
+[Epoch 33/400] [Batch 43/79] [G loss: 0.061636] ETA: 19:40:24.610019
+[Epoch 33/400] [Batch 48/79] [G loss: 0.056249] ETA: 19:39:25.485319
+[Epoch 33/400] [Batch 53/79] [G loss: 0.064048] ETA: 19:43:44.921441
+[Epoch 33/400] [Batch 58/79] [G loss: 0.052070] ETA: 19:40:03.476665
+[Epoch 33/400] [Batch 63/79] [G loss: 0.049225] ETA: 19:39:58.897915
+[Epoch 33/400] [Batch 68/79] [G loss: 0.049548] ETA: 19:39:08.656398
+[Epoch 33/400] [Batch 73/79] [G loss: 0.054597] ETA: 19:38:47.497616
+[Epoch 33/400] [Batch 78/79] [G loss: 0.048044] ETA: 2:44:52.197917
+[Epoch 34/400] [Batch 4/79] [G loss: 0.053196] ETA: 19:38:36.819828
+[Epoch 34/400] [Batch 9/79] [G loss: 0.059287] ETA: 19:38:39.867747
+[Epoch 34/400] [Batch 14/79] [G loss: 0.054263] ETA: 19:35:11.750340
+[Epoch 34/400] [Batch 19/79] [G loss: 0.060387] ETA: 19:37:45.640504
+[Epoch 34/400] [Batch 24/79] [G loss: 0.060021] ETA: 19:36:45.555282
+[Epoch 34/400] [Batch 29/79] [G loss: 0.055190] ETA: 19:37:50.301549
+[Epoch 34/400] [Batch 34/79] [G loss: 0.051024] ETA: 19:38:35.555782
+[Epoch 34/400] [Batch 39/79] [G loss: 0.062659] ETA: 19:36:43.923619
+[Epoch 34/400] [Batch 44/79] [G loss: 0.058222] ETA: 19:35:47.480512
+[Epoch 34/400] [Batch 49/79] [G loss: 0.054969] ETA: 19:34:53.206772
+[Epoch 34/400] [Batch 54/79] [G loss: 0.053436] ETA: 19:35:28.163538
+[Epoch 34/400] [Batch 59/79] [G loss: 0.056665] ETA: 19:33:07.007656
+[Epoch 34/400] [Batch 64/79] [G loss: 0.052015] ETA: 19:36:40.167215
+[Epoch 34/400] [Batch 69/79] [G loss: 0.052302] ETA: 19:34:32.250373
+[Epoch 34/400] [Batch 74/79] [G loss: 0.054403] ETA: 19:34:36.798363
+[Epoch 35/400] [Batch 0/79] [G loss: 0.048027] ETA: 19:38:47.320874
+[Epoch 35/400] [Batch 5/79] [G loss: 0.059803] ETA: 19:34:41.697750
+[Epoch 35/400] [Batch 10/79] [G loss: 0.048156] ETA: 19:36:16.896805
+[Epoch 35/400] [Batch 15/79] [G loss: 0.057208] ETA: 19:33:41.389489
+[Epoch 35/400] [Batch 20/79] [G loss: 0.053022] ETA: 19:35:42.168975
+[Epoch 35/400] [Batch 25/79] [G loss: 0.054822] ETA: 19:33:28.150795
+[Epoch 35/400] [Batch 30/79] [G loss: 0.055488] ETA: 19:33:58.902268
+[Epoch 35/400] [Batch 35/79] [G loss: 0.056703] ETA: 19:32:36.788635
+[Epoch 35/400] [Batch 40/79] [G loss: 0.050561] ETA: 19:34:17.583009
+[Epoch 35/400] [Batch 45/79] [G loss: 0.049152] ETA: 19:33:02.652242
+[Epoch 35/400] [Batch 50/79] [G loss: 0.046762] ETA: 19:32:57.229900
+[Epoch 35/400] [Batch 55/79] [G loss: 0.049884] ETA: 19:31:13.031216
+[Epoch 35/400] [Batch 60/79] [G loss: 0.053320] ETA: 19:32:46.405571
+[Epoch 35/400] [Batch 65/79] [G loss: 0.056940] ETA: 19:32:34.583266
+[Epoch 35/400] [Batch 70/79] [G loss: 0.057628] ETA: 19:30:39.655988
+[Epoch 35/400] [Batch 75/79] [G loss: 0.060875] ETA: 19:30:31.800909
+Most similiar photos:  37143103522_3af1d6d204_b, 2744046608_4d0e6f8615_b, 1901997554_8dfb6f70f3_b, 16893028003_737c554fcd_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 7814972518_85009cb1a6_b, 31107177_5d057c6012_b, 5608821155_24c106f5cb_b, 4286840651_be8f4c40a9_b
+[Epoch 36/400] [Batch 1/79] [G loss: 0.048117] ETA: 19:20:06.003431
+[Epoch 36/400] [Batch 6/79] [G loss: 0.055680] ETA: 19:24:57.576571
+[Epoch 36/400] [Batch 11/79] [G loss: 0.055048] ETA: 19:26:03.877530
+[Epoch 36/400] [Batch 16/79] [G loss: 0.048682] ETA: 19:30:07.101116
+[Epoch 36/400] [Batch 21/79] [G loss: 0.062045] ETA: 19:30:15.741253
+[Epoch 36/400] [Batch 26/79] [G loss: 0.044705] ETA: 19:30:01.584961
+[Epoch 36/400] [Batch 31/79] [G loss: 0.058576] ETA: 19:30:48.415893
+[Epoch 36/400] [Batch 36/79] [G loss: 0.056996] ETA: 19:32:48.548031
+[Epoch 36/400] [Batch 41/79] [G loss: 0.053822] ETA: 19:31:34.407686
+[Epoch 36/400] [Batch 46/79] [G loss: 0.048860] ETA: 19:30:48.558733
+[Epoch 36/400] [Batch 51/79] [G loss: 0.051751] ETA: 19:30:08.935663
+[Epoch 36/400] [Batch 56/79] [G loss: 0.046753] ETA: 19:31:07.472577
+[Epoch 36/400] [Batch 61/79] [G loss: 0.057874] ETA: 19:30:27.700979
+[Epoch 36/400] [Batch 66/79] [G loss: 0.055361] ETA: 19:31:52.212255
+[Epoch 36/400] [Batch 71/79] [G loss: 0.049660] ETA: 19:29:26.467309
+[Epoch 36/400] [Batch 76/79] [G loss: 0.057468] ETA: 19:30:04.700089
+[Epoch 37/400] [Batch 2/79] [G loss: 0.045837] ETA: 19:30:13.599706
+[Epoch 37/400] [Batch 7/79] [G loss: 0.049281] ETA: 19:29:10.104423
+[Epoch 37/400] [Batch 12/79] [G loss: 0.050641] ETA: 19:29:22.466894
+[Epoch 37/400] [Batch 17/79] [G loss: 0.058637] ETA: 19:29:26.955914
+[Epoch 37/400] [Batch 22/79] [G loss: 0.052581] ETA: 19:28:35.192194
+[Epoch 37/400] [Batch 27/79] [G loss: 0.052751] ETA: 19:28:06.031365
+[Epoch 37/400] [Batch 32/79] [G loss: 0.056852] ETA: 19:31:42.103308
+[Epoch 37/400] [Batch 37/79] [G loss: 0.048695] ETA: 19:29:14.174042
+[Epoch 37/400] [Batch 42/79] [G loss: 0.054793] ETA: 19:26:26.008780
+[Epoch 37/400] [Batch 47/79] [G loss: 0.049018] ETA: 19:28:15.808635
+[Epoch 37/400] [Batch 52/79] [G loss: 0.054508] ETA: 19:30:13.243693
+[Epoch 37/400] [Batch 57/79] [G loss: 0.050460] ETA: 19:27:57.446008
+[Epoch 37/400] [Batch 62/79] [G loss: 0.048211] ETA: 19:29:09.759444
+[Epoch 37/400] [Batch 67/79] [G loss: 0.061096] ETA: 19:25:00.255318
+[Epoch 37/400] [Batch 72/79] [G loss: 0.061716] ETA: 19:26:11.931635
+[Epoch 37/400] [Batch 77/79] [G loss: 0.056711] ETA: 19:29:10.265121
+[Epoch 38/400] [Batch 3/79] [G loss: 0.044560] ETA: 19:26:38.445241
+[Epoch 38/400] [Batch 8/79] [G loss: 0.052711] ETA: 19:26:01.952906
+[Epoch 38/400] [Batch 13/79] [G loss: 0.051731] ETA: 19:25:41.805075
+[Epoch 38/400] [Batch 18/79] [G loss: 0.052503] ETA: 19:11:42.276154
+[Epoch 38/400] [Batch 23/79] [G loss: 0.054901] ETA: 19:25:04.481292
+[Epoch 38/400] [Batch 28/79] [G loss: 0.045804] ETA: 19:22:44.388640
+[Epoch 38/400] [Batch 33/79] [G loss: 0.049848] ETA: 19:25:53.618063
+[Epoch 38/400] [Batch 38/79] [G loss: 0.049868] ETA: 19:26:48.682709
+[Epoch 38/400] [Batch 43/79] [G loss: 0.049505] ETA: 19:22:30.547023
+[Epoch 38/400] [Batch 48/79] [G loss: 0.056400] ETA: 19:21:00.810435
+[Epoch 38/400] [Batch 53/79] [G loss: 0.051038] ETA: 19:26:23.741677
+[Epoch 38/400] [Batch 58/79] [G loss: 0.054126] ETA: 19:25:31.316419
+[Epoch 38/400] [Batch 63/79] [G loss: 0.050279] ETA: 19:21:05.010295
+[Epoch 38/400] [Batch 68/79] [G loss: 0.052939] ETA: 19:20:15.357893
+[Epoch 38/400] [Batch 73/79] [G loss: 0.055807] ETA: 19:21:48.462495
+[Epoch 38/400] [Batch 78/79] [G loss: 0.054429] ETA: 2:41:30.888615
+[Epoch 39/400] [Batch 4/79] [G loss: 0.048069] ETA: 19:22:13.130429
+[Epoch 39/400] [Batch 9/79] [G loss: 0.053536] ETA: 19:20:40.198476
+[Epoch 39/400] [Batch 14/79] [G loss: 0.051787] ETA: 19:07:48.416653
+[Epoch 39/400] [Batch 19/79] [G loss: 0.055871] ETA: 19:25:31.308031
+[Epoch 39/400] [Batch 24/79] [G loss: 0.049672] ETA: 19:20:37.860177
+[Epoch 39/400] [Batch 29/79] [G loss: 0.050254] ETA: 19:18:13.328874
+[Epoch 39/400] [Batch 34/79] [G loss: 0.054503] ETA: 19:08:03.188088
+[Epoch 39/400] [Batch 39/79] [G loss: 0.053247] ETA: 19:07:59.428482
+[Epoch 39/400] [Batch 44/79] [G loss: 0.048894] ETA: 19:05:15.059310
+[Epoch 39/400] [Batch 49/79] [G loss: 0.055430] ETA: 19:35:54.128830
+[Epoch 39/400] [Batch 54/79] [G loss: 0.051365] ETA: 19:04:59.071497
+[Epoch 39/400] [Batch 59/79] [G loss: 0.050406] ETA: 19:05:50.915823
+[Epoch 39/400] [Batch 64/79] [G loss: 0.049829] ETA: 19:03:08.913256
+[Epoch 39/400] [Batch 69/79] [G loss: 0.044754] ETA: 19:07:34.591370
+[Epoch 39/400] [Batch 74/79] [G loss: 0.050635] ETA: 19:03:10.450959
+[Epoch 40/400] [Batch 0/79] [G loss: 0.048827] ETA: 19:19:11.881742
+[Epoch 40/400] [Batch 5/79] [G loss: 0.052657] ETA: 19:17:31.717899
+[Epoch 40/400] [Batch 10/79] [G loss: 0.049951] ETA: 19:17:30.743856
+[Epoch 40/400] [Batch 15/79] [G loss: 0.049755] ETA: 19:16:49.510195
+[Epoch 40/400] [Batch 20/79] [G loss: 0.049370] ETA: 19:16:55.873580
+[Epoch 40/400] [Batch 25/79] [G loss: 0.047033] ETA: 19:14:54.948044
+[Epoch 40/400] [Batch 30/79] [G loss: 0.052158] ETA: 19:15:17.732878
+[Epoch 40/400] [Batch 35/79] [G loss: 0.054731] ETA: 19:15:13.524637
+[Epoch 40/400] [Batch 40/79] [G loss: 0.059464] ETA: 19:17:00.230770
+[Epoch 40/400] [Batch 45/79] [G loss: 0.050650] ETA: 19:16:00.152507
+[Epoch 40/400] [Batch 50/79] [G loss: 0.045933] ETA: 19:14:33.199039
+[Epoch 40/400] [Batch 55/79] [G loss: 0.046719] ETA: 19:14:17.046530
+[Epoch 40/400] [Batch 60/79] [G loss: 0.052213] ETA: 19:15:02.265930
+[Epoch 40/400] [Batch 65/79] [G loss: 0.045418] ETA: 19:14:55.989245
+[Epoch 40/400] [Batch 70/79] [G loss: 0.047374] ETA: 19:14:22.519450
+[Epoch 40/400] [Batch 75/79] [G loss: 0.052457] ETA: 19:15:17.256843
+Most similiar photos:  37143103522_3af1d6d204_b, 3504325608_892baf1fb8_b, 1901997554_8dfb6f70f3_b, 16893028003_737c554fcd_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 31107177_5d057c6012_b, 5608821155_24c106f5cb_b, 4286840651_be8f4c40a9_b
+[Epoch 41/400] [Batch 1/79] [G loss: 0.050962] ETA: 19:06:56.407804
+[Epoch 41/400] [Batch 6/79] [G loss: 0.054039] ETA: 19:09:28.558631
+[Epoch 41/400] [Batch 11/79] [G loss: 0.048994] ETA: 19:11:07.754281
+[Epoch 41/400] [Batch 16/79] [G loss: 0.049972] ETA: 19:13:30.918581
+[Epoch 41/400] [Batch 21/79] [G loss: 0.049636] ETA: 19:13:41.338382
+[Epoch 41/400] [Batch 26/79] [G loss: 0.044655] ETA: 19:13:33.895172
+[Epoch 41/400] [Batch 31/79] [G loss: 0.050025] ETA: 19:14:10.576763
+[Epoch 41/400] [Batch 36/79] [G loss: 0.050008] ETA: 19:16:05.274394
+[Epoch 41/400] [Batch 41/79] [G loss: 0.049140] ETA: 19:14:47.305756
+[Epoch 41/400] [Batch 46/79] [G loss: 0.044825] ETA: 19:16:41.016164
+[Epoch 41/400] [Batch 51/79] [G loss: 0.049167] ETA: 19:15:19.962018
+[Epoch 41/400] [Batch 56/79] [G loss: 0.046083] ETA: 19:14:13.630271
+[Epoch 41/400] [Batch 61/79] [G loss: 0.050106] ETA: 19:14:25.133619
+[Epoch 41/400] [Batch 66/79] [G loss: 0.046526] ETA: 19:14:25.106320
+[Epoch 41/400] [Batch 71/79] [G loss: 0.050954] ETA: 19:14:10.262990
+[Epoch 41/400] [Batch 76/79] [G loss: 0.054874] ETA: 19:14:07.748008
+[Epoch 42/400] [Batch 2/79] [G loss: 0.049057] ETA: 19:14:00.462656
+[Epoch 42/400] [Batch 7/79] [G loss: 0.055884] ETA: 19:14:43.371162
+[Epoch 42/400] [Batch 12/79] [G loss: 0.051450] ETA: 19:13:41.714578
+[Epoch 42/400] [Batch 17/79] [G loss: 0.053763] ETA: 19:13:59.358641
+[Epoch 42/400] [Batch 22/79] [G loss: 0.046424] ETA: 19:13:36.269417
+[Epoch 42/400] [Batch 27/79] [G loss: 0.046911] ETA: 19:11:31.321156
+[Epoch 42/400] [Batch 32/79] [G loss: 0.046792] ETA: 19:13:26.937969
+[Epoch 42/400] [Batch 37/79] [G loss: 0.052017] ETA: 19:13:47.450509
+[Epoch 42/400] [Batch 42/79] [G loss: 0.049958] ETA: 19:13:37.242508
+[Epoch 42/400] [Batch 47/79] [G loss: 0.049605] ETA: 19:12:00.301933
+[Epoch 42/400] [Batch 52/79] [G loss: 0.048977] ETA: 19:09:50.842381
+[Epoch 42/400] [Batch 57/79] [G loss: 0.048101] ETA: 19:15:06.309360
+[Epoch 42/400] [Batch 62/79] [G loss: 0.050101] ETA: 19:09:12.153273
+[Epoch 42/400] [Batch 67/79] [G loss: 0.052055] ETA: 19:08:10.573797
+[Epoch 42/400] [Batch 72/79] [G loss: 0.051083] ETA: 19:08:55.407059
+[Epoch 42/400] [Batch 77/79] [G loss: 0.047240] ETA: 19:11:05.037431
+[Epoch 43/400] [Batch 3/79] [G loss: 0.043117] ETA: 19:08:34.984417
+[Epoch 43/400] [Batch 8/79] [G loss: 0.053944] ETA: 18:55:51.511220
+[Epoch 43/400] [Batch 13/79] [G loss: 0.046617] ETA: 18:53:18.727648
+[Epoch 43/400] [Batch 18/79] [G loss: 0.052297] ETA: 18:54:48.499128
+[Epoch 43/400] [Batch 23/79] [G loss: 0.055232] ETA: 18:57:48.519502
+[Epoch 43/400] [Batch 28/79] [G loss: 0.054647] ETA: 18:52:26.168154
+[Epoch 43/400] [Batch 33/79] [G loss: 0.056193] ETA: 18:54:20.342216
+[Epoch 43/400] [Batch 38/79] [G loss: 0.048328] ETA: 19:08:29.508572
+[Epoch 43/400] [Batch 43/79] [G loss: 0.045943] ETA: 19:06:33.176880
+[Epoch 43/400] [Batch 48/79] [G loss: 0.045447] ETA: 19:05:18.728971
+[Epoch 43/400] [Batch 53/79] [G loss: 0.055995] ETA: 19:06:31.130280
+[Epoch 43/400] [Batch 58/79] [G loss: 0.056455] ETA: 19:06:28.514034
+[Epoch 43/400] [Batch 63/79] [G loss: 0.048766] ETA: 19:06:53.857899
+[Epoch 43/400] [Batch 68/79] [G loss: 0.048839] ETA: 19:05:08.068962
+[Epoch 43/400] [Batch 73/79] [G loss: 0.051508] ETA: 19:11:43.807867
+[Epoch 43/400] [Batch 78/79] [G loss: 0.044340] ETA: 2:41:58.964249
+[Epoch 44/400] [Batch 4/79] [G loss: 0.044291] ETA: 19:06:28.776875
+[Epoch 44/400] [Batch 9/79] [G loss: 0.052256] ETA: 19:06:15.359129
+[Epoch 44/400] [Batch 14/79] [G loss: 0.050814] ETA: 19:06:38.440604
+[Epoch 44/400] [Batch 19/79] [G loss: 0.047113] ETA: 19:06:16.949502
+[Epoch 44/400] [Batch 24/79] [G loss: 0.046516] ETA: 19:05:18.600702
+[Epoch 44/400] [Batch 29/79] [G loss: 0.049890] ETA: 19:06:26.900997
+[Epoch 44/400] [Batch 34/79] [G loss: 0.053947] ETA: 19:07:27.209685
+[Epoch 44/400] [Batch 39/79] [G loss: 0.053017] ETA: 19:04:46.404486
+[Epoch 44/400] [Batch 44/79] [G loss: 0.050087] ETA: 19:02:02.887230
+[Epoch 44/400] [Batch 49/79] [G loss: 0.044836] ETA: 19:03:26.565011
+[Epoch 44/400] [Batch 54/79] [G loss: 0.048338] ETA: 19:03:07.627387
+[Epoch 44/400] [Batch 59/79] [G loss: 0.053705] ETA: 19:01:28.691962
+[Epoch 44/400] [Batch 64/79] [G loss: 0.042318] ETA: 19:00:59.189758
+[Epoch 44/400] [Batch 69/79] [G loss: 0.046929] ETA: 19:02:46.721158
+[Epoch 44/400] [Batch 74/79] [G loss: 0.047154] ETA: 19:02:36.360269
+[Epoch 45/400] [Batch 0/79] [G loss: 0.044147] ETA: 19:03:00.627836
+[Epoch 45/400] [Batch 5/79] [G loss: 0.053402] ETA: 19:03:54.825659
+[Epoch 45/400] [Batch 10/79] [G loss: 0.051365] ETA: 19:01:48.570145
+[Epoch 45/400] [Batch 15/79] [G loss: 0.054576] ETA: 19:02:11.583850
+[Epoch 45/400] [Batch 20/79] [G loss: 0.047035] ETA: 19:00:50.918710
+[Epoch 45/400] [Batch 25/79] [G loss: 0.048643] ETA: 19:00:51.980367
+[Epoch 45/400] [Batch 30/79] [G loss: 0.049644] ETA: 19:01:26.306862
+[Epoch 45/400] [Batch 35/79] [G loss: 0.050733] ETA: 18:59:59.943397
+[Epoch 45/400] [Batch 40/79] [G loss: 0.052061] ETA: 19:02:16.561857
+[Epoch 45/400] [Batch 45/79] [G loss: 0.049827] ETA: 18:59:51.985893
+[Epoch 45/400] [Batch 50/79] [G loss: 0.052682] ETA: 18:59:59.255986
+[Epoch 45/400] [Batch 55/79] [G loss: 0.050630] ETA: 19:01:57.376578
+[Epoch 45/400] [Batch 60/79] [G loss: 0.050564] ETA: 18:59:15.767674
+[Epoch 45/400] [Batch 65/79] [G loss: 0.044362] ETA: 18:58:36.610770
+[Epoch 45/400] [Batch 70/79] [G loss: 0.047300] ETA: 18:59:14.612607
+[Epoch 45/400] [Batch 75/79] [G loss: 0.055094] ETA: 18:58:41.189473
+Most similiar photos:  37143103522_3af1d6d204_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 8485334348_2a56d71b13_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 31107177_5d057c6012_b, 5608821155_24c106f5cb_b, 4286840651_be8f4c40a9_b
+[Epoch 46/400] [Batch 1/79] [G loss: 0.051274] ETA: 18:50:18.777388
+[Epoch 46/400] [Batch 6/79] [G loss: 0.045870] ETA: 18:56:03.419209
+[Epoch 46/400] [Batch 11/79] [G loss: 0.051512] ETA: 18:55:36.866699
+[Epoch 46/400] [Batch 16/79] [G loss: 0.048381] ETA: 18:55:08.926594
+[Epoch 46/400] [Batch 21/79] [G loss: 0.053161] ETA: 18:58:13.342742
+[Epoch 46/400] [Batch 26/79] [G loss: 0.045934] ETA: 18:58:48.006539
+[Epoch 46/400] [Batch 31/79] [G loss: 0.048096] ETA: 18:57:28.643860
+[Epoch 46/400] [Batch 36/79] [G loss: 0.044389] ETA: 18:57:36.165612
+[Epoch 46/400] [Batch 41/79] [G loss: 0.048027] ETA: 18:55:59.804696
+[Epoch 46/400] [Batch 46/79] [G loss: 0.055005] ETA: 18:59:28.315048
+[Epoch 46/400] [Batch 51/79] [G loss: 0.049533] ETA: 18:57:03.488127
+[Epoch 46/400] [Batch 56/79] [G loss: 0.046100] ETA: 18:57:50.511165
+[Epoch 46/400] [Batch 61/79] [G loss: 0.051984] ETA: 18:58:48.829849
+[Epoch 46/400] [Batch 66/79] [G loss: 0.047634] ETA: 18:58:12.686534
+[Epoch 46/400] [Batch 71/79] [G loss: 0.050085] ETA: 18:57:40.116553
+[Epoch 46/400] [Batch 76/79] [G loss: 0.051946] ETA: 18:56:28.813908
+[Epoch 47/400] [Batch 2/79] [G loss: 0.043255] ETA: 18:57:52.052279
+[Epoch 47/400] [Batch 7/79] [G loss: 0.043892] ETA: 18:57:44.390421
+[Epoch 47/400] [Batch 12/79] [G loss: 0.050101] ETA: 18:56:38.953956
+[Epoch 47/400] [Batch 17/79] [G loss: 0.049125] ETA: 18:56:58.243539
+[Epoch 47/400] [Batch 22/79] [G loss: 0.045827] ETA: 18:59:14.381570
+[Epoch 47/400] [Batch 27/79] [G loss: 0.045061] ETA: 18:55:33.560052
+[Epoch 47/400] [Batch 32/79] [G loss: 0.048336] ETA: 18:54:50.782918
+[Epoch 47/400] [Batch 37/79] [G loss: 0.045774] ETA: 18:56:25.424030
+[Epoch 47/400] [Batch 42/79] [G loss: 0.045068] ETA: 18:53:34.429686
+[Epoch 47/400] [Batch 47/79] [G loss: 0.041981] ETA: 18:55:47.121506
+[Epoch 47/400] [Batch 52/79] [G loss: 0.047926] ETA: 18:53:36.781400
+[Epoch 47/400] [Batch 57/79] [G loss: 0.040541] ETA: 18:52:33.797717
+[Epoch 47/400] [Batch 62/79] [G loss: 0.046449] ETA: 18:51:26.029261
+[Epoch 47/400] [Batch 67/79] [G loss: 0.050937] ETA: 18:53:06.614728
+[Epoch 47/400] [Batch 72/79] [G loss: 0.046644] ETA: 18:54:35.156435
+[Epoch 47/400] [Batch 77/79] [G loss: 0.053978] ETA: 18:51:24.395227
+[Epoch 48/400] [Batch 3/79] [G loss: 0.052684] ETA: 18:52:15.943485
+[Epoch 48/400] [Batch 8/79] [G loss: 0.049180] ETA: 18:53:30.726595
+[Epoch 48/400] [Batch 13/79] [G loss: 0.048278] ETA: 18:51:15.844814
+[Epoch 48/400] [Batch 18/79] [G loss: 0.047849] ETA: 18:56:49.699178
+[Epoch 48/400] [Batch 23/79] [G loss: 0.047321] ETA: 18:50:58.718181
+[Epoch 48/400] [Batch 28/79] [G loss: 0.050737] ETA: 18:51:40.652003
+[Epoch 48/400] [Batch 33/79] [G loss: 0.047233] ETA: 18:51:31.655815
+[Epoch 48/400] [Batch 38/79] [G loss: 0.052020] ETA: 18:49:35.360420
+[Epoch 48/400] [Batch 43/79] [G loss: 0.049182] ETA: 18:50:09.819646
+[Epoch 48/400] [Batch 48/79] [G loss: 0.045457] ETA: 18:49:20.471859
+[Epoch 48/400] [Batch 53/79] [G loss: 0.047821] ETA: 18:49:35.020938
+[Epoch 48/400] [Batch 58/79] [G loss: 0.041034] ETA: 18:49:52.100966
+[Epoch 48/400] [Batch 63/79] [G loss: 0.046313] ETA: 18:52:55.548995
+[Epoch 48/400] [Batch 68/79] [G loss: 0.044523] ETA: 18:50:35.362921
+[Epoch 48/400] [Batch 73/79] [G loss: 0.046523] ETA: 18:52:16.686451
+[Epoch 48/400] [Batch 78/79] [G loss: 0.040405] ETA: 2:37:54.708447
+[Epoch 49/400] [Batch 4/79] [G loss: 0.046676] ETA: 18:49:54.814998
+[Epoch 49/400] [Batch 9/79] [G loss: 0.049984] ETA: 18:47:36.701174
+[Epoch 49/400] [Batch 14/79] [G loss: 0.046711] ETA: 18:48:49.281893
+[Epoch 49/400] [Batch 19/79] [G loss: 0.049218] ETA: 18:47:09.942052
+[Epoch 49/400] [Batch 24/79] [G loss: 0.047187] ETA: 18:46:59.766741
+[Epoch 49/400] [Batch 29/79] [G loss: 0.055058] ETA: 18:47:01.610332
+[Epoch 49/400] [Batch 34/79] [G loss: 0.042767] ETA: 18:46:34.824835
+[Epoch 49/400] [Batch 39/79] [G loss: 0.045758] ETA: 18:46:11.305897
+[Epoch 49/400] [Batch 44/79] [G loss: 0.043440] ETA: 18:45:14.589936
+[Epoch 49/400] [Batch 49/79] [G loss: 0.051600] ETA: 18:45:12.348518
+[Epoch 49/400] [Batch 54/79] [G loss: 0.046035] ETA: 18:48:08.856268
+[Epoch 49/400] [Batch 59/79] [G loss: 0.049339] ETA: 18:48:40.820611
+[Epoch 49/400] [Batch 64/79] [G loss: 0.049705] ETA: 18:47:04.064161
+[Epoch 49/400] [Batch 69/79] [G loss: 0.048380] ETA: 18:44:26.885033
+[Epoch 49/400] [Batch 74/79] [G loss: 0.048850] ETA: 18:43:39.565891
+[Epoch 50/400] [Batch 0/79] [G loss: 0.042663] ETA: 18:45:44.199133
+[Epoch 50/400] [Batch 5/79] [G loss: 0.046914] ETA: 18:45:59.173204
+[Epoch 50/400] [Batch 10/79] [G loss: 0.047139] ETA: 18:46:45.854578
+[Epoch 50/400] [Batch 15/79] [G loss: 0.045049] ETA: 18:47:39.090163
+[Epoch 50/400] [Batch 20/79] [G loss: 0.048658] ETA: 18:51:01.298254
+[Epoch 50/400] [Batch 25/79] [G loss: 0.045165] ETA: 18:48:28.485723
+[Epoch 50/400] [Batch 30/79] [G loss: 0.052915] ETA: 18:44:22.393141
+[Epoch 50/400] [Batch 35/79] [G loss: 0.041628] ETA: 18:44:01.568763
+[Epoch 50/400] [Batch 40/79] [G loss: 0.050303] ETA: 18:46:43.550110
+[Epoch 50/400] [Batch 45/79] [G loss: 0.049406] ETA: 18:45:44.414018
+[Epoch 50/400] [Batch 50/79] [G loss: 0.047979] ETA: 18:44:23.981152
+[Epoch 50/400] [Batch 55/79] [G loss: 0.049005] ETA: 18:44:50.852789
+[Epoch 50/400] [Batch 60/79] [G loss: 0.046109] ETA: 18:43:31.127434
+[Epoch 50/400] [Batch 65/79] [G loss: 0.053593] ETA: 18:43:54.925275
+[Epoch 50/400] [Batch 70/79] [G loss: 0.046719] ETA: 18:45:29.535680
+[Epoch 50/400] [Batch 75/79] [G loss: 0.049485] ETA: 18:43:31.360013
+Most similiar photos:  37143103522_3af1d6d204_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 16893028003_737c554fcd_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 31107177_5d057c6012_b, 25743317_c7012edd72_b, 2699008188_c56d130a9c_b
+[Epoch 51/400] [Batch 1/79] [G loss: 0.045727] ETA: 18:35:31.769056
+[Epoch 51/400] [Batch 6/79] [G loss: 0.054579] ETA: 18:39:02.546486
+[Epoch 51/400] [Batch 11/79] [G loss: 0.042579] ETA: 18:40:25.710077
+[Epoch 51/400] [Batch 16/79] [G loss: 0.047656] ETA: 18:31:36.077110
+[Epoch 51/400] [Batch 21/79] [G loss: 0.042768] ETA: 18:44:43.228111
+[Epoch 51/400] [Batch 26/79] [G loss: 0.040505] ETA: 18:43:16.015660
+[Epoch 51/400] [Batch 31/79] [G loss: 0.054657] ETA: 18:42:38.995028
+[Epoch 51/400] [Batch 36/79] [G loss: 0.048247] ETA: 18:40:56.722167
+[Epoch 51/400] [Batch 41/79] [G loss: 0.049157] ETA: 18:42:49.277894
+[Epoch 51/400] [Batch 46/79] [G loss: 0.040671] ETA: 18:39:11.111931
+[Epoch 51/400] [Batch 51/79] [G loss: 0.048473] ETA: 18:43:13.484802
+[Epoch 51/400] [Batch 56/79] [G loss: 0.048245] ETA: 18:26:45.676658
+[Epoch 51/400] [Batch 61/79] [G loss: 0.049631] ETA: 18:40:10.316541
+[Epoch 51/400] [Batch 66/79] [G loss: 0.047171] ETA: 18:39:02.130930
+[Epoch 51/400] [Batch 71/79] [G loss: 0.049760] ETA: 18:38:28.302116
+[Epoch 51/400] [Batch 76/79] [G loss: 0.046240] ETA: 18:37:22.464988
+[Epoch 52/400] [Batch 2/79] [G loss: 0.047765] ETA: 18:36:50.558419
+[Epoch 52/400] [Batch 7/79] [G loss: 0.049432] ETA: 18:37:25.990425
+[Epoch 52/400] [Batch 12/79] [G loss: 0.047733] ETA: 18:37:10.511169
+[Epoch 52/400] [Batch 17/79] [G loss: 0.047310] ETA: 18:37:25.624179
+[Epoch 52/400] [Batch 22/79] [G loss: 0.040474] ETA: 18:35:48.890405
+[Epoch 52/400] [Batch 27/79] [G loss: 0.048732] ETA: 18:37:01.431309
+[Epoch 52/400] [Batch 32/79] [G loss: 0.052058] ETA: 18:36:26.996541
+[Epoch 52/400] [Batch 37/79] [G loss: 0.048966] ETA: 18:25:24.966829
+[Epoch 52/400] [Batch 42/79] [G loss: 0.047797] ETA: 18:34:31.252763
+[Epoch 52/400] [Batch 47/79] [G loss: 0.045233] ETA: 18:36:45.552713
+[Epoch 52/400] [Batch 52/79] [G loss: 0.045664] ETA: 18:35:34.727306
+[Epoch 52/400] [Batch 57/79] [G loss: 0.049527] ETA: 18:35:01.710699
+[Epoch 52/400] [Batch 62/79] [G loss: 0.043354] ETA: 18:32:59.282699
+[Epoch 52/400] [Batch 67/79] [G loss: 0.050194] ETA: 18:32:44.971894
+[Epoch 52/400] [Batch 72/79] [G loss: 0.046429] ETA: 18:34:59.414721
+[Epoch 52/400] [Batch 77/79] [G loss: 0.051481] ETA: 18:32:16.489885
+[Epoch 53/400] [Batch 3/79] [G loss: 0.048004] ETA: 18:31:43.693728
+[Epoch 53/400] [Batch 8/79] [G loss: 0.046001] ETA: 18:32:46.907119
+[Epoch 53/400] [Batch 13/79] [G loss: 0.051005] ETA: 18:33:09.629650
+[Epoch 53/400] [Batch 18/79] [G loss: 0.049320] ETA: 18:32:37.076616
+[Epoch 53/400] [Batch 23/79] [G loss: 0.043699] ETA: 18:32:58.458109
+[Epoch 53/400] [Batch 28/79] [G loss: 0.050319] ETA: 18:32:59.828736
+[Epoch 53/400] [Batch 33/79] [G loss: 0.047988] ETA: 18:32:41.891408
+[Epoch 53/400] [Batch 38/79] [G loss: 0.046120] ETA: 18:34:00.264291
+[Epoch 53/400] [Batch 43/79] [G loss: 0.043355] ETA: 18:32:58.677440
+[Epoch 53/400] [Batch 48/79] [G loss: 0.042001] ETA: 18:29:26.592466
+[Epoch 53/400] [Batch 53/79] [G loss: 0.052799] ETA: 18:30:49.184761
+[Epoch 53/400] [Batch 58/79] [G loss: 0.047648] ETA: 18:22:01.171423
+[Epoch 53/400] [Batch 63/79] [G loss: 0.042291] ETA: 18:15:39.385331
+[Epoch 53/400] [Batch 68/79] [G loss: 0.047756] ETA: 18:36:11.096349
+[Epoch 53/400] [Batch 73/79] [G loss: 0.044762] ETA: 18:35:02.401733
+[Epoch 53/400] [Batch 78/79] [G loss: 0.048475] ETA: 2:33:26.495862
+[Epoch 54/400] [Batch 4/79] [G loss: 0.047004] ETA: 18:31:26.719787
+[Epoch 54/400] [Batch 9/79] [G loss: 0.042553] ETA: 18:29:42.172394
+[Epoch 54/400] [Batch 14/79] [G loss: 0.039651] ETA: 18:29:00.430317
+[Epoch 54/400] [Batch 19/79] [G loss: 0.043386] ETA: 18:29:50.530461
+[Epoch 54/400] [Batch 24/79] [G loss: 0.047343] ETA: 18:29:22.857430
+[Epoch 54/400] [Batch 29/79] [G loss: 0.052641] ETA: 18:29:35.181117
+[Epoch 54/400] [Batch 34/79] [G loss: 0.044622] ETA: 18:31:27.842417
+[Epoch 54/400] [Batch 39/79] [G loss: 0.045491] ETA: 18:29:22.389168
+[Epoch 54/400] [Batch 44/79] [G loss: 0.047112] ETA: 18:30:08.571827
+[Epoch 54/400] [Batch 49/79] [G loss: 0.044715] ETA: 18:28:29.340738
+[Epoch 54/400] [Batch 54/79] [G loss: 0.042148] ETA: 18:28:18.817883
+[Epoch 54/400] [Batch 59/79] [G loss: 0.049125] ETA: 18:26:58.011433
+[Epoch 54/400] [Batch 64/79] [G loss: 0.053742] ETA: 18:27:44.227352
+[Epoch 54/400] [Batch 69/79] [G loss: 0.043945] ETA: 18:29:19.487501
+[Epoch 54/400] [Batch 74/79] [G loss: 0.042708] ETA: 18:26:59.810886
+[Epoch 55/400] [Batch 0/79] [G loss: 0.045011] ETA: 18:27:54.233744
+[Epoch 55/400] [Batch 5/79] [G loss: 0.044128] ETA: 18:29:53.711674
+[Epoch 55/400] [Batch 10/79] [G loss: 0.041611] ETA: 18:28:17.353659
+[Epoch 55/400] [Batch 15/79] [G loss: 0.047089] ETA: 18:27:36.067600
+[Epoch 55/400] [Batch 20/79] [G loss: 0.045115] ETA: 18:26:36.221294
+[Epoch 55/400] [Batch 25/79] [G loss: 0.043062] ETA: 18:28:17.215724
+[Epoch 55/400] [Batch 30/79] [G loss: 0.044402] ETA: 18:27:16.323345
+[Epoch 55/400] [Batch 35/79] [G loss: 0.043349] ETA: 18:26:45.340652
+[Epoch 55/400] [Batch 40/79] [G loss: 0.048856] ETA: 18:26:48.806145
+[Epoch 55/400] [Batch 45/79] [G loss: 0.053552] ETA: 18:27:10.560265
+[Epoch 55/400] [Batch 50/79] [G loss: 0.050089] ETA: 18:27:12.013142
+[Epoch 55/400] [Batch 55/79] [G loss: 0.043494] ETA: 18:25:27.827072
+[Epoch 55/400] [Batch 60/79] [G loss: 0.044417] ETA: 18:25:15.893809
+[Epoch 55/400] [Batch 65/79] [G loss: 0.041429] ETA: 18:26:45.231645
+[Epoch 55/400] [Batch 70/79] [G loss: 0.042633] ETA: 18:25:56.925344
+[Epoch 55/400] [Batch 75/79] [G loss: 0.044947] ETA: 18:24:44.584236
+Most similiar photos:  5460634866_4b69cc750f_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 10875154203_0aee0d4f17_b, 25743317_c7012edd72_b, 2699008188_c56d130a9c_b
+[Epoch 56/400] [Batch 1/79] [G loss: 0.044534] ETA: 18:16:21.228685
+[Epoch 56/400] [Batch 6/79] [G loss: 0.047582] ETA: 18:20:31.419351
+[Epoch 56/400] [Batch 11/79] [G loss: 0.044931] ETA: 18:22:53.139850
+[Epoch 56/400] [Batch 16/79] [G loss: 0.046682] ETA: 18:23:28.198395
+[Epoch 56/400] [Batch 21/79] [G loss: 0.046460] ETA: 18:10:40.496482
+[Epoch 56/400] [Batch 26/79] [G loss: 0.042096] ETA: 18:24:56.103072
+[Epoch 56/400] [Batch 31/79] [G loss: 0.047833] ETA: 18:24:52.799141
+[Epoch 56/400] [Batch 36/79] [G loss: 0.039392] ETA: 18:22:46.684890
+[Epoch 56/400] [Batch 41/79] [G loss: 0.045876] ETA: 18:25:20.010391
+[Epoch 56/400] [Batch 46/79] [G loss: 0.047978] ETA: 18:24:35.739603
+[Epoch 56/400] [Batch 51/79] [G loss: 0.043384] ETA: 18:21:26.488158
+[Epoch 56/400] [Batch 56/79] [G loss: 0.051204] ETA: 18:21:58.087006
+[Epoch 56/400] [Batch 61/79] [G loss: 0.044610] ETA: 18:22:27.478170
+[Epoch 56/400] [Batch 66/79] [G loss: 0.045743] ETA: 18:22:30.179021
+[Epoch 56/400] [Batch 71/79] [G loss: 0.046786] ETA: 18:20:38.549198
+[Epoch 56/400] [Batch 76/79] [G loss: 0.044810] ETA: 18:20:40.265131
+[Epoch 57/400] [Batch 2/79] [G loss: 0.042911] ETA: 18:21:16.678795
+[Epoch 57/400] [Batch 7/79] [G loss: 0.044082] ETA: 18:22:44.441035
+[Epoch 57/400] [Batch 12/79] [G loss: 0.050111] ETA: 18:22:27.037183
+[Epoch 57/400] [Batch 17/79] [G loss: 0.040240] ETA: 18:23:57.301760
+[Epoch 57/400] [Batch 22/79] [G loss: 0.046686] ETA: 18:20:15.304202
+[Epoch 57/400] [Batch 27/79] [G loss: 0.042377] ETA: 18:21:50.307345
+[Epoch 57/400] [Batch 32/79] [G loss: 0.050200] ETA: 18:20:46.125512
+[Epoch 57/400] [Batch 37/79] [G loss: 0.048632] ETA: 18:22:35.472393
+[Epoch 57/400] [Batch 42/79] [G loss: 0.045361] ETA: 18:21:41.301497
+[Epoch 57/400] [Batch 47/79] [G loss: 0.045276] ETA: 18:20:12.694359
+[Epoch 57/400] [Batch 52/79] [G loss: 0.045987] ETA: 18:17:35.605137
+[Epoch 57/400] [Batch 57/79] [G loss: 0.042836] ETA: 18:18:20.323296
+[Epoch 57/400] [Batch 62/79] [G loss: 0.047496] ETA: 18:18:20.861291
+[Epoch 57/400] [Batch 67/79] [G loss: 0.046061] ETA: 18:20:39.479899
+[Epoch 57/400] [Batch 72/79] [G loss: 0.041128] ETA: 18:19:16.697333
+[Epoch 57/400] [Batch 77/79] [G loss: 0.043679] ETA: 18:20:05.069213
+[Epoch 58/400] [Batch 3/79] [G loss: 0.047646] ETA: 18:20:28.666381
+[Epoch 58/400] [Batch 8/79] [G loss: 0.047161] ETA: 18:18:54.751785
+[Epoch 58/400] [Batch 13/79] [G loss: 0.039645] ETA: 18:13:31.000332
+[Epoch 58/400] [Batch 18/79] [G loss: 0.045560] ETA: 18:21:51.544847
+[Epoch 58/400] [Batch 23/79] [G loss: 0.047780] ETA: 18:18:13.565291
+[Epoch 58/400] [Batch 28/79] [G loss: 0.047077] ETA: 18:19:44.299893
+[Epoch 58/400] [Batch 33/79] [G loss: 0.039376] ETA: 18:18:09.788704
+[Epoch 58/400] [Batch 38/79] [G loss: 0.046766] ETA: 18:17:22.574263
+[Epoch 58/400] [Batch 43/79] [G loss: 0.045356] ETA: 18:19:46.460805
+[Epoch 58/400] [Batch 48/79] [G loss: 0.043774] ETA: 18:17:52.530527
+[Epoch 58/400] [Batch 53/79] [G loss: 0.052939] ETA: 18:18:17.252699
+[Epoch 58/400] [Batch 58/79] [G loss: 0.042103] ETA: 18:17:19.068718
+[Epoch 58/400] [Batch 63/79] [G loss: 0.040478] ETA: 18:20:55.702039
+[Epoch 58/400] [Batch 68/79] [G loss: 0.042627] ETA: 18:16:18.273618
+[Epoch 58/400] [Batch 73/79] [G loss: 0.045460] ETA: 18:17:51.542186
+[Epoch 58/400] [Batch 78/79] [G loss: 0.058288] ETA: 2:32:13.815780
+[Epoch 59/400] [Batch 4/79] [G loss: 0.047344] ETA: 18:17:53.052453
+[Epoch 59/400] [Batch 9/79] [G loss: 0.039826] ETA: 18:18:39.926038
+[Epoch 59/400] [Batch 14/79] [G loss: 0.044073] ETA: 18:06:01.063403
+[Epoch 59/400] [Batch 19/79] [G loss: 0.037697] ETA: 18:18:39.939747
+[Epoch 59/400] [Batch 24/79] [G loss: 0.049943] ETA: 18:16:23.706102
+[Epoch 59/400] [Batch 29/79] [G loss: 0.042456] ETA: 18:14:35.575011
+[Epoch 59/400] [Batch 34/79] [G loss: 0.039999] ETA: 18:17:21.866294
+[Epoch 59/400] [Batch 39/79] [G loss: 0.046043] ETA: 18:15:44.517279
+[Epoch 59/400] [Batch 44/79] [G loss: 0.050587] ETA: 18:16:23.877389
+[Epoch 59/400] [Batch 49/79] [G loss: 0.048558] ETA: 18:15:22.192593
+[Epoch 59/400] [Batch 54/79] [G loss: 0.044268] ETA: 18:13:45.483354
+[Epoch 59/400] [Batch 59/79] [G loss: 0.047551] ETA: 18:14:50.644226
+[Epoch 59/400] [Batch 64/79] [G loss: 0.043198] ETA: 18:14:24.764196
+[Epoch 59/400] [Batch 69/79] [G loss: 0.043907] ETA: 18:14:36.250832
+[Epoch 59/400] [Batch 74/79] [G loss: 0.039601] ETA: 18:13:58.185081
+[Epoch 60/400] [Batch 0/79] [G loss: 0.046626] ETA: 18:13:35.696888
+[Epoch 60/400] [Batch 5/79] [G loss: 0.039974] ETA: 18:12:36.121498
+[Epoch 60/400] [Batch 10/79] [G loss: 0.046590] ETA: 18:14:09.310863
+[Epoch 60/400] [Batch 15/79] [G loss: 0.045282] ETA: 18:12:14.859327
+[Epoch 60/400] [Batch 20/79] [G loss: 0.046271] ETA: 18:13:08.615656
+[Epoch 60/400] [Batch 25/79] [G loss: 0.045101] ETA: 18:11:43.991468
+[Epoch 60/400] [Batch 30/79] [G loss: 0.040759] ETA: 18:11:35.554211
+[Epoch 60/400] [Batch 35/79] [G loss: 0.041758] ETA: 18:10:00.813615
+[Epoch 60/400] [Batch 40/79] [G loss: 0.044851] ETA: 18:09:25.334988
+[Epoch 60/400] [Batch 45/79] [G loss: 0.051527] ETA: 18:09:37.916291
+[Epoch 60/400] [Batch 50/79] [G loss: 0.042956] ETA: 18:10:45.951760
+[Epoch 60/400] [Batch 55/79] [G loss: 0.045761] ETA: 18:09:43.533654
+[Epoch 60/400] [Batch 60/79] [G loss: 0.043262] ETA: 18:10:07.611370
+[Epoch 60/400] [Batch 65/79] [G loss: 0.044936] ETA: 18:08:45.998211
+[Epoch 60/400] [Batch 70/79] [G loss: 0.043885] ETA: 18:09:57.762051
+[Epoch 60/400] [Batch 75/79] [G loss: 0.040549] ETA: 18:07:17.004321
+Most similiar photos:  23936343771_7927ece16a_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 7215981986_a68e988a2e_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 61/400] [Batch 1/79] [G loss: 0.041908] ETA: 18:01:19.776382
+[Epoch 61/400] [Batch 6/79] [G loss: 0.044563] ETA: 18:05:25.083894
+[Epoch 61/400] [Batch 11/79] [G loss: 0.044643] ETA: 18:05:13.739302
+[Epoch 61/400] [Batch 16/79] [G loss: 0.052897] ETA: 18:08:15.670410
+[Epoch 61/400] [Batch 21/79] [G loss: 0.045049] ETA: 18:12:04.314137
+[Epoch 61/400] [Batch 26/79] [G loss: 0.046493] ETA: 18:07:56.817749
+[Epoch 61/400] [Batch 31/79] [G loss: 0.048725] ETA: 18:17:56.813889
+[Epoch 61/400] [Batch 36/79] [G loss: 0.043823] ETA: 18:08:48.159885
+[Epoch 61/400] [Batch 41/79] [G loss: 0.040464] ETA: 18:07:36.981463
+[Epoch 61/400] [Batch 46/79] [G loss: 0.041993] ETA: 18:08:12.100807
+[Epoch 61/400] [Batch 51/79] [G loss: 0.042091] ETA: 18:06:59.397991
+[Epoch 61/400] [Batch 56/79] [G loss: 0.043942] ETA: 18:06:50.294992
+[Epoch 61/400] [Batch 61/79] [G loss: 0.045658] ETA: 18:06:59.614449
+[Epoch 61/400] [Batch 66/79] [G loss: 0.044594] ETA: 18:07:52.664194
+[Epoch 61/400] [Batch 71/79] [G loss: 0.041515] ETA: 18:07:40.434976
+[Epoch 61/400] [Batch 76/79] [G loss: 0.043458] ETA: 18:07:48.828372
+[Epoch 62/400] [Batch 2/79] [G loss: 0.040268] ETA: 18:08:32.525010
+[Epoch 62/400] [Batch 7/79] [G loss: 0.048595] ETA: 18:07:53.613864
+[Epoch 62/400] [Batch 12/79] [G loss: 0.044364] ETA: 18:07:35.680089
+[Epoch 62/400] [Batch 17/79] [G loss: 0.043295] ETA: 18:08:11.127309
+[Epoch 62/400] [Batch 22/79] [G loss: 0.038798] ETA: 18:09:08.336754
+[Epoch 62/400] [Batch 27/79] [G loss: 0.045162] ETA: 18:06:42.095109
+[Epoch 62/400] [Batch 32/79] [G loss: 0.049883] ETA: 18:03:30.197911
+[Epoch 62/400] [Batch 37/79] [G loss: 0.041598] ETA: 18:04:11.514165
+[Epoch 62/400] [Batch 42/79] [G loss: 0.043927] ETA: 18:05:00.787435
+[Epoch 62/400] [Batch 47/79] [G loss: 0.044491] ETA: 18:04:49.829929
+[Epoch 62/400] [Batch 52/79] [G loss: 0.046757] ETA: 18:02:57.591503
+[Epoch 62/400] [Batch 57/79] [G loss: 0.044855] ETA: 18:04:21.490966
+[Epoch 62/400] [Batch 62/79] [G loss: 0.049151] ETA: 18:02:45.925312
+[Epoch 62/400] [Batch 67/79] [G loss: 0.040477] ETA: 18:05:09.307489
+[Epoch 62/400] [Batch 72/79] [G loss: 0.042707] ETA: 18:03:37.797585
+[Epoch 62/400] [Batch 77/79] [G loss: 0.044866] ETA: 18:11:45.048662
+[Epoch 63/400] [Batch 3/79] [G loss: 0.040986] ETA: 18:06:08.824239
+[Epoch 63/400] [Batch 8/79] [G loss: 0.045984] ETA: 18:06:23.488628
+[Epoch 63/400] [Batch 13/79] [G loss: 0.043407] ETA: 18:05:55.287037
+[Epoch 63/400] [Batch 18/79] [G loss: 0.041643] ETA: 18:05:41.921672
+[Epoch 63/400] [Batch 23/79] [G loss: 0.037934] ETA: 18:04:03.714333
+[Epoch 63/400] [Batch 28/79] [G loss: 0.041644] ETA: 18:03:27.856125
+[Epoch 63/400] [Batch 33/79] [G loss: 0.041605] ETA: 18:01:21.408293
+[Epoch 63/400] [Batch 38/79] [G loss: 0.038788] ETA: 18:01:54.520874
+[Epoch 63/400] [Batch 43/79] [G loss: 0.048080] ETA: 18:03:35.620537
+[Epoch 63/400] [Batch 48/79] [G loss: 0.041513] ETA: 18:02:43.866556
+[Epoch 63/400] [Batch 53/79] [G loss: 0.043332] ETA: 18:01:19.237261
+[Epoch 63/400] [Batch 58/79] [G loss: 0.045229] ETA: 18:01:53.833373
+[Epoch 63/400] [Batch 63/79] [G loss: 0.041539] ETA: 18:06:32.817078
+[Epoch 63/400] [Batch 68/79] [G loss: 0.049910] ETA: 18:00:43.274692
+[Epoch 63/400] [Batch 73/79] [G loss: 0.037541] ETA: 18:01:32.966652
+[Epoch 63/400] [Batch 78/79] [G loss: 0.033533] ETA: 2:30:22.620630
+[Epoch 64/400] [Batch 4/79] [G loss: 0.049868] ETA: 18:00:20.004597
+[Epoch 64/400] [Batch 9/79] [G loss: 0.046593] ETA: 18:00:05.040840
+[Epoch 64/400] [Batch 14/79] [G loss: 0.042876] ETA: 18:01:03.027170
+[Epoch 64/400] [Batch 19/79] [G loss: 0.043661] ETA: 18:02:09.505539
+[Epoch 64/400] [Batch 24/79] [G loss: 0.040437] ETA: 18:02:03.835688
+[Epoch 64/400] [Batch 29/79] [G loss: 0.041729] ETA: 18:00:01.414783
+[Epoch 64/400] [Batch 34/79] [G loss: 0.043605] ETA: 17:57:15.240850
+[Epoch 64/400] [Batch 39/79] [G loss: 0.040183] ETA: 17:59:30.144106
+[Epoch 64/400] [Batch 44/79] [G loss: 0.048257] ETA: 17:57:31.029825
+[Epoch 64/400] [Batch 49/79] [G loss: 0.043872] ETA: 17:57:28.711150
+[Epoch 64/400] [Batch 54/79] [G loss: 0.037706] ETA: 17:56:41.635637
+[Epoch 64/400] [Batch 59/79] [G loss: 0.041557] ETA: 17:58:21.802547
+[Epoch 64/400] [Batch 64/79] [G loss: 0.041372] ETA: 17:57:45.363522
+[Epoch 64/400] [Batch 69/79] [G loss: 0.044134] ETA: 17:56:14.270582
+[Epoch 64/400] [Batch 74/79] [G loss: 0.046217] ETA: 17:55:29.958880
+[Epoch 65/400] [Batch 0/79] [G loss: 0.042046] ETA: 17:56:48.194611
+[Epoch 65/400] [Batch 5/79] [G loss: 0.044286] ETA: 17:56:08.489270
+[Epoch 65/400] [Batch 10/79] [G loss: 0.042694] ETA: 17:56:19.448758
+[Epoch 65/400] [Batch 15/79] [G loss: 0.042894] ETA: 17:55:47.378790
+[Epoch 65/400] [Batch 20/79] [G loss: 0.040278] ETA: 17:56:02.628897
+[Epoch 65/400] [Batch 25/79] [G loss: 0.051515] ETA: 17:54:56.121111
+[Epoch 65/400] [Batch 30/79] [G loss: 0.042700] ETA: 17:53:42.568653
+[Epoch 65/400] [Batch 35/79] [G loss: 0.041703] ETA: 17:53:24.737506
+[Epoch 65/400] [Batch 40/79] [G loss: 0.038204] ETA: 17:54:34.494028
+[Epoch 65/400] [Batch 45/79] [G loss: 0.039399] ETA: 17:54:12.738891
+[Epoch 65/400] [Batch 50/79] [G loss: 0.045550] ETA: 17:52:36.710801
+[Epoch 65/400] [Batch 55/79] [G loss: 0.044305] ETA: 17:53:50.515795
+[Epoch 65/400] [Batch 60/79] [G loss: 0.038986] ETA: 17:53:18.430363
+[Epoch 65/400] [Batch 65/79] [G loss: 0.049564] ETA: 17:53:59.158058
+[Epoch 65/400] [Batch 70/79] [G loss: 0.042563] ETA: 17:53:52.843975
+[Epoch 65/400] [Batch 75/79] [G loss: 0.039339] ETA: 17:42:41.508851
+Most similiar photos:  29659804521_58dbfe64c3_b, 1837049499_be7ff67a8e_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 7215981986_a68e988a2e_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 66/400] [Batch 1/79] [G loss: 0.044441] ETA: 17:45:10.010272
+[Epoch 66/400] [Batch 6/79] [G loss: 0.043106] ETA: 17:49:54.316225
+[Epoch 66/400] [Batch 11/79] [G loss: 0.042844] ETA: 17:51:28.829833
+[Epoch 66/400] [Batch 16/79] [G loss: 0.045099] ETA: 17:53:41.453104
+[Epoch 66/400] [Batch 21/79] [G loss: 0.041893] ETA: 17:54:14.647574
+[Epoch 66/400] [Batch 26/79] [G loss: 0.048257] ETA: 17:53:50.960732
+[Epoch 66/400] [Batch 31/79] [G loss: 0.045262] ETA: 17:54:19.293230
+[Epoch 66/400] [Batch 36/79] [G loss: 0.041887] ETA: 17:54:40.907094
+[Epoch 66/400] [Batch 41/79] [G loss: 0.047833] ETA: 17:53:52.253593
+[Epoch 66/400] [Batch 46/79] [G loss: 0.042898] ETA: 17:54:11.770163
+[Epoch 66/400] [Batch 51/79] [G loss: 0.040589] ETA: 17:54:04.784620
+[Epoch 66/400] [Batch 56/79] [G loss: 0.042949] ETA: 17:53:26.610160
+[Epoch 66/400] [Batch 61/79] [G loss: 0.043933] ETA: 17:54:00.579861
+[Epoch 66/400] [Batch 66/79] [G loss: 0.043070] ETA: 17:52:51.775990
+[Epoch 66/400] [Batch 71/79] [G loss: 0.038231] ETA: 17:52:24.740704
+[Epoch 66/400] [Batch 76/79] [G loss: 0.043140] ETA: 17:51:12.063932
+[Epoch 67/400] [Batch 2/79] [G loss: 0.045402] ETA: 17:50:39.291246
+[Epoch 67/400] [Batch 7/79] [G loss: 0.043174] ETA: 17:50:07.792997
+[Epoch 67/400] [Batch 12/79] [G loss: 0.041921] ETA: 17:52:40.353742
+[Epoch 67/400] [Batch 17/79] [G loss: 0.046430] ETA: 17:52:28.911645
+[Epoch 67/400] [Batch 22/79] [G loss: 0.043979] ETA: 17:50:58.294086
+[Epoch 67/400] [Batch 27/79] [G loss: 0.039205] ETA: 17:50:01.327772
+[Epoch 67/400] [Batch 32/79] [G loss: 0.043492] ETA: 17:51:15.092459
+[Epoch 67/400] [Batch 37/79] [G loss: 0.041834] ETA: 17:54:03.412116
+[Epoch 67/400] [Batch 42/79] [G loss: 0.046947] ETA: 17:51:04.312617
+[Epoch 67/400] [Batch 47/79] [G loss: 0.042612] ETA: 17:50:40.558782
+[Epoch 67/400] [Batch 52/79] [G loss: 0.044581] ETA: 17:49:28.653617
+[Epoch 67/400] [Batch 57/79] [G loss: 0.040122] ETA: 17:51:06.238511
+[Epoch 67/400] [Batch 62/79] [G loss: 0.042248] ETA: 17:49:21.939989
+[Epoch 67/400] [Batch 67/79] [G loss: 0.042158] ETA: 17:50:11.814423
+[Epoch 67/400] [Batch 72/79] [G loss: 0.042129] ETA: 17:51:00.664405
+[Epoch 67/400] [Batch 77/79] [G loss: 0.042031] ETA: 17:49:08.001308
+[Epoch 68/400] [Batch 3/79] [G loss: 0.045865] ETA: 17:48:29.637761
+[Epoch 68/400] [Batch 8/79] [G loss: 0.040459] ETA: 17:48:50.684366
+[Epoch 68/400] [Batch 13/79] [G loss: 0.045995] ETA: 17:47:22.715788
+[Epoch 68/400] [Batch 18/79] [G loss: 0.044511] ETA: 17:47:51.975176
+[Epoch 68/400] [Batch 23/79] [G loss: 0.040751] ETA: 17:47:33.179723
+[Epoch 68/400] [Batch 28/79] [G loss: 0.039745] ETA: 17:47:33.857327
+[Epoch 68/400] [Batch 33/79] [G loss: 0.037605] ETA: 17:46:26.480404
+[Epoch 68/400] [Batch 38/79] [G loss: 0.046256] ETA: 17:47:53.930311
+[Epoch 68/400] [Batch 43/79] [G loss: 0.040562] ETA: 17:47:08.510056
+[Epoch 68/400] [Batch 48/79] [G loss: 0.041288] ETA: 17:46:46.790099
+[Epoch 68/400] [Batch 53/79] [G loss: 0.034944] ETA: 17:45:08.320552
+[Epoch 68/400] [Batch 58/79] [G loss: 0.039168] ETA: 17:47:07.233949
+[Epoch 68/400] [Batch 63/79] [G loss: 0.041436] ETA: 17:47:03.285363
+[Epoch 68/400] [Batch 68/79] [G loss: 0.038203] ETA: 17:48:52.504520
+[Epoch 68/400] [Batch 73/79] [G loss: 0.043859] ETA: 17:49:43.914684
+[Epoch 68/400] [Batch 78/79] [G loss: 0.058079] ETA: 2:29:47.672174
+[Epoch 69/400] [Batch 4/79] [G loss: 0.043500] ETA: 17:47:26.131704
+[Epoch 69/400] [Batch 9/79] [G loss: 0.044405] ETA: 17:43:23.246140
+[Epoch 69/400] [Batch 14/79] [G loss: 0.044123] ETA: 17:42:33.711662
+[Epoch 69/400] [Batch 19/79] [G loss: 0.037323] ETA: 17:45:02.544537
+[Epoch 69/400] [Batch 24/79] [G loss: 0.043538] ETA: 17:43:25.893123
+[Epoch 69/400] [Batch 29/79] [G loss: 0.042465] ETA: 17:43:09.926291
+[Epoch 69/400] [Batch 34/79] [G loss: 0.038937] ETA: 17:43:28.199326
+[Epoch 69/400] [Batch 39/79] [G loss: 0.041854] ETA: 17:43:12.303514
+[Epoch 69/400] [Batch 44/79] [G loss: 0.037009] ETA: 17:41:15.152206
+[Epoch 69/400] [Batch 49/79] [G loss: 0.043984] ETA: 17:42:45.344954
+[Epoch 69/400] [Batch 54/79] [G loss: 0.047959] ETA: 17:42:08.784512
+[Epoch 69/400] [Batch 59/79] [G loss: 0.042768] ETA: 17:43:08.990800
+[Epoch 69/400] [Batch 64/79] [G loss: 0.045134] ETA: 17:41:18.117868
+[Epoch 69/400] [Batch 69/79] [G loss: 0.046233] ETA: 17:42:11.492767
+[Epoch 69/400] [Batch 74/79] [G loss: 0.040679] ETA: 17:44:12.257115
+[Epoch 70/400] [Batch 0/79] [G loss: 0.041185] ETA: 17:43:53.412216
+[Epoch 70/400] [Batch 5/79] [G loss: 0.040291] ETA: 17:40:56.960737
+[Epoch 70/400] [Batch 10/79] [G loss: 0.046215] ETA: 17:41:36.064262
+[Epoch 70/400] [Batch 15/79] [G loss: 0.041658] ETA: 17:43:35.121335
+[Epoch 70/400] [Batch 20/79] [G loss: 0.047437] ETA: 17:44:13.250933
+[Epoch 70/400] [Batch 25/79] [G loss: 0.042286] ETA: 17:40:43.827434
+[Epoch 70/400] [Batch 30/79] [G loss: 0.035405] ETA: 17:40:29.628897
+[Epoch 70/400] [Batch 35/79] [G loss: 0.043085] ETA: 17:42:07.763320
+[Epoch 70/400] [Batch 40/79] [G loss: 0.034638] ETA: 17:42:46.904225
+[Epoch 70/400] [Batch 45/79] [G loss: 0.038984] ETA: 17:44:51.658437
+[Epoch 70/400] [Batch 50/79] [G loss: 0.044144] ETA: 17:38:42.357039
+[Epoch 70/400] [Batch 55/79] [G loss: 0.043520] ETA: 17:42:06.051998
+[Epoch 70/400] [Batch 60/79] [G loss: 0.042042] ETA: 17:40:22.608218
+[Epoch 70/400] [Batch 65/79] [G loss: 0.039811] ETA: 17:37:09.813017
+[Epoch 70/400] [Batch 70/79] [G loss: 0.040823] ETA: 17:41:33.907738
+[Epoch 70/400] [Batch 75/79] [G loss: 0.039861] ETA: 17:40:26.790751
+Most similiar photos:  29659804521_58dbfe64c3_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 7215981986_a68e988a2e_b, 5608821155_24c106f5cb_b, 5250072950_1870932b18_b
+[Epoch 71/400] [Batch 1/79] [G loss: 0.044773] ETA: 17:29:46.500137
+[Epoch 71/400] [Batch 6/79] [G loss: 0.041218] ETA: 17:35:27.750596
+[Epoch 71/400] [Batch 11/79] [G loss: 0.042174] ETA: 17:35:27.736588
+[Epoch 71/400] [Batch 16/79] [G loss: 0.040451] ETA: 17:38:08.510936
+[Epoch 71/400] [Batch 21/79] [G loss: 0.042663] ETA: 17:37:59.441447
+[Epoch 71/400] [Batch 26/79] [G loss: 0.041262] ETA: 17:37:36.330603
+[Epoch 71/400] [Batch 31/79] [G loss: 0.037596] ETA: 17:38:59.340296
+[Epoch 71/400] [Batch 36/79] [G loss: 0.048351] ETA: 17:38:21.242068
+[Epoch 71/400] [Batch 41/79] [G loss: 0.045929] ETA: 17:37:56.826990
+[Epoch 71/400] [Batch 46/79] [G loss: 0.049629] ETA: 17:38:03.135140
+[Epoch 71/400] [Batch 51/79] [G loss: 0.036638] ETA: 17:38:19.201593
+[Epoch 71/400] [Batch 56/79] [G loss: 0.040597] ETA: 17:35:35.339159
+[Epoch 71/400] [Batch 61/79] [G loss: 0.042162] ETA: 17:36:35.707715
+[Epoch 71/400] [Batch 66/79] [G loss: 0.044230] ETA: 17:36:47.793200
+[Epoch 71/400] [Batch 71/79] [G loss: 0.041267] ETA: 17:36:45.834961
+[Epoch 71/400] [Batch 76/79] [G loss: 0.043121] ETA: 17:36:25.930054
+[Epoch 72/400] [Batch 2/79] [G loss: 0.044293] ETA: 17:36:24.628336
+[Epoch 72/400] [Batch 7/79] [G loss: 0.040565] ETA: 17:36:28.473380
+[Epoch 72/400] [Batch 12/79] [G loss: 0.040048] ETA: 17:35:00.359678
+[Epoch 72/400] [Batch 17/79] [G loss: 0.044694] ETA: 17:34:19.616349
+[Epoch 72/400] [Batch 22/79] [G loss: 0.041418] ETA: 17:34:15.339746
+[Epoch 72/400] [Batch 27/79] [G loss: 0.038149] ETA: 17:34:24.341071
+[Epoch 72/400] [Batch 32/79] [G loss: 0.043796] ETA: 17:34:57.626562
+[Epoch 72/400] [Batch 37/79] [G loss: 0.046121] ETA: 17:22:32.115887
+[Epoch 72/400] [Batch 42/79] [G loss: 0.038648] ETA: 17:36:01.017675
+[Epoch 72/400] [Batch 47/79] [G loss: 0.041319] ETA: 17:36:08.986065
+[Epoch 72/400] [Batch 52/79] [G loss: 0.042808] ETA: 17:35:41.957402
+[Epoch 72/400] [Batch 57/79] [G loss: 0.040967] ETA: 17:33:33.241793
+[Epoch 72/400] [Batch 62/79] [G loss: 0.048026] ETA: 17:32:18.116419
+[Epoch 72/400] [Batch 67/79] [G loss: 0.038974] ETA: 17:32:40.922256
+[Epoch 72/400] [Batch 72/79] [G loss: 0.042110] ETA: 17:32:31.875858
+[Epoch 72/400] [Batch 77/79] [G loss: 0.042931] ETA: 17:32:28.291749
+[Epoch 73/400] [Batch 3/79] [G loss: 0.040986] ETA: 17:33:42.299531
+[Epoch 73/400] [Batch 8/79] [G loss: 0.037412] ETA: 17:34:10.994176
+[Epoch 73/400] [Batch 13/79] [G loss: 0.044989] ETA: 17:31:52.119842
+[Epoch 73/400] [Batch 18/79] [G loss: 0.040275] ETA: 17:31:05.308446
+[Epoch 73/400] [Batch 23/79] [G loss: 0.043845] ETA: 17:30:38.878810
+[Epoch 73/400] [Batch 28/79] [G loss: 0.037896] ETA: 17:30:16.650614
+[Epoch 73/400] [Batch 33/79] [G loss: 0.043524] ETA: 17:31:14.545670
+[Epoch 73/400] [Batch 38/79] [G loss: 0.036298] ETA: 17:30:11.664311
+[Epoch 73/400] [Batch 43/79] [G loss: 0.032785] ETA: 17:29:06.681249
+[Epoch 73/400] [Batch 48/79] [G loss: 0.043453] ETA: 17:28:54.655831
+[Epoch 73/400] [Batch 53/79] [G loss: 0.039733] ETA: 17:29:03.853970
+[Epoch 73/400] [Batch 58/79] [G loss: 0.042328] ETA: 17:30:20.868808
+[Epoch 73/400] [Batch 63/79] [G loss: 0.044463] ETA: 17:29:10.791271
+[Epoch 73/400] [Batch 68/79] [G loss: 0.038908] ETA: 17:29:39.894143
+[Epoch 73/400] [Batch 73/79] [G loss: 0.039319] ETA: 17:29:03.013382
+[Epoch 73/400] [Batch 78/79] [G loss: 0.034934] ETA: 2:24:51.946528
+[Epoch 74/400] [Batch 4/79] [G loss: 0.045354] ETA: 17:30:02.005637
+[Epoch 74/400] [Batch 9/79] [G loss: 0.038360] ETA: 17:32:17.479147
+[Epoch 74/400] [Batch 14/79] [G loss: 0.043726] ETA: 17:32:56.055093
+[Epoch 74/400] [Batch 19/79] [G loss: 0.043035] ETA: 17:31:26.332164
+[Epoch 74/400] [Batch 24/79] [G loss: 0.044410] ETA: 17:31:28.755133
+[Epoch 74/400] [Batch 29/79] [G loss: 0.040332] ETA: 17:31:19.433227
+[Epoch 74/400] [Batch 34/79] [G loss: 0.044120] ETA: 17:31:19.719219
+[Epoch 74/400] [Batch 39/79] [G loss: 0.036516] ETA: 17:29:41.647894
+[Epoch 74/400] [Batch 44/79] [G loss: 0.039427] ETA: 17:25:53.463264
+[Epoch 74/400] [Batch 49/79] [G loss: 0.038594] ETA: 17:27:38.351235
+[Epoch 74/400] [Batch 54/79] [G loss: 0.042444] ETA: 17:27:56.001358
+[Epoch 74/400] [Batch 59/79] [G loss: 0.052243] ETA: 17:26:49.870670
+[Epoch 74/400] [Batch 64/79] [G loss: 0.038501] ETA: 17:31:19.060371
+[Epoch 74/400] [Batch 69/79] [G loss: 0.044315] ETA: 17:27:21.189427
+[Epoch 74/400] [Batch 74/79] [G loss: 0.035186] ETA: 17:27:23.326092
+[Epoch 75/400] [Batch 0/79] [G loss: 0.041011] ETA: 17:27:22.078149
+[Epoch 75/400] [Batch 5/79] [G loss: 0.037326] ETA: 17:26:39.600227
+[Epoch 75/400] [Batch 10/79] [G loss: 0.041160] ETA: 17:39:03.298734
+[Epoch 75/400] [Batch 15/79] [G loss: 0.035665] ETA: 17:25:49.496241
+[Epoch 75/400] [Batch 20/79] [G loss: 0.040386] ETA: 17:25:06.930659
+[Epoch 75/400] [Batch 25/79] [G loss: 0.042511] ETA: 17:26:22.092941
+[Epoch 75/400] [Batch 30/79] [G loss: 0.044519] ETA: 17:27:17.545516
+[Epoch 75/400] [Batch 35/79] [G loss: 0.042152] ETA: 17:25:06.596956
+[Epoch 75/400] [Batch 40/79] [G loss: 0.036958] ETA: 17:31:41.253555
+[Epoch 75/400] [Batch 45/79] [G loss: 0.040155] ETA: 17:24:45.733478
+[Epoch 75/400] [Batch 50/79] [G loss: 0.047437] ETA: 17:25:06.715614
+[Epoch 75/400] [Batch 55/79] [G loss: 0.043272] ETA: 17:24:39.294963
+[Epoch 75/400] [Batch 60/79] [G loss: 0.036863] ETA: 17:22:55.853052
+[Epoch 75/400] [Batch 65/79] [G loss: 0.039009] ETA: 17:22:34.564996
+[Epoch 75/400] [Batch 70/79] [G loss: 0.037381] ETA: 17:26:04.880884
+[Epoch 75/400] [Batch 75/79] [G loss: 0.039612] ETA: 17:25:43.975830
+Most similiar photos:  29659804521_58dbfe64c3_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 7215981986_a68e988a2e_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 76/400] [Batch 1/79] [G loss: 0.039675] ETA: 17:14:33.579452
+[Epoch 76/400] [Batch 6/79] [G loss: 0.033746] ETA: 17:17:07.886102
+[Epoch 76/400] [Batch 11/79] [G loss: 0.039355] ETA: 17:20:06.978867
+[Epoch 76/400] [Batch 16/79] [G loss: 0.039198] ETA: 17:19:05.962386
+[Epoch 76/400] [Batch 21/79] [G loss: 0.040390] ETA: 17:21:02.483114
+[Epoch 76/400] [Batch 26/79] [G loss: 0.036591] ETA: 17:24:29.728363
+[Epoch 76/400] [Batch 31/79] [G loss: 0.046328] ETA: 17:22:58.827829
+[Epoch 76/400] [Batch 36/79] [G loss: 0.038038] ETA: 17:21:21.620321
+[Epoch 76/400] [Batch 41/79] [G loss: 0.042695] ETA: 17:20:00.287302
+[Epoch 76/400] [Batch 46/79] [G loss: 0.041203] ETA: 17:22:31.022351
+[Epoch 76/400] [Batch 51/79] [G loss: 0.042639] ETA: 17:19:36.995991
+[Epoch 76/400] [Batch 56/79] [G loss: 0.041647] ETA: 17:20:56.691208
+[Epoch 76/400] [Batch 61/79] [G loss: 0.039433] ETA: 17:21:11.701772
+[Epoch 76/400] [Batch 66/79] [G loss: 0.043471] ETA: 17:19:48.143778
+[Epoch 76/400] [Batch 71/79] [G loss: 0.039661] ETA: 17:27:44.151275
+[Epoch 76/400] [Batch 76/79] [G loss: 0.035921] ETA: 17:18:26.585846
+[Epoch 77/400] [Batch 2/79] [G loss: 0.039200] ETA: 17:20:05.641086
+[Epoch 77/400] [Batch 7/79] [G loss: 0.047315] ETA: 17:19:27.557051
+[Epoch 77/400] [Batch 12/79] [G loss: 0.040785] ETA: 17:06:49.119458
+[Epoch 77/400] [Batch 17/79] [G loss: 0.049243] ETA: 17:07:16.188626
+[Epoch 77/400] [Batch 22/79] [G loss: 0.036567] ETA: 17:21:43.787045
+[Epoch 77/400] [Batch 27/79] [G loss: 0.037002] ETA: 17:19:52.608955
+[Epoch 77/400] [Batch 32/79] [G loss: 0.036787] ETA: 17:17:19.562827
+[Epoch 77/400] [Batch 37/79] [G loss: 0.040181] ETA: 17:17:21.153994
+[Epoch 77/400] [Batch 42/79] [G loss: 0.039176] ETA: 17:18:13.698198
+[Epoch 77/400] [Batch 47/79] [G loss: 0.040717] ETA: 17:17:48.634450
+[Epoch 77/400] [Batch 52/79] [G loss: 0.038658] ETA: 17:18:10.391762
+[Epoch 77/400] [Batch 57/79] [G loss: 0.041485] ETA: 17:16:05.754375
+[Epoch 77/400] [Batch 62/79] [G loss: 0.039562] ETA: 17:17:51.441185
+[Epoch 77/400] [Batch 67/79] [G loss: 0.043651] ETA: 17:16:53.543606
+[Epoch 77/400] [Batch 72/79] [G loss: 0.047601] ETA: 17:16:11.036634
+[Epoch 77/400] [Batch 77/79] [G loss: 0.039352] ETA: 17:17:29.691238
+[Epoch 78/400] [Batch 3/79] [G loss: 0.035797] ETA: 17:15:08.635327
+[Epoch 78/400] [Batch 8/79] [G loss: 0.039797] ETA: 17:15:18.859084
+[Epoch 78/400] [Batch 13/79] [G loss: 0.035902] ETA: 17:15:38.239449
+[Epoch 78/400] [Batch 18/79] [G loss: 0.034294] ETA: 17:16:18.710399
+[Epoch 78/400] [Batch 23/79] [G loss: 0.036798] ETA: 17:15:40.358016
+[Epoch 78/400] [Batch 28/79] [G loss: 0.039191] ETA: 17:14:42.375176
+[Epoch 78/400] [Batch 33/79] [G loss: 0.040933] ETA: 17:15:50.232903
+[Epoch 78/400] [Batch 38/79] [G loss: 0.041489] ETA: 17:16:39.401093
+[Epoch 78/400] [Batch 43/79] [G loss: 0.040585] ETA: 17:14:12.265795
+[Epoch 78/400] [Batch 48/79] [G loss: 0.039378] ETA: 17:13:45.895417
+[Epoch 78/400] [Batch 53/79] [G loss: 0.035426] ETA: 17:14:27.388502
+[Epoch 78/400] [Batch 58/79] [G loss: 0.041209] ETA: 17:15:58.775654
+[Epoch 78/400] [Batch 63/79] [G loss: 0.041514] ETA: 17:15:32.506430
+[Epoch 78/400] [Batch 68/79] [G loss: 0.045353] ETA: 17:17:33.165154
+[Epoch 78/400] [Batch 73/79] [G loss: 0.037410] ETA: 17:13:56.884121
+[Epoch 78/400] [Batch 78/79] [G loss: 0.040376] ETA: 2:25:12.288094
+[Epoch 79/400] [Batch 4/79] [G loss: 0.033626] ETA: 17:12:03.067735
+[Epoch 79/400] [Batch 9/79] [G loss: 0.034019] ETA: 17:12:24.678247
+[Epoch 79/400] [Batch 14/79] [G loss: 0.038453] ETA: 17:12:05.039903
+[Epoch 79/400] [Batch 19/79] [G loss: 0.040380] ETA: 17:12:37.488489
+[Epoch 79/400] [Batch 24/79] [G loss: 0.039029] ETA: 17:12:25.619634
+[Epoch 79/400] [Batch 29/79] [G loss: 0.041225] ETA: 17:12:21.571329
+[Epoch 79/400] [Batch 34/79] [G loss: 0.040724] ETA: 17:11:58.753844
+[Epoch 79/400] [Batch 39/79] [G loss: 0.043806] ETA: 17:12:05.840607
+[Epoch 79/400] [Batch 44/79] [G loss: 0.035890] ETA: 17:11:47.546221
+[Epoch 79/400] [Batch 49/79] [G loss: 0.035780] ETA: 17:11:12.943318
+[Epoch 79/400] [Batch 54/79] [G loss: 0.043180] ETA: 17:12:08.738390
+[Epoch 79/400] [Batch 59/79] [G loss: 0.038155] ETA: 17:10:53.455567
+[Epoch 79/400] [Batch 64/79] [G loss: 0.035592] ETA: 17:10:59.106849
+[Epoch 79/400] [Batch 69/79] [G loss: 0.043432] ETA: 17:11:03.424551
+[Epoch 79/400] [Batch 74/79] [G loss: 0.037945] ETA: 17:09:29.219373
+[Epoch 80/400] [Batch 0/79] [G loss: 0.033375] ETA: 17:11:25.643768
+[Epoch 80/400] [Batch 5/79] [G loss: 0.042952] ETA: 17:13:10.242416
+[Epoch 80/400] [Batch 10/79] [G loss: 0.042664] ETA: 17:10:05.891829
+[Epoch 80/400] [Batch 15/79] [G loss: 0.038759] ETA: 17:08:35.801084
+[Epoch 80/400] [Batch 20/79] [G loss: 0.039370] ETA: 17:08:29.441214
+[Epoch 80/400] [Batch 25/79] [G loss: 0.044913] ETA: 17:08:37.993690
+[Epoch 80/400] [Batch 30/79] [G loss: 0.042456] ETA: 17:10:53.284478
+[Epoch 80/400] [Batch 35/79] [G loss: 0.036795] ETA: 17:10:00.168128
+[Epoch 80/400] [Batch 40/79] [G loss: 0.039808] ETA: 17:10:04.518805
+[Epoch 80/400] [Batch 45/79] [G loss: 0.040637] ETA: 17:10:42.368757
+[Epoch 80/400] [Batch 50/79] [G loss: 0.036200] ETA: 17:10:41.159556
+[Epoch 80/400] [Batch 55/79] [G loss: 0.037230] ETA: 17:09:17.251984
+[Epoch 80/400] [Batch 60/79] [G loss: 0.035576] ETA: 17:08:18.807454
+[Epoch 80/400] [Batch 65/79] [G loss: 0.040507] ETA: 17:09:02.839065
+[Epoch 80/400] [Batch 70/79] [G loss: 0.046830] ETA: 17:13:09.012618
+[Epoch 80/400] [Batch 75/79] [G loss: 0.040559] ETA: 17:10:18.606337
+Most similiar photos:  29659804521_58dbfe64c3_b, 11850147854_619e260c2a_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 2184371886_f6ed96d4c6_b, 27861644476_bd3db48094_b, 7215981986_a68e988a2e_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 81/400] [Batch 1/79] [G loss: 0.041082] ETA: 16:57:21.752243
+[Epoch 81/400] [Batch 6/79] [G loss: 0.035515] ETA: 16:51:13.091898
+[Epoch 81/400] [Batch 11/79] [G loss: 0.041808] ETA: 16:51:28.173227
+[Epoch 81/400] [Batch 16/79] [G loss: 0.037860] ETA: 17:05:40.257096
+[Epoch 81/400] [Batch 21/79] [G loss: 0.041653] ETA: 16:53:33.156986
+[Epoch 81/400] [Batch 26/79] [G loss: 0.036346] ETA: 16:52:11.732023
+[Epoch 81/400] [Batch 31/79] [G loss: 0.038870] ETA: 16:53:43.703370
+[Epoch 81/400] [Batch 36/79] [G loss: 0.038451] ETA: 16:52:36.344601
+[Epoch 81/400] [Batch 41/79] [G loss: 0.042174] ETA: 17:09:45.925884
+[Epoch 81/400] [Batch 46/79] [G loss: 0.041327] ETA: 16:53:42.936366
+[Epoch 81/400] [Batch 51/79] [G loss: 0.044432] ETA: 17:07:09.757488
+[Epoch 81/400] [Batch 56/79] [G loss: 0.037567] ETA: 16:57:19.337864
+[Epoch 81/400] [Batch 61/79] [G loss: 0.038014] ETA: 16:49:32.549415
+[Epoch 81/400] [Batch 66/79] [G loss: 0.040364] ETA: 16:49:06.767212
+[Epoch 81/400] [Batch 71/79] [G loss: 0.040692] ETA: 17:08:45.854883
+[Epoch 81/400] [Batch 76/79] [G loss: 0.042773] ETA: 16:51:02.838846
+[Epoch 82/400] [Batch 2/79] [G loss: 0.035201] ETA: 16:49:38.520432
+[Epoch 82/400] [Batch 7/79] [G loss: 0.042089] ETA: 16:49:59.132493
+[Epoch 82/400] [Batch 12/79] [G loss: 0.038528] ETA: 17:06:39.261875
+[Epoch 82/400] [Batch 17/79] [G loss: 0.037070] ETA: 17:05:23.136710
+[Epoch 82/400] [Batch 22/79] [G loss: 0.041048] ETA: 16:48:43.389220
+[Epoch 82/400] [Batch 27/79] [G loss: 0.044823] ETA: 16:50:53.341985
+[Epoch 82/400] [Batch 32/79] [G loss: 0.043726] ETA: 17:05:55.839298
+[Epoch 82/400] [Batch 37/79] [G loss: 0.036688] ETA: 16:48:47.894809
+[Epoch 82/400] [Batch 42/79] [G loss: 0.040765] ETA: 16:47:32.184048
+[Epoch 82/400] [Batch 47/79] [G loss: 0.043923] ETA: 17:02:27.525513
+[Epoch 82/400] [Batch 52/79] [G loss: 0.036103] ETA: 17:02:01.694682
+[Epoch 82/400] [Batch 57/79] [G loss: 0.041385] ETA: 17:04:15.523067
+[Epoch 82/400] [Batch 62/79] [G loss: 0.037619] ETA: 16:59:39.423985
+[Epoch 82/400] [Batch 67/79] [G loss: 0.035164] ETA: 16:59:23.023945
+[Epoch 82/400] [Batch 72/79] [G loss: 0.036945] ETA: 17:00:38.182247
+[Epoch 82/400] [Batch 77/79] [G loss: 0.039652] ETA: 17:00:11.574452
+[Epoch 83/400] [Batch 3/79] [G loss: 0.039059] ETA: 17:03:36.715908
+[Epoch 83/400] [Batch 8/79] [G loss: 0.037631] ETA: 17:01:21.667814
+[Epoch 83/400] [Batch 13/79] [G loss: 0.042677] ETA: 17:00:02.704690
+[Epoch 83/400] [Batch 18/79] [G loss: 0.039166] ETA: 16:59:33.916024
+[Epoch 83/400] [Batch 23/79] [G loss: 0.038569] ETA: 16:47:16.327114
+[Epoch 83/400] [Batch 28/79] [G loss: 0.037937] ETA: 16:57:39.234966
+[Epoch 83/400] [Batch 33/79] [G loss: 0.041546] ETA: 16:58:14.065392
+[Epoch 83/400] [Batch 38/79] [G loss: 0.039783] ETA: 16:59:20.008782
+[Epoch 83/400] [Batch 43/79] [G loss: 0.039753] ETA: 17:02:59.927397
+[Epoch 83/400] [Batch 48/79] [G loss: 0.040348] ETA: 16:57:41.064725
+[Epoch 83/400] [Batch 53/79] [G loss: 0.038287] ETA: 16:59:19.998057
+[Epoch 83/400] [Batch 58/79] [G loss: 0.043583] ETA: 16:47:12.362717
+[Epoch 83/400] [Batch 63/79] [G loss: 0.039174] ETA: 16:50:06.676321
+[Epoch 83/400] [Batch 68/79] [G loss: 0.039633] ETA: 16:44:48.924408
+[Epoch 83/400] [Batch 73/79] [G loss: 0.034867] ETA: 16:44:43.873508
+[Epoch 83/400] [Batch 78/79] [G loss: 0.030386] ETA: 2:22:18.446839
+[Epoch 84/400] [Batch 4/79] [G loss: 0.038613] ETA: 16:42:34.756622
+[Epoch 84/400] [Batch 9/79] [G loss: 0.035399] ETA: 16:44:48.724803
+[Epoch 84/400] [Batch 14/79] [G loss: 0.038492] ETA: 16:44:15.313838
+[Epoch 84/400] [Batch 19/79] [G loss: 0.037560] ETA: 16:44:37.138528
+[Epoch 84/400] [Batch 24/79] [G loss: 0.037554] ETA: 16:47:43.360934
+[Epoch 84/400] [Batch 29/79] [G loss: 0.039551] ETA: 16:42:14.152451
+[Epoch 84/400] [Batch 34/79] [G loss: 0.040307] ETA: 16:40:53.003826
+[Epoch 84/400] [Batch 39/79] [G loss: 0.040323] ETA: 16:41:56.460019
+[Epoch 84/400] [Batch 44/79] [G loss: 0.036839] ETA: 16:41:28.560801
+[Epoch 84/400] [Batch 49/79] [G loss: 0.042871] ETA: 16:42:45.399585
+[Epoch 84/400] [Batch 54/79] [G loss: 0.045714] ETA: 16:41:52.269099
+[Epoch 84/400] [Batch 59/79] [G loss: 0.040927] ETA: 16:39:57.360257
+[Epoch 84/400] [Batch 64/79] [G loss: 0.040206] ETA: 16:51:10.822763
+[Epoch 84/400] [Batch 69/79] [G loss: 0.044114] ETA: 16:40:14.153014
+[Epoch 84/400] [Batch 74/79] [G loss: 0.040184] ETA: 16:40:57.513478
+[Epoch 85/400] [Batch 0/79] [G loss: 0.036344] ETA: 16:42:16.153303
+[Epoch 85/400] [Batch 5/79] [G loss: 0.039421] ETA: 16:41:46.405430
+[Epoch 85/400] [Batch 10/79] [G loss: 0.031466] ETA: 16:40:15.756756
+[Epoch 85/400] [Batch 15/79] [G loss: 0.037089] ETA: 16:39:04.623907
+[Epoch 85/400] [Batch 20/79] [G loss: 0.042173] ETA: 16:40:11.305773
+[Epoch 85/400] [Batch 25/79] [G loss: 0.038756] ETA: 16:39:11.916494
+[Epoch 85/400] [Batch 30/79] [G loss: 0.034991] ETA: 16:45:51.974870
+[Epoch 85/400] [Batch 35/79] [G loss: 0.034694] ETA: 16:38:08.199973
+[Epoch 85/400] [Batch 40/79] [G loss: 0.041475] ETA: 16:38:25.204848
+[Epoch 85/400] [Batch 45/79] [G loss: 0.035418] ETA: 16:41:04.511318
+[Epoch 85/400] [Batch 50/79] [G loss: 0.040514] ETA: 16:36:50.205561
+[Epoch 85/400] [Batch 55/79] [G loss: 0.038064] ETA: 16:39:13.023582
+[Epoch 85/400] [Batch 60/79] [G loss: 0.037933] ETA: 16:37:21.882992
+[Epoch 85/400] [Batch 65/79] [G loss: 0.032207] ETA: 16:39:08.601375
+[Epoch 85/400] [Batch 70/79] [G loss: 0.042840] ETA: 16:38:13.276132
+[Epoch 85/400] [Batch 75/79] [G loss: 0.039585] ETA: 16:38:53.492317
+Most similiar photos:  29659804521_58dbfe64c3_b, 1837049499_be7ff67a8e_b, 1901997554_8dfb6f70f3_b, 21205038811_bbe4f046a2_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 31107177_5d057c6012_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 86/400] [Batch 1/79] [G loss: 0.040688] ETA: 16:30:08.311623
+[Epoch 86/400] [Batch 6/79] [G loss: 0.043859] ETA: 16:47:56.938629
+[Epoch 86/400] [Batch 11/79] [G loss: 0.043192] ETA: 16:34:23.500793
+[Epoch 86/400] [Batch 16/79] [G loss: 0.042191] ETA: 16:50:21.974285
+[Epoch 86/400] [Batch 21/79] [G loss: 0.039093] ETA: 16:47:29.418646
+[Epoch 86/400] [Batch 26/79] [G loss: 0.041486] ETA: 16:47:52.128425
+[Epoch 86/400] [Batch 31/79] [G loss: 0.041809] ETA: 16:49:25.959954
+[Epoch 86/400] [Batch 36/79] [G loss: 0.035251] ETA: 16:49:17.356904
+[Epoch 86/400] [Batch 41/79] [G loss: 0.039792] ETA: 16:35:51.074882
+[Epoch 86/400] [Batch 46/79] [G loss: 0.038366] ETA: 16:50:44.315062
+[Epoch 86/400] [Batch 51/79] [G loss: 0.037367] ETA: 16:51:04.152187
+[Epoch 86/400] [Batch 56/79] [G loss: 0.036048] ETA: 16:47:41.401820
+[Epoch 86/400] [Batch 61/79] [G loss: 0.034473] ETA: 16:35:45.109248
+[Epoch 86/400] [Batch 66/79] [G loss: 0.038340] ETA: 16:51:12.369337
+[Epoch 86/400] [Batch 71/79] [G loss: 0.044052] ETA: 16:47:41.734514
+[Epoch 86/400] [Batch 76/79] [G loss: 0.039148] ETA: 16:47:50.738544
+[Epoch 87/400] [Batch 2/79] [G loss: 0.039176] ETA: 16:34:19.211159
+[Epoch 87/400] [Batch 7/79] [G loss: 0.039627] ETA: 16:46:32.606277
+[Epoch 87/400] [Batch 12/79] [G loss: 0.042400] ETA: 16:48:54.580389
+[Epoch 87/400] [Batch 17/79] [G loss: 0.037446] ETA: 16:47:27.001514
+[Epoch 87/400] [Batch 22/79] [G loss: 0.037040] ETA: 16:34:14.846206
+[Epoch 87/400] [Batch 27/79] [G loss: 0.048367] ETA: 16:46:49.789395
+[Epoch 87/400] [Batch 32/79] [G loss: 0.041392] ETA: 16:48:02.379574
+[Epoch 87/400] [Batch 37/79] [G loss: 0.035166] ETA: 16:46:00.531936
+[Epoch 87/400] [Batch 42/79] [G loss: 0.036672] ETA: 16:46:19.641926
+[Epoch 87/400] [Batch 47/79] [G loss: 0.034816] ETA: 16:44:53.230162
+[Epoch 87/400] [Batch 52/79] [G loss: 0.039561] ETA: 16:44:50.939748
+[Epoch 87/400] [Batch 57/79] [G loss: 0.038285] ETA: 16:45:17.177858
+[Epoch 87/400] [Batch 62/79] [G loss: 0.037822] ETA: 16:46:43.923457
+[Epoch 87/400] [Batch 67/79] [G loss: 0.038911] ETA: 16:47:36.728296
+[Epoch 87/400] [Batch 72/79] [G loss: 0.036318] ETA: 16:45:56.020814
+[Epoch 87/400] [Batch 77/79] [G loss: 0.039900] ETA: 16:44:28.819332
+[Epoch 88/400] [Batch 3/79] [G loss: 0.034481] ETA: 16:44:32.382764
+[Epoch 88/400] [Batch 8/79] [G loss: 0.046115] ETA: 16:32:39.939423
+[Epoch 88/400] [Batch 13/79] [G loss: 0.043904] ETA: 16:43:13.491474
+[Epoch 88/400] [Batch 18/79] [G loss: 0.038548] ETA: 16:45:28.344898
+[Epoch 88/400] [Batch 23/79] [G loss: 0.036522] ETA: 16:46:52.124991
+[Epoch 88/400] [Batch 28/79] [G loss: 0.037269] ETA: 16:45:29.966083
+[Epoch 88/400] [Batch 33/79] [G loss: 0.042495] ETA: 16:33:33.866258
+[Epoch 88/400] [Batch 38/79] [G loss: 0.032235] ETA: 16:43:45.405715
+[Epoch 88/400] [Batch 43/79] [G loss: 0.033859] ETA: 16:41:11.938841
+[Epoch 88/400] [Batch 48/79] [G loss: 0.044239] ETA: 16:43:31.162519
+[Epoch 88/400] [Batch 53/79] [G loss: 0.038093] ETA: 16:41:52.267691
+[Epoch 88/400] [Batch 58/79] [G loss: 0.041102] ETA: 16:41:33.961771
+[Epoch 88/400] [Batch 63/79] [G loss: 0.037275] ETA: 16:43:41.821207
+[Epoch 88/400] [Batch 68/79] [G loss: 0.037257] ETA: 16:40:35.299077
+[Epoch 88/400] [Batch 73/79] [G loss: 0.040092] ETA: 16:43:32.231499
+[Epoch 88/400] [Batch 78/79] [G loss: 0.036282] ETA: 2:19:03.347318
+[Epoch 89/400] [Batch 4/79] [G loss: 0.038312] ETA: 16:39:45.566703
+[Epoch 89/400] [Batch 9/79] [G loss: 0.041803] ETA: 16:42:41.800785
+[Epoch 89/400] [Batch 14/79] [G loss: 0.039051] ETA: 16:39:53.370026
+[Epoch 89/400] [Batch 19/79] [G loss: 0.038534] ETA: 16:38:48.615797
+[Epoch 89/400] [Batch 24/79] [G loss: 0.033045] ETA: 16:38:16.297107
+[Epoch 89/400] [Batch 29/79] [G loss: 0.044819] ETA: 16:38:16.710091
+[Epoch 89/400] [Batch 34/79] [G loss: 0.035538] ETA: 16:38:20.709589
+[Epoch 89/400] [Batch 39/79] [G loss: 0.041032] ETA: 16:37:35.622644
+[Epoch 89/400] [Batch 44/79] [G loss: 0.041893] ETA: 16:37:18.726836
+[Epoch 89/400] [Batch 49/79] [G loss: 0.037898] ETA: 16:38:00.918703
+[Epoch 89/400] [Batch 54/79] [G loss: 0.040905] ETA: 16:36:37.857028
+[Epoch 89/400] [Batch 59/79] [G loss: 0.036950] ETA: 16:38:45.528359
+[Epoch 89/400] [Batch 64/79] [G loss: 0.037590] ETA: 16:38:41.144214
+[Epoch 89/400] [Batch 69/79] [G loss: 0.036987] ETA: 16:38:42.936916
+[Epoch 89/400] [Batch 74/79] [G loss: 0.045214] ETA: 16:37:08.526378
+[Epoch 90/400] [Batch 0/79] [G loss: 0.039113] ETA: 16:38:38.085504
+[Epoch 90/400] [Batch 5/79] [G loss: 0.036361] ETA: 16:37:34.299787
+[Epoch 90/400] [Batch 10/79] [G loss: 0.034828] ETA: 16:36:46.521263
+[Epoch 90/400] [Batch 15/79] [G loss: 0.037389] ETA: 16:38:55.012341
+[Epoch 90/400] [Batch 20/79] [G loss: 0.040501] ETA: 16:37:39.491534
+[Epoch 90/400] [Batch 25/79] [G loss: 0.035648] ETA: 16:35:22.173568
+[Epoch 90/400] [Batch 30/79] [G loss: 0.036447] ETA: 16:35:06.037354
+[Epoch 90/400] [Batch 35/79] [G loss: 0.036365] ETA: 16:36:12.334729
+[Epoch 90/400] [Batch 40/79] [G loss: 0.036063] ETA: 16:35:06.204164
+[Epoch 90/400] [Batch 45/79] [G loss: 0.037751] ETA: 16:33:26.875237
+[Epoch 90/400] [Batch 50/79] [G loss: 0.040793] ETA: 16:33:24.472475
+[Epoch 90/400] [Batch 55/79] [G loss: 0.036717] ETA: 16:34:22.059363
+[Epoch 90/400] [Batch 60/79] [G loss: 0.035665] ETA: 16:33:41.986320
+[Epoch 90/400] [Batch 65/79] [G loss: 0.039542] ETA: 16:33:55.814184
+[Epoch 90/400] [Batch 70/79] [G loss: 0.037465] ETA: 16:32:12.820959
+[Epoch 90/400] [Batch 75/79] [G loss: 0.035431] ETA: 16:33:16.385961
+Most similiar photos:  29659804521_58dbfe64c3_b, 3652843460_a3eae6598d_b, 1901997554_8dfb6f70f3_b, 7877223368_dfbc83dc4c_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 7215981986_a68e988a2e_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 91/400] [Batch 1/79] [G loss: 0.040475] ETA: 16:27:31.725156
+[Epoch 91/400] [Batch 6/79] [G loss: 0.035928] ETA: 16:29:01.635085
+[Epoch 91/400] [Batch 11/79] [G loss: 0.035394] ETA: 16:30:21.218014
+[Epoch 91/400] [Batch 16/79] [G loss: 0.038636] ETA: 16:30:53.430935
+[Epoch 91/400] [Batch 21/79] [G loss: 0.033695] ETA: 16:35:27.914665
+[Epoch 91/400] [Batch 26/79] [G loss: 0.042656] ETA: 16:33:03.300878
+[Epoch 91/400] [Batch 31/79] [G loss: 0.039478] ETA: 16:34:02.794275
+[Epoch 91/400] [Batch 36/79] [G loss: 0.039313] ETA: 16:33:27.612938
+[Epoch 91/400] [Batch 41/79] [G loss: 0.039259] ETA: 16:19:55.347688
+[Epoch 91/400] [Batch 46/79] [G loss: 0.034011] ETA: 16:32:29.518216
+[Epoch 91/400] [Batch 51/79] [G loss: 0.037666] ETA: 16:31:27.826424
+[Epoch 91/400] [Batch 56/79] [G loss: 0.039295] ETA: 16:22:54.069712
+[Epoch 91/400] [Batch 61/79] [G loss: 0.038074] ETA: 16:32:43.156104
+[Epoch 91/400] [Batch 66/79] [G loss: 0.038801] ETA: 16:31:52.402335
+[Epoch 91/400] [Batch 71/79] [G loss: 0.035467] ETA: 16:34:03.440952
+[Epoch 91/400] [Batch 76/79] [G loss: 0.037186] ETA: 16:33:32.854753
+[Epoch 92/400] [Batch 2/79] [G loss: 0.038354] ETA: 16:29:02.961416
+[Epoch 92/400] [Batch 7/79] [G loss: 0.038030] ETA: 16:29:23.997304
+[Epoch 92/400] [Batch 12/79] [G loss: 0.041053] ETA: 16:29:08.988647
+[Epoch 92/400] [Batch 17/79] [G loss: 0.037679] ETA: 16:30:10.178854
+[Epoch 92/400] [Batch 22/79] [G loss: 0.041676] ETA: 16:30:08.203533
+[Epoch 92/400] [Batch 27/79] [G loss: 0.036635] ETA: 16:30:50.188869
+[Epoch 92/400] [Batch 32/79] [G loss: 0.037430] ETA: 16:30:42.124414
+[Epoch 92/400] [Batch 37/79] [G loss: 0.032459] ETA: 16:29:07.618568
+[Epoch 92/400] [Batch 42/79] [G loss: 0.039227] ETA: 16:32:56.746550
+[Epoch 92/400] [Batch 47/79] [G loss: 0.036953] ETA: 16:31:23.573520
+[Epoch 92/400] [Batch 52/79] [G loss: 0.038289] ETA: 16:30:31.991625
+[Epoch 92/400] [Batch 57/79] [G loss: 0.033297] ETA: 16:30:18.780428
+[Epoch 92/400] [Batch 62/79] [G loss: 0.038725] ETA: 16:28:32.257841
+[Epoch 92/400] [Batch 67/79] [G loss: 0.035584] ETA: 16:31:14.914423
+[Epoch 92/400] [Batch 72/79] [G loss: 0.040374] ETA: 16:32:22.114420
+[Epoch 92/400] [Batch 77/79] [G loss: 0.036044] ETA: 16:31:36.915250
+[Epoch 93/400] [Batch 3/79] [G loss: 0.040898] ETA: 16:29:36.209736
+[Epoch 93/400] [Batch 8/79] [G loss: 0.036003] ETA: 16:29:48.794287
+[Epoch 93/400] [Batch 13/79] [G loss: 0.035741] ETA: 16:27:11.874275
+[Epoch 93/400] [Batch 18/79] [G loss: 0.039829] ETA: 16:27:21.312702
+[Epoch 93/400] [Batch 23/79] [G loss: 0.047908] ETA: 16:28:23.080745
+[Epoch 93/400] [Batch 28/79] [G loss: 0.044860] ETA: 16:26:53.766629
+[Epoch 93/400] [Batch 33/79] [G loss: 0.039506] ETA: 16:27:09.672585
+[Epoch 93/400] [Batch 38/79] [G loss: 0.035701] ETA: 16:26:41.083605
+[Epoch 93/400] [Batch 43/79] [G loss: 0.032666] ETA: 16:22:48.561058
+[Epoch 93/400] [Batch 48/79] [G loss: 0.038229] ETA: 16:26:08.862070
+[Epoch 93/400] [Batch 53/79] [G loss: 0.037028] ETA: 16:30:08.499861
+[Epoch 93/400] [Batch 58/79] [G loss: 0.038916] ETA: 16:25:55.608140
+[Epoch 93/400] [Batch 63/79] [G loss: 0.037606] ETA: 16:31:06.510444
+[Epoch 93/400] [Batch 68/79] [G loss: 0.035065] ETA: 16:24:41.488978
+[Epoch 93/400] [Batch 73/79] [G loss: 0.034733] ETA: 16:13:59.475532
+[Epoch 93/400] [Batch 78/79] [G loss: 0.034976] ETA: 2:16:49.555423
+[Epoch 94/400] [Batch 4/79] [G loss: 0.035817] ETA: 16:22:57.740297
+[Epoch 94/400] [Batch 9/79] [G loss: 0.038042] ETA: 16:24:50.256389
+[Epoch 94/400] [Batch 14/79] [G loss: 0.037427] ETA: 16:23:49.494591
+[Epoch 94/400] [Batch 19/79] [G loss: 0.041430] ETA: 16:24:17.700648
+[Epoch 94/400] [Batch 24/79] [G loss: 0.035468] ETA: 16:26:18.654027
+[Epoch 94/400] [Batch 29/79] [G loss: 0.042406] ETA: 16:27:13.483571
+[Epoch 94/400] [Batch 34/79] [G loss: 0.033325] ETA: 16:23:11.714063
+[Epoch 94/400] [Batch 39/79] [G loss: 0.040207] ETA: 16:21:48.424873
+[Epoch 94/400] [Batch 44/79] [G loss: 0.039236] ETA: 16:22:24.212794
+[Epoch 94/400] [Batch 49/79] [G loss: 0.035758] ETA: 16:22:12.119697
+[Epoch 94/400] [Batch 54/79] [G loss: 0.034633] ETA: 16:21:39.358692
+[Epoch 94/400] [Batch 59/79] [G loss: 0.040431] ETA: 16:22:01.967795
+[Epoch 94/400] [Batch 64/79] [G loss: 0.038530] ETA: 16:24:32.346544
+[Epoch 94/400] [Batch 69/79] [G loss: 0.039760] ETA: 16:22:47.240385
+[Epoch 94/400] [Batch 74/79] [G loss: 0.033809] ETA: 16:21:39.199247
+[Epoch 95/400] [Batch 0/79] [G loss: 0.033702] ETA: 16:23:31.122370
+[Epoch 95/400] [Batch 5/79] [G loss: 0.039938] ETA: 16:24:48.079212
+[Epoch 95/400] [Batch 10/79] [G loss: 0.039725] ETA: 16:23:27.510390
+[Epoch 95/400] [Batch 15/79] [G loss: 0.035105] ETA: 16:20:35.244064
+[Epoch 95/400] [Batch 20/79] [G loss: 0.038489] ETA: 16:19:52.737848
+[Epoch 95/400] [Batch 25/79] [G loss: 0.035815] ETA: 16:08:14.467463
+[Epoch 95/400] [Batch 30/79] [G loss: 0.036091] ETA: 16:08:25.567846
+[Epoch 95/400] [Batch 35/79] [G loss: 0.037978] ETA: 16:06:28.359375
+[Epoch 95/400] [Batch 40/79] [G loss: 0.039404] ETA: 16:06:29.470783
+[Epoch 95/400] [Batch 45/79] [G loss: 0.037498] ETA: 16:08:28.157444
+[Epoch 95/400] [Batch 50/79] [G loss: 0.042735] ETA: 16:06:47.493911
+[Epoch 95/400] [Batch 55/79] [G loss: 0.035756] ETA: 16:23:13.311634
+[Epoch 95/400] [Batch 60/79] [G loss: 0.039242] ETA: 16:07:01.453531
+[Epoch 95/400] [Batch 65/79] [G loss: 0.037405] ETA: 16:19:43.587105
+[Epoch 95/400] [Batch 70/79] [G loss: 0.040057] ETA: 16:23:56.132908
+[Epoch 95/400] [Batch 75/79] [G loss: 0.035233] ETA: 16:06:05.468240
+Most similiar photos:  16424075841_59f975712f_b, 3652843460_a3eae6598d_b, 1901997554_8dfb6f70f3_b, 7877223368_dfbc83dc4c_b, 864760525_1358b2a77d_b, 18690135234_ea0be7a84c_b, 27861644476_bd3db48094_b, 5863570862_096b87aa7a_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 96/400] [Batch 1/79] [G loss: 0.036777] ETA: 15:57:08.208010
+[Epoch 96/400] [Batch 6/79] [G loss: 0.035617] ETA: 15:58:17.446589
+[Epoch 96/400] [Batch 11/79] [G loss: 0.038312] ETA: 15:59:24.058725
+[Epoch 96/400] [Batch 16/79] [G loss: 0.041133] ETA: 16:03:47.264786
+[Epoch 96/400] [Batch 21/79] [G loss: 0.040215] ETA: 16:05:09.451343
+[Epoch 96/400] [Batch 26/79] [G loss: 0.040008] ETA: 16:03:15.316997
+[Epoch 96/400] [Batch 31/79] [G loss: 0.039367] ETA: 16:04:05.579731
+[Epoch 96/400] [Batch 36/79] [G loss: 0.034186] ETA: 16:05:08.588886
+[Epoch 96/400] [Batch 41/79] [G loss: 0.032224] ETA: 16:03:44.920565
+[Epoch 96/400] [Batch 46/79] [G loss: 0.035187] ETA: 16:03:30.580902
+[Epoch 96/400] [Batch 51/79] [G loss: 0.035146] ETA: 16:03:55.809572
+[Epoch 96/400] [Batch 56/79] [G loss: 0.035352] ETA: 16:06:34.404058
+[Epoch 96/400] [Batch 61/79] [G loss: 0.037295] ETA: 16:02:16.755066
+[Epoch 96/400] [Batch 66/79] [G loss: 0.033171] ETA: 16:18:16.138990
+[Epoch 96/400] [Batch 71/79] [G loss: 0.033358] ETA: 16:15:36.680264
+[Epoch 96/400] [Batch 76/79] [G loss: 0.036005] ETA: 16:05:04.345322
+[Epoch 97/400] [Batch 2/79] [G loss: 0.035184] ETA: 16:18:36.927860
+[Epoch 97/400] [Batch 7/79] [G loss: 0.039740] ETA: 16:13:54.165285
+[Epoch 97/400] [Batch 12/79] [G loss: 0.037728] ETA: 16:15:49.232912
+[Epoch 97/400] [Batch 17/79] [G loss: 0.035499] ETA: 16:13:51.406384
+[Epoch 97/400] [Batch 22/79] [G loss: 0.036229] ETA: 16:13:31.255583
+[Epoch 97/400] [Batch 27/79] [G loss: 0.040081] ETA: 16:14:19.161723
+[Epoch 97/400] [Batch 32/79] [G loss: 0.035989] ETA: 16:13:40.959040
+[Epoch 97/400] [Batch 37/79] [G loss: 0.042183] ETA: 16:13:03.639050
+[Epoch 97/400] [Batch 42/79] [G loss: 0.038632] ETA: 16:12:11.904727
+[Epoch 97/400] [Batch 47/79] [G loss: 0.040867] ETA: 16:13:17.731578
+[Epoch 97/400] [Batch 52/79] [G loss: 0.036868] ETA: 16:13:03.641528
+[Epoch 97/400] [Batch 57/79] [G loss: 0.038887] ETA: 16:11:21.941671
+[Epoch 97/400] [Batch 62/79] [G loss: 0.040198] ETA: 16:11:25.938710
+[Epoch 97/400] [Batch 67/79] [G loss: 0.036728] ETA: 16:11:31.437092
+[Epoch 97/400] [Batch 72/79] [G loss: 0.034099] ETA: 16:12:41.229157
+[Epoch 97/400] [Batch 77/79] [G loss: 0.037519] ETA: 16:13:01.222401
+[Epoch 98/400] [Batch 3/79] [G loss: 0.032786] ETA: 16:10:17.525128
+[Epoch 98/400] [Batch 8/79] [G loss: 0.040059] ETA: 16:08:46.226556
+[Epoch 98/400] [Batch 13/79] [G loss: 0.039926] ETA: 16:10:01.181840
+[Epoch 98/400] [Batch 18/79] [G loss: 0.039451] ETA: 16:12:20.686722
+[Epoch 98/400] [Batch 23/79] [G loss: 0.034798] ETA: 16:09:42.501880
+[Epoch 98/400] [Batch 28/79] [G loss: 0.039813] ETA: 16:08:59.678931
+[Epoch 98/400] [Batch 33/79] [G loss: 0.035469] ETA: 16:08:12.892605
+[Epoch 98/400] [Batch 38/79] [G loss: 0.033199] ETA: 16:09:31.618223
+[Epoch 98/400] [Batch 43/79] [G loss: 0.034043] ETA: 16:09:11.095054
+[Epoch 98/400] [Batch 48/79] [G loss: 0.033676] ETA: 16:09:24.238482
+[Epoch 98/400] [Batch 53/79] [G loss: 0.035389] ETA: 16:08:07.107246
+[Epoch 98/400] [Batch 58/79] [G loss: 0.037418] ETA: 16:09:22.938690
+[Epoch 98/400] [Batch 63/79] [G loss: 0.036059] ETA: 16:08:35.965745
+[Epoch 98/400] [Batch 68/79] [G loss: 0.035217] ETA: 16:08:12.409987
+[Epoch 98/400] [Batch 73/79] [G loss: 0.037947] ETA: 16:08:26.677469
+[Epoch 98/400] [Batch 78/79] [G loss: 0.033596] ETA: 2:14:56.162953
+[Epoch 99/400] [Batch 4/79] [G loss: 0.031097] ETA: 16:09:31.655202
+[Epoch 99/400] [Batch 9/79] [G loss: 0.034106] ETA: 16:07:11.319809
+[Epoch 99/400] [Batch 14/79] [G loss: 0.036893] ETA: 16:08:21.802828
+[Epoch 99/400] [Batch 19/79] [G loss: 0.038046] ETA: 16:08:52.115765
+[Epoch 99/400] [Batch 24/79] [G loss: 0.039205] ETA: 16:07:34.495928
+[Epoch 99/400] [Batch 29/79] [G loss: 0.034393] ETA: 16:10:58.519471
+[Epoch 99/400] [Batch 34/79] [G loss: 0.041196] ETA: 16:06:07.143613
+[Epoch 99/400] [Batch 39/79] [G loss: 0.036631] ETA: 16:07:07.154102
+[Epoch 99/400] [Batch 44/79] [G loss: 0.036637] ETA: 16:06:31.991675
+[Epoch 99/400] [Batch 49/79] [G loss: 0.037617] ETA: 16:06:15.792117
+[Epoch 99/400] [Batch 54/79] [G loss: 0.041914] ETA: 15:59:58.535413
+[Epoch 99/400] [Batch 59/79] [G loss: 0.038355] ETA: 16:07:02.843533
+[Epoch 99/400] [Batch 64/79] [G loss: 0.033662] ETA: 16:07:33.804392
+[Epoch 99/400] [Batch 69/79] [G loss: 0.038888] ETA: 16:04:50.954165
+[Epoch 99/400] [Batch 74/79] [G loss: 0.036098] ETA: 16:09:24.649211
+[Epoch 100/400] [Batch 0/79] [G loss: 0.044177] ETA: 16:09:39.198146
+[Epoch 100/400] [Batch 5/79] [G loss: 0.035010] ETA: 16:06:16.818509
+[Epoch 100/400] [Batch 10/79] [G loss: 0.034734] ETA: 16:06:35.027986
+[Epoch 100/400] [Batch 15/79] [G loss: 0.035079] ETA: 16:05:39.735281
+[Epoch 100/400] [Batch 20/79] [G loss: 0.036265] ETA: 15:55:34.135437
+[Epoch 100/400] [Batch 25/79] [G loss: 0.041376] ETA: 16:06:50.293174
+[Epoch 100/400] [Batch 30/79] [G loss: 0.034626] ETA: 15:53:48.015547
+[Epoch 100/400] [Batch 35/79] [G loss: 0.037188] ETA: 16:05:01.654286
+[Epoch 100/400] [Batch 40/79] [G loss: 0.038509] ETA: 16:04:18.338861
+[Epoch 100/400] [Batch 45/79] [G loss: 0.038159] ETA: 16:03:35.741547
+[Epoch 100/400] [Batch 50/79] [G loss: 0.035430] ETA: 16:03:56.185336
+[Epoch 100/400] [Batch 55/79] [G loss: 0.035086] ETA: 16:05:55.010620
+[Epoch 100/400] [Batch 60/79] [G loss: 0.036443] ETA: 16:04:51.167107
+[Epoch 100/400] [Batch 65/79] [G loss: 0.038858] ETA: 16:04:12.201502
+[Epoch 100/400] [Batch 70/79] [G loss: 0.034528] ETA: 16:01:47.387519
+[Epoch 100/400] [Batch 75/79] [G loss: 0.038333] ETA: 16:01:40.944722
+Most similiar photos:  29659804521_58dbfe64c3_b, 3652843460_a3eae6598d_b, 413402227_0860f20b15_b, 7877223368_dfbc83dc4c_b, 864760525_1358b2a77d_b, 2184371886_f6ed96d4c6_b, 27861644476_bd3db48094_b, 5863570862_096b87aa7a_b, 25743317_c7012edd72_b, 5250072950_1870932b18_b
+[Epoch 101/400] [Batch 1/79] [G loss: 0.036807] ETA: 15:53:41.733890
+[Epoch 101/400] [Batch 6/79] [G loss: 0.036352] ETA: 15:58:17.659109
+[Epoch 101/400] [Batch 11/79] [G loss: 0.041229] ETA: 16:00:18.573067
+[Epoch 101/400] [Batch 16/79] [G loss: 0.042057] ETA: 16:01:07.742841
+[Epoch 101/400] [Batch 21/79] [G loss: 0.033982] ETA: 16:02:30.168419
+[Epoch 101/400] [Batch 26/79] [G loss: 0.038578] ETA: 16:02:05.984681
+[Epoch 101/400] [Batch 31/79] [G loss: 0.038428] ETA: 16:02:43.678868
+[Epoch 101/400] [Batch 36/79] [G loss: 0.035575] ETA: 16:01:47.412345
+[Epoch 101/400] [Batch 41/79] [G loss: 0.042420] ETA: 16:01:58.880396
+[Epoch 101/400] [Batch 46/79] [G loss: 0.040359] ETA: 16:01:13.990697
+[Epoch 101/400] [Batch 51/79] [G loss: 0.041817] ETA: 16:02:09.715600
+[Epoch 101/400] [Batch 56/79] [G loss: 0.038380] ETA: 16:00:06.546396
+[Epoch 101/400] [Batch 61/79] [G loss: 0.039938] ETA: 15:59:12.481403
+[Epoch 101/400] [Batch 66/79] [G loss: 0.037244] ETA: 16:00:21.210061
+[Epoch 101/400] [Batch 71/79] [G loss: 0.033828] ETA: 16:01:14.828732
+[Epoch 101/400] [Batch 76/79] [G loss: 0.034924] ETA: 15:59:50.825338
+[Epoch 102/400] [Batch 2/79] [G loss: 0.037020] ETA: 15:58:30.887718
+[Epoch 102/400] [Batch 7/79] [G loss: 0.034316] ETA: 15:58:38.603067
+[Epoch 102/400] [Batch 12/79] [G loss: 0.036351] ETA: 15:58:48.256614
+[Epoch 102/400] [Batch 17/79] [G loss: 0.036041] ETA: 15:58:31.466604
+[Epoch 102/400] [Batch 22/79] [G loss: 0.029871] ETA: 15:56:22.509613
+[Epoch 102/400] [Batch 27/79] [G loss: 0.037030] ETA: 15:56:32.125503
+[Epoch 102/400] [Batch 32/79] [G loss: 0.046483] ETA: 16:00:48.737381
+[Epoch 102/400] [Batch 37/79] [G loss: 0.039700] ETA: 15:57:14.602983
+[Epoch 102/400] [Batch 42/79] [G loss: 0.034120] ETA: 15:58:27.514954
+[Epoch 102/400] [Batch 47/79] [G loss: 0.040007] ETA: 15:57:34.656186
+[Epoch 102/400] [Batch 52/79] [G loss: 0.035980] ETA: 15:55:42.125087
+[Epoch 102/400] [Batch 57/79] [G loss: 0.033481] ETA: 15:56:29.848324
+[Epoch 102/400] [Batch 62/79] [G loss: 0.033897] ETA: 15:55:02.705374
+[Epoch 102/400] [Batch 67/79] [G loss: 0.034874] ETA: 15:55:10.634887
+[Epoch 102/400] [Batch 72/79] [G loss: 0.039355] ETA: 15:54:48.367109
+[Epoch 102/400] [Batch 77/79] [G loss: 0.044416] ETA: 15:54:05.219380
+[Epoch 103/400] [Batch 3/79] [G loss: 0.035055] ETA: 15:54:18.241568
+[Epoch 103/400] [Batch 8/79] [G loss: 0.040889] ETA: 15:54:01.391150
+[Epoch 103/400] [Batch 13/79] [G loss: 0.033209] ETA: 15:53:38.912661
+[Epoch 103/400] [Batch 18/79] [G loss: 0.038131] ETA: 15:56:17.802726
+[Epoch 103/400] [Batch 23/79] [G loss: 0.031609] ETA: 15:53:22.185326
+[Epoch 103/400] [Batch 28/79] [G loss: 0.037114] ETA: 15:52:58.143922
+[Epoch 103/400] [Batch 33/79] [G loss: 0.034632] ETA: 15:54:52.833953
+[Epoch 103/400] [Batch 38/79] [G loss: 0.047147] ETA: 15:43:32.915003
+[Epoch 103/400] [Batch 43/79] [G loss: 0.037913] ETA: 16:00:21.771970
+[Epoch 103/400] [Batch 48/79] [G loss: 0.039148] ETA: 15:53:57.715570
+[Epoch 103/400] [Batch 53/79] [G loss: 0.035372] ETA: 15:52:15.521295
+[Epoch 103/400] [Batch 58/79] [G loss: 0.036638] ETA: 15:54:56.197834
+[Epoch 103/400] [Batch 63/79] [G loss: 0.034343] ETA: 15:42:18.330603
+[Epoch 103/400] [Batch 68/79] [G loss: 0.038057] ETA: 15:54:40.095370
+[Epoch 103/400] [Batch 73/79] [G loss: 0.035342] ETA: 15:41:35.509584
+[Epoch 103/400] [Batch 78/79] [G loss: 0.040605] ETA: 2:13:53.748711
+[Epoch 104/400] [Batch 4/79] [G loss: 0.041940] ETA: 15:41:34.126596
+[Epoch 104/400] [Batch 9/79] [G loss: 0.035795] ETA: 15:42:26.797961
+[Epoch 104/400] [Batch 14/79] [G loss: 0.031408] ETA: 15:41:44.464002
+[Epoch 104/400] [Batch 19/79] [G loss: 0.033374] ETA: 15:58:48.877910
+[Epoch 104/400] [Batch 24/79] [G loss: 0.033506] ETA: 15:40:50.672989
+[Epoch 104/400] [Batch 29/79] [G loss: 0.044455] ETA: 15:40:18.800608
+[Epoch 104/400] [Batch 34/79] [G loss: 0.037302] ETA: 15:55:17.489791
+[Epoch 104/400] [Batch 39/79] [G loss: 0.034203] ETA: 15:42:35.480838
+[Epoch 104/400] [Batch 44/79] [G loss: 0.038337] ETA: 15:35:13.356471
+[Epoch 104/400] [Batch 49/79] [G loss: 0.031059] ETA: 15:37:43.127687
+[Epoch 104/400] [Batch 54/79] [G loss: 0.038696] ETA: 15:40:58.384850
+[Epoch 104/400] [Batch 59/79] [G loss: 0.035160] ETA: 15:41:43.592169
+[Epoch 104/400] [Batch 64/79] [G loss: 0.039926] ETA: 15:37:42.711411
+[Epoch 104/400] [Batch 69/79] [G loss: 0.039695] ETA: 15:37:13.733009
+[Epoch 104/400] [Batch 74/79] [G loss: 0.039781] ETA: 15:38:56.758926
+[Epoch 105/400] [Batch 0/79] [G loss: 0.037887] ETA: 15:39:45.933383
+[Epoch 105/400] [Batch 5/79] [G loss: 0.038857] ETA: 15:38:45.422835
+[Epoch 105/400] [Batch 10/79] [G loss: 0.037461] ETA: 15:36:54.219850
+[Epoch 105/400] [Batch 15/79] [G loss: 0.035159] ETA: 15:36:55.508533
+[Epoch 105/400] [Batch 20/79] [G loss: 0.034773] ETA: 15:35:53.742225
+[Epoch 105/400] [Batch 25/79] [G loss: 0.037803] ETA: 15:34:21.842022
+[Epoch 105/400] [Batch 30/79] [G loss: 0.038521] ETA: 15:35:05.143344
+[Epoch 105/400] [Batch 35/79] [G loss: 0.034011] ETA: 15:35:38.667505
+[Epoch 105/400] [Batch 40/79] [G loss: 0.034983] ETA: 15:36:59.336590
+[Epoch 105/400] [Batch 45/79] [G loss: 0.035019] ETA: 15:36:56.443291
+[Epoch 105/400] [Batch 50/79] [G loss: 0.039033] ETA: 15:35:21.952156
+[Epoch 105/400] [Batch 55/79] [G loss: 0.039154] ETA: 15:35:01.404369
+[Epoch 105/400] [Batch 60/79] [G loss: 0.039568] ETA: 15:36:25.144794
+[38;5;1m[e 0506 16:00:13.247206 24 log.cc:258] Caught SIGINT, quick exit[m

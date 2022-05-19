@@ -1,0 +1,2 @@
+CUDA_VISIBLE_DEVICES=0 python pix2pix.py --output_path ./MAE_force_enhanced --batch_size 128 --data_path ../data > log.txt 2>&1
+CUDA_VISIBLE_DEVICES=0 python pix2pix_gan.py --output_path ./MAE_gan --batch_size 128 --data_path ../data > log.txt 2>&1
