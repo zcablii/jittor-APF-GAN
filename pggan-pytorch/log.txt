@@ -1,0 +1,394 @@
+Unable to load librosa: No module named 'librosa'.
+Exporting sound won't work.
+Treating value: . as str.
+Treating value: . as str.
+Treating value: . as str.
+Treating value: abslog as str.
+{
+	'result_dir': 'results/TEST',
+	'exp_name': 'TEST',
+	'minibatch_size': 128,
+	'lr_rampup_kimg': 40,
+	'G_lr_max': 0.0002,
+	'D_lr_max': 0.0002,
+	'total_kimg': 2500,
+	'tick_kimg_default': 10,
+	'image_snapshot_ticks': 3,
+	'resume_network': 0,
+	'resume_time': 0,
+	'num_data_workers': 16,
+	'random_seed': 1337,
+	'progressive_growing': True,
+	'comet_key': '',
+	'comet_project_name': 'None',
+	'iwass_lambda': 10.0,
+	'iwass_epsilon': 0.001,
+	'iwass_target': 1.0,
+	'save_dataset': '',
+	'load_dataset': '',
+	'label_dir': '../../CGAN/data/train/gray_label',
+	'image_dir': '../../CGAN/data/train/imgs',
+	'dataset_class': 'DefaultImageFolderDataset',
+	'postprocessors': [],
+	'checkpoints_dir': '',
+	'Trainer': {'semantic_nc': 29, 'D_training_repeats': 1, 'tick_nimg_default': 10000, 'resume_nimg': 0},
+	'Generator': {'fmap_base': 4096, 'fmap_decay': 1.0, 'fmap_max': 512, 'semantic_nc': 29, 'num_channels': 3, 'resolution': 512, 'normalize_latents': True, 'wscale': True, 'pixelnorm': True, 'leakyrelu': True},
+	'Discriminator': {'fmap_base': 4096, 'fmap_decay': 1.0, 'fmap_max': 512, 'wscale': True, 'pixelnorm': False, 'resolution': 512, 'num_channels': 3, 'leakyrelu': True},
+	'DepthManager': {'minibatch_overrides': {3: 80, 4: 64, 5: 48, 6: 36, 7: 24, 8: 16}, 'tick_kimg_default': 10, 'tick_kimg_overrides': {3: 10, 4: 10, 5: 5, 6: 2, 7: 2, 8: 1}, 'stabilize_epoch': 20, 'fade_epoch': 20, 'max_lod': None, 'depth_offset': None},
+	'SaverPlugin': {'keep_old_checkpoints': False, 'network_snapshot_ticks': 40},
+	'OutputGenerator': {'samples_count': 6, 'output_snapshot_ticks': 3},
+	'Adam': {'betas': (0.0, 0.99), 'eps': 1e-08, 'weight_decay': 0, 'amsgrad': False},
+	'ImageSaver': {'samples_path': '.', 'drange': (-1, 1), 'resolution': 512, 'create_subdirs': True},
+	'Postprocessor': {'samples_path': '.'},
+	'SoundSaver': {'samples_path': '.', 'drange': (-1, 1), 'resolution': 512, 'mode': 'abslog', 'sample_rate': 16000, 'hop_length': 128, 'create_subdirs': True, 'verbose': False, 'griffin_lim_iter': 100},
+}
+model max_depth:  6
+Discriminator max_depth:  6
+Generator(
+  (fc): Conv2d(29, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (block0): SPADEResnetBlock(
+    (conv_0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (conv_1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (norm_0): SPADE(
+      (param_free_norm): SynchronizedBatchNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+      (mlp_shared): Sequential(
+        (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): ReLU()
+      )
+      (mlp_gamma): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (mlp_beta): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (norm_1): SPADE(
+      (param_free_norm): SynchronizedBatchNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+      (mlp_shared): Sequential(
+        (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (1): ReLU()
+      )
+      (mlp_gamma): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (mlp_beta): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (toRGB): Conv2d(512, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  )
+  (blocks): ModuleList(
+    (0): SPADEResnetBlock(
+      (conv_0): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_1): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (norm_0): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_1): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (toRGB): Conv2d(512, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (1): SPADEResnetBlock(
+      (conv_0): Conv2d(512, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_1): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_s): Conv2d(512, 256, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (norm_0): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_1): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_s): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(512, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (toRGB): Conv2d(256, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (2): SPADEResnetBlock(
+      (conv_0): Conv2d(256, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_1): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_s): Conv2d(256, 128, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (norm_0): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_1): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_s): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(256, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (toRGB): Conv2d(128, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (3): SPADEResnetBlock(
+      (conv_0): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_1): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_s): Conv2d(128, 64, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (norm_0): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_1): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_s): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(128, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (toRGB): Conv2d(64, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (4): SPADEResnetBlock(
+      (conv_0): Conv2d(64, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_1): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_s): Conv2d(64, 32, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (norm_0): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_1): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_s): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(64, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (toRGB): Conv2d(32, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (5): SPADEResnetBlock(
+      (conv_0): Conv2d(32, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_1): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (conv_s): Conv2d(32, 16, kernel_size=(1, 1), stride=(1, 1), bias=False)
+      (norm_0): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_1): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(16, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (norm_s): SPADE(
+        (param_free_norm): SynchronizedBatchNorm2d(32, eps=1e-05, momentum=0.1, affine=False, track_running_stats=True)
+        (mlp_shared): Sequential(
+          (0): Conv2d(29, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+          (1): ReLU()
+        )
+        (mlp_gamma): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (mlp_beta): Conv2d(128, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      )
+      (toRGB): Conv2d(16, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+  )
+)
+Total nuber of parameters in Generator: 23225765
+Discriminator(
+  (blocks): ModuleList(
+    (0): DBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 16, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c1): PGConv2d(
+        (conv): Conv2d(16, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+    (1): DBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 32, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c1): PGConv2d(
+        (conv): Conv2d(32, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+    (2): DBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 64, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c1): PGConv2d(
+        (conv): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+    (3): DBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 128, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c1): PGConv2d(
+        (conv): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+    (4): DBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 256, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c1): PGConv2d(
+        (conv): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+    (5): DBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 512, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c1): PGConv2d(
+        (conv): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+    (6): DLastBlock(
+      (fromRGB): PGConv2d(
+        (conv): Conv2d(3, 512, kernel_size=(1, 1), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (stddev): MinibatchStddev()
+      (c1): PGConv2d(
+        (conv): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c2): PGConv2d(
+        (conv): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c3): PGConv2d(
+        (conv): Conv2d(513, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+      (c4): PGConv2d(
+        (conv): Conv2d(512, 512, kernel_size=(3, 4), stride=(1, 1))
+        (act): LeakyReLU(negative_slope=0.2)
+      )
+    )
+  )
+  (linear): Linear(in_features=512, out_features=1, bias=True)
+)
+Total nuber of parameters in Discriminator: 17314961
+dataset [Pix2pixDataset] of size 10000 was created
+create web directory results/TEST/web...
+DepthManager max_depth:  6
+switch depth:  0
+dataset [Pix2pixDataset] of size 10000 was created
+Comet_ml logging disabled.
+real_image.shape:  torch.Size([128, 3, 6, 8])
+need_visual False
+====D=====information=====
+model depth, alpha  (-1, -1) ---> (0, 1.0)
+model input:  torch.Size([128, 3, 6, 8])
+after  <class 'network.DLastBlock'> became shape  torch.Size([128, 512, 1, 1])
+====--------------====
+====G=====information=====
+model depth, alpha  (-1, -1) ---> (0, 1.0)
+model input:  torch.Size([128, 29, 384, 512])
+Generated size:  torch.Size([128, 3, 6, 8])
+====--------------====
