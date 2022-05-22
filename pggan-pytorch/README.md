@@ -65,8 +65,8 @@ The code is in constant development. :) We publish it now, because you can alway
 
 ## PG with SPADE
 
-Note: currently only work for pytorch 0.4.0 ( conda install pytorch=0.4.1 cuda90 -c pytorch )
+Note: currently only work for pytorch 0.4.1 ( conda install pytorch=0.4.1 cuda92 -c pytorch )
 
 run: python train.py --exp_name label2img512
 
-PG training has stabilize and fade phases, chage these config in plugins.py DepthManager(), defalut is 20, 20
+PG training has stabilize and fade phases, change these config in plugins.py DepthManager(), defalut is 20, 20
