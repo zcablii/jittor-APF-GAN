@@ -117,8 +117,9 @@ def __scale_shortside(img, target_width, method=Image.BICUBIC):
 
 def __crop(img, pos, size):
     ow, oh = img.size
+    tw = size
+    th = int(size * oh / ow)
     x1, y1 = pos
-    tw = th = size
     return img.crop((x1, y1, x1 + tw, y1 + th))
 
 
