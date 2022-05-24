@@ -160,7 +160,7 @@ class Pix2PixModel(torch.nn.Module):
             G_losses['VGG'] = self.criterionVGG(fake_image[-1], real_image) \
                 * self.opt.lambda_vgg
 
-        return G_losses, fake_image
+        return G_losses, fake_image[-1]
 
     def compute_discriminator_loss(self, input_semantics, real_image):
         D_losses = {}

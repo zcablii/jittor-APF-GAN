@@ -96,7 +96,7 @@ class Visualizer():
                         ims.append(img_path)
                         txts.append(label)
                         links.append(img_path)
-                if len(ims) < 10:
+                if len(ims) < 6:
                     webpage.add_images(ims, txts, links, width=self.win_size)
                 else:
                     num = int(round(len(ims)/2.0))
