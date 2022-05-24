@@ -11,6 +11,7 @@ from options.test_options import TestOptions
 from models.pix2pix_model import Pix2PixModel
 from util.visualizer import Visualizer
 from util import html
+import torch
 
 opt = TestOptions().parse()
 
@@ -33,7 +34,8 @@ for i, data_i in enumerate(dataloader):
     if i * opt.batchSize >= opt.how_many:
         break
 
-    generated = model(data_i, mode='inference')
+    with torch.cuda.amp.autocast():
+        generated = model(data_i, mode='inference')
 
     img_path = data_i['path']
     for b in range(generated.shape[0]):

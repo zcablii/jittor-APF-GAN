@@ -5,6 +5,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 
 from models.networks.sync_batchnorm import DataParallelWithCallback
 from models.pix2pix_model import Pix2PixModel
+import torch
 
 
 class Pix2PixTrainer():
@@ -32,7 +33,8 @@ class Pix2PixTrainer():
 
     def run_generator_one_step(self, data):
         self.optimizer_G.zero_grad()
-        g_losses, generated = self.pix2pix_model(data, mode='generator')
+        with torch.cuda.amp.autocast():
+            g_losses, generated = self.pix2pix_model(data, mode='generator')
         g_loss = sum(g_losses.values()).mean()
         g_loss.backward()
         self.optimizer_G.step()
@@ -41,7 +43,8 @@ class Pix2PixTrainer():
 
     def run_discriminator_one_step(self, data):
         self.optimizer_D.zero_grad()
-        d_losses = self.pix2pix_model(data, mode='discriminator')
+        with torch.cuda.amp.autocast():
+            d_losses = self.pix2pix_model(data, mode='discriminator')
         d_loss = sum(d_losses.values()).mean()
         d_loss.backward()
         self.optimizer_D.step()

@@ -1,41 +1,42 @@
+set num_upsampling_layers to more
 ----------------- Options ---------------
             D_steps_per_G: 1                             
              aspect_ratio: 1.3333333333333333            
-                batchSize: 32                            
+                batchSize: 24                            
                     beta1: 0.0                           
                     beta2: 0.9                           
       cache_filelist_read: True                          
      cache_filelist_write: True                          
           checkpoints_dir: ./checkpoints                 
    contain_dontcare_label: False                         
-           continue_train: True                          	[default: False]
-                crop_size: 256                           
+           continue_train: False                         
+                crop_size: 512                           
                  dataroot: ./datasets/coco_stuff/        
              dataset_mode: custom                        
                     debug: False                         
-             display_freq: 100                           
+             display_freq: 5000                          
           display_winsize: 256                           
            fade_in_epochs: 50                            
                  gan_mode: hinge                         
                   gpu_ids: 0                             
-                image_dir: ../data/train/imgs            
+                image_dir: ../../CGAN/data/train/imgs    	[default: ../data/train/imgs]
                 init_type: xavier                        
             init_variance: 0.02                          
              instance_dir:                               
                   isTrain: True                          	[default: None]
-                label_dir: ../data/train/gray_label      	[default: ../data/train/labels]
+                label_dir: ../../CGAN/data/train/gray_label	[default: ../data/train/labels]
                  label_nc: 29                            
               lambda_feat: 10.0                          
                lambda_kld: 0.05                          
                lambda_vgg: 10.0                          
        load_from_opt_file: False                         
-                load_size: 256                           
+                load_size: 640                           
                        lr: 0.0002                        
          max_dataset_size: 9223372036854775807           
                     model: pix2pix                       
                  nThreads: 8                             
                n_layers_D: 4                             
-                     name: label2img                     
+                     name: label2imgs_512x384            	[default: label2img]
                       ndf: 64                            
                       nef: 16                            
                      netD: multiscale                    
@@ -54,66 +55,47 @@
                    norm_D: spectralinstance              
                    norm_E: spectralinstance              
                    norm_G: spectralspadesyncbatch3x3     
-                    num_D: 2                             
-    num_upsampling_layers: normal                        
+                    num_D: 3                             
+    num_upsampling_layers: more                          
                 optimizer: adam                          
                 output_nc: 3                             
                     phase: train                         
-          preprocess_mode: fixed                         
-               print_freq: 100                           
-          save_epoch_freq: 10                            
+          preprocess_mode: scale_width_and_crop          
+               print_freq: 5000                          
+          save_epoch_freq: 20                            
          save_latest_freq: 50000                         
            serial_batches: False                         
                    tf_log: False                         
+                  use_pos: True                          
+             use_pos_proj: True                          
                   use_vae: False                         
               which_epoch: latest                        
                     z_dim: 256                           
 ----------------- End -------------------
-train.py --label_dir=../data/train/gray_label --image_dir=../data/train/imgs --continue_train
+train.py --name=label2imgs_512x384 --label_dir=../../CGAN/data/train/gray_label --image_dir=../../CGAN/data/train/imgs
 dataset [CustomDataset] of size 10000 was created
-Network [SPADEGenerator] was created. Total number of parameters: 92.8 million. To see the architecture, do print(network).
-Network [MultiscaleDiscriminator] was created. Total number of parameters: 5.6 million. To see the architecture, do print(network).
-Resuming from epoch 200 at iteration 0
-create web directory ./checkpoints/label2img/web...
-/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/upsampling.py:129: UserWarning: nn.Upsample is deprecated. Use nn.functional.interpolate instead.
-  warnings.warn("nn.{} is deprecated. Use nn.functional.interpolate instead.".format(self.name))
-/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/functional.py:1320: UserWarning: nn.functional.tanh is deprecated. Use torch.tanh instead.
+Network [SPADEGenerator] was created. Total number of parameters: 70.0 million. To see the architecture, do print(network).
+Network [MultiscaleDiscriminator] was created. Total number of parameters: 8.4 million. To see the architecture, do print(network).
+create web directory ./checkpoints/label2imgs_512x384/web...
+/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/functional.py:1698: UserWarning: nn.functional.tanh is deprecated. Use torch.tanh instead.
   warnings.warn("nn.functional.tanh is deprecated. Use torch.tanh instead.")
-(epoch: 200, iters: 32, time: 0.044) GAN: 1.325 GAN_Feat: 10.741 VGG: 6.371 D_Fake: 0.366 D_real: 0.985 
-(epoch: 200, iters: 128, time: 0.075) GAN: 0.351 GAN_Feat: 9.985 VGG: 6.178 D_Fake: 1.041 D_real: 0.345 
-(epoch: 200, iters: 224, time: 0.074) GAN: 1.366 GAN_Feat: 9.598 VGG: 6.307 D_Fake: 0.377 D_real: 0.932 
-(epoch: 200, iters: 320, time: 0.075) GAN: 0.591 GAN_Feat: 8.818 VGG: 5.770 D_Fake: 0.763 D_real: 0.612 
-(epoch: 200, iters: 416, time: 0.075) GAN: 0.899 GAN_Feat: 9.118 VGG: 6.280 D_Fake: 0.602 D_real: 0.740 
-(epoch: 200, iters: 512, time: 0.075) GAN: 0.297 GAN_Feat: 8.680 VGG: 5.897 D_Fake: 0.987 D_real: 0.453 
-(epoch: 200, iters: 640, time: 0.075) GAN: 0.625 GAN_Feat: 8.565 VGG: 5.808 D_Fake: 0.692 D_real: 0.760 
-(epoch: 200, iters: 736, time: 0.075) GAN: 0.748 GAN_Feat: 8.295 VGG: 5.742 D_Fake: 0.817 D_real: 0.860 
-(epoch: 200, iters: 832, time: 0.075) GAN: 0.458 GAN_Feat: 8.687 VGG: 5.785 D_Fake: 0.785 D_real: 0.621 
-(epoch: 200, iters: 928, time: 0.076) GAN: 0.981 GAN_Feat: 8.702 VGG: 6.058 D_Fake: 0.459 D_real: 1.012 
+/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/functional.py:3503: UserWarning: The default behavior for interpolate/upsample with float scale_factor changed in 1.6.0 to align with other frameworks/libraries, and now uses scale_factor directly, instead of relying on the computed output size. If you wish to restore the old behavior, please set recompute_scale_factor=True. See the documentation of nn.Upsample for details. 
+  "The default behavior for interpolate/upsample with float scale_factor changed "
+(epoch: 1, iters: 5016, time: 0.113) GAN: 0.772 GAN_Feat: 14.673 VGG: 5.264 D_Fake: 0.437 D_real: 0.733 
 Traceback (most recent call last):
-  File "train.py", line 45, in <module>
-    trainer.run_discriminator_one_step(data_i)
-  File "/home/lyx/CGAN/SPADE-with-AMP-master/trainers/pix2pix_trainer.py", line 44, in run_discriminator_one_step
-    d_losses = self.pix2pix_model(data, mode='discriminator')
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/module.py", line 489, in __call__
-    result = self.forward(*input, **kwargs)
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/parallel/data_parallel.py", line 141, in forward
-    return self.module(*inputs[0], **kwargs[0])
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/module.py", line 489, in __call__
-    result = self.forward(*input, **kwargs)
-  File "/home/lyx/CGAN/SPADE-with-AMP-master/models/pix2pix_model.py", line 50, in forward
-    input_semantics, real_image)
-  File "/home/lyx/CGAN/SPADE-with-AMP-master/models/pix2pix_model.py", line 168, in compute_discriminator_loss
-    fake_image, _ = self.generate_fake(input_semantics, real_image)
-  File "/home/lyx/CGAN/SPADE-with-AMP-master/models/pix2pix_model.py", line 195, in generate_fake
-    fake_image = self.netG(input_semantics, z=z)
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/module.py", line 489, in __call__
-    result = self.forward(*input, **kwargs)
-  File "/home/lyx/CGAN/SPADE-with-AMP-master/models/networks/generator.py", line 93, in forward
-    x = self.up(x)
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/module.py", line 489, in __call__
-    result = self.forward(*input, **kwargs)
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/modules/upsampling.py", line 130, in forward
-    return F.interpolate(input, self.size, self.scale_factor, self.mode, self.align_corners)
-  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/functional.py", line 2429, in interpolate
-    return torch._C._nn.upsample_nearest2d(input, _output_size(2))
-KeyboardInterrupt
+  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/PIL/Image.py", line 2828, in fromarray
+    mode, rawmode = _fromarray_typemap[typekey]
+KeyError: ((1, 1, 128, 3), '|u1')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "train.py", line 67, in <module>
+    ('real_image', data_i['image'][:print_sample_num])])
+  File "/home/lyx/jittor-Torile-GanVit/SPADE_master/util/visualizer.py", line 72, in display_current_results
+    util.save_image(image_numpy[i], img_path)
+  File "/home/lyx/jittor-Torile-GanVit/SPADE_master/util/util.py", line 135, in save_image
+    image_pil = Image.fromarray(image_numpy)
+  File "/home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/PIL/Image.py", line 2830, in fromarray
+    raise TypeError("Cannot handle this data type: %s, %s" % typekey) from e
+TypeError: Cannot handle this data type: (1, 1, 128, 3), |u1

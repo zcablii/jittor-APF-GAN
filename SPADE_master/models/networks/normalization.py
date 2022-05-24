@@ -4,6 +4,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 """
 
 import re
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -50,6 +51,48 @@ def get_nonspade_norm_layer(opt, norm_type='instance'):
     return add_norm_layer
 
 
+def get_2d_sincos_pos_embed_from_grid(embed_dim, grid):
+    assert embed_dim % 2 == 0
+
+    # use half of dimensions to encode grid_h
+    emb_h = get_1d_sincos_pos_embed_from_grid(embed_dim // 2, grid[0])  # (H*W, D/2)
+    emb_w = get_1d_sincos_pos_embed_from_grid(embed_dim // 2, grid[1])  # (H*W, D/2)
+
+    emb = np.concatenate([emb_h, emb_w], axis=1) # (H*W, D)
+    return emb
+
+
+def get_1d_sincos_pos_embed_from_grid(embed_dim, pos):
+    """
+    embed_dim: output dimension for each position
+    pos: a list of positions to be encoded: size (M,)
+    out: (M, D)
+    """
+    assert embed_dim % 2 == 0
+    omega = np.arange(embed_dim // 2, dtype=np.float)
+    omega /= embed_dim / 2.
+    omega = 1. / 10000**omega  # (D/2,)
+
+    pos = pos.reshape(-1)  # (M,)
+    out = np.einsum('m,d->md', pos, omega)  # (M, D/2), outer product
+
+    emb_sin = np.sin(out) # (M, D/2)
+    emb_cos = np.cos(out) # (M, D/2)
+
+    emb = np.concatenate([emb_sin, emb_cos], axis=1)  # (M, D)
+    return emb
+
+
+def get_2d_sincos_pos_embed(embed_dim, grid_h_sz, grid_w_sz):
+    grid_h = np.arange(grid_h_sz, dtype=np.float16)
+    grid_w = np.arange(grid_w_sz, dtype=np.float16)
+    grid = np.meshgrid(grid_w, grid_h)
+    grid = np.stack(grid, axis=0)
+
+    grid = grid.reshape([2, 1, grid_h_sz, grid_w_sz])
+    pos_embed = get_2d_sincos_pos_embed_from_grid(embed_dim, grid)
+    return pos_embed
+
 # Creates SPADE normalization layer based on the given configuration
 # SPADE consists of two steps. First, it normalizes the activations using
 # your favorite normalization method, such as Batch Norm or Instance Norm.
@@ -64,7 +107,7 @@ def get_nonspade_norm_layer(opt, norm_type='instance'):
 # |norm_nc|: the #channels of the normalized activations, hence the output dim of SPADE
 # |label_nc|: the #channels of the input semantic map, hence the input dim of SPADE
 class SPADE(nn.Module):
-    def __init__(self, config_text, norm_nc, label_nc):
+    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False):
         super().__init__()
 
         assert config_text.startswith('spade')
@@ -82,8 +125,19 @@ class SPADE(nn.Module):
             raise ValueError('%s is not a recognized param-free norm type in SPADE'
                              % param_free_norm_type)
 
+        self.use_pos = use_pos
+        self.use_pos_proj = use_pos_proj
+        # if use_pos:
+        #     print('use_pos true!!!!!!!!')
+        #     if use_pos_proj:
+        #         print('use_pos_proj true!!!!!!!!')
+
         # The dimension of the intermediate embedding space. Yes, hardcoded.
         nhidden = 128
+
+        self.pos_embed = None
+        if use_pos_proj:
+            self.pos_proj = nn.Conv2d(nhidden, nhidden, kernel_size=1)
 
         pw = ks // 2
         self.mlp_shared = nn.Sequential(
@@ -101,6 +155,16 @@ class SPADE(nn.Module):
         # Part 2. produce scaling and bias conditioned on semantic map
         segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
         actv = self.mlp_shared(segmap)
+        if self.use_pos: # default with True
+            if self.pos_embed is None:
+                B, C, H, W = actv.size()
+                pos_embed = torch.from_numpy(get_2d_sincos_pos_embed(C, H, W)).to(actv.device)
+                self.pos_embed = pos_embed.permute(0, 1).reshape(1, C, H, W)
+            if self.use_pos_proj: # default with True
+                actv += self.pos_proj(self.pos_embed.to(torch.float16))
+            else:
+                actv += self.pos_embed
+
         gamma = self.mlp_gamma(actv)
         beta = self.mlp_beta(actv)
 
