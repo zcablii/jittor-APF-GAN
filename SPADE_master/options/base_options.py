@@ -11,6 +11,8 @@ import torch
 import models
 import data
 import pickle
+import torch.backends.cudnn as cudnn
+import misc
 
 
 class BaseOptions():
@@ -18,6 +20,13 @@ class BaseOptions():
         self.initialized = False
 
     def initialize(self, parser):
+        # distributed training parameters
+        parser.add_argument('--device', default='cuda', help='device to use for training / testing')
+        parser.add_argument('--world_size', default=1, type=int, help='number of distributed processes')
+        parser.add_argument('--local_rank', default=-1, type=int)
+        parser.add_argument('--dist_on_itp', action='store_true')
+        parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
+
         # experiment specifics
         parser.add_argument('--name', type=str, default='label2img', help='name of the experiment. It decides where to store samples and models')
 
@@ -28,7 +37,7 @@ class BaseOptions():
         parser.add_argument('--norm_D', type=str, default='spectralinstance', help='instance normalization or batch normalization')
         parser.add_argument('--norm_E', type=str, default='spectralinstance', help='instance normalization or batch normalization')
         parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
-
+        parser.add_argument('--num_D', type=int, default=3, help='number of discriminators to be used in multiscale')
         # for SPADE
         parser.add_argument('--use_pos', action='store_true', help='SPADE use pos_embed')
         parser.set_defaults(use_pos=True)
@@ -167,18 +176,21 @@ class BaseOptions():
             (0 if opt.no_instance else 1)
 
         # set gpu ids
-        str_ids = opt.gpu_ids.split(',')
-        opt.gpu_ids = []
-        for str_id in str_ids:
-            id = int(str_id)
-            if id >= 0:
-                opt.gpu_ids.append(id)
-        if len(opt.gpu_ids) > 0:
-            torch.cuda.set_device(opt.gpu_ids[0])
+        # str_ids = opt.gpu_ids.split(',')
+        # opt.gpu_ids = []
+        # for str_id in str_ids:
+        #     id = int(str_id)
+        #     if id >= 0:
+        #         opt.gpu_ids.append(id)
+        # if len(opt.gpu_ids) > 0:
+        #     torch.cuda.set_device(opt.gpu_ids[0])
 
-        assert len(opt.gpu_ids) == 0 or opt.batchSize % len(opt.gpu_ids) == 0, \
-            "Batch size %d is wrong. It must be a multiple of # GPUs %d." \
-            % (opt.batchSize, len(opt.gpu_ids))
+        # assert len(opt.gpu_ids) == 0 or opt.batchSize % len(opt.gpu_ids) == 0, \
+        #     "Batch size %d is wrong. It must be a multiple of # GPUs %d." \
+        #     % (opt.batchSize, len(opt.gpu_ids))
+        misc.init_distributed_mode(opt)
+        cudnn.benchmark = True
+        opt.gpu_ids = list(range(torch.cuda.device_count()))
 
         self.opt = opt
         return self.opt

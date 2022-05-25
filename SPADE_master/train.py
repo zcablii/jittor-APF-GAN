@@ -12,10 +12,25 @@ from util.visualizer import Visualizer
 from trainers.pix2pix_trainer import Pix2PixTrainer
 import os
 from tensorboardX import SummaryWriter
+import torch
+import misc
+from tqdm import tqdm
 # parse options
-os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+# os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 opt = TrainOptions().parse()
-writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name))
+ngpus = torch.cuda.device_count()
+print(f'n_gpus={ngpus}')
+print(f'gpu_ids={opt.gpu_ids}')
+opt.lr = opt.lr * opt.batchSize * ngpus / 24
+if not opt.distributed:
+    opt.batchSize = opt.batchSize * ngpus
+    opt.nThreads = opt.nThreads * ngpus
+
+if misc.is_main_process():
+    os.makedirs(os.path.join(opt.checkpoints_dir, opt.name), exist_ok=True)
+    writer = SummaryWriter(os.path.join(opt.checkpoints_dir, opt.name))
+else:
+    writer = None
 # print options to help debugging
 print(' '.join(sys.argv))
 
@@ -33,8 +48,10 @@ visualizer = Visualizer(opt)
 
 print_sample_num = 8
 for epoch in iter_counter.training_epochs():
+    if opt.distributed:
+        dataloader.sampler.set_epoch(epoch)
     iter_counter.record_epoch_start(epoch)
-    for i, data_i in enumerate(dataloader, start=iter_counter.epoch_iter):
+    for i, data_i in enumerate(tqdm(dataloader), start=iter_counter.epoch_iter):
         iter_counter.record_one_iteration()
         # Training
         # train generator
@@ -51,8 +68,9 @@ for epoch in iter_counter.training_epochs():
             #print(v)
             #if v != 0:
             v = v.mean().float()
-            writer.add_scalar(loss_names[ct], v, (epoch-1) * len(dataloader) + i)
-            ct+=1
+            if misc.is_main_process():
+                writer.add_scalar(loss_names[ct], v, (epoch-1) * len(dataloader) + i)
+                ct+=1
 
         if iter_counter.needs_printing():
             losses = trainer.get_latest_losses()
@@ -66,7 +84,7 @@ for epoch in iter_counter.training_epochs():
                                    ('real_image', data_i['image'][:print_sample_num])])
             visualizer.display_current_results(visuals, epoch, iter_counter.total_steps_so_far)
 
-        if iter_counter.needs_saving():
+        if iter_counter.needs_saving() and misc.is_main_process():
             print('saving the latest model (epoch %d, total_steps %d)' %
                   (epoch, iter_counter.total_steps_so_far))
             trainer.save('latest')
@@ -75,8 +93,8 @@ for epoch in iter_counter.training_epochs():
     trainer.update_learning_rate(epoch)
     iter_counter.record_epoch_end()
 
-    if epoch % opt.save_epoch_freq == 0 or \
-       epoch == iter_counter.total_epochs:
+    if (epoch % opt.save_epoch_freq == 0 or \
+       epoch == iter_counter.total_epochs) and misc.is_main_process():
         print('saving the model at the end of epoch %d, iters %d' %
               (epoch, iter_counter.total_steps_so_far))
         trainer.save('latest')

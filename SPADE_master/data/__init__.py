@@ -6,6 +6,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import importlib
 import torch.utils.data
 from data.base_dataset import BaseDataset
+import misc
 
 
 def find_dataset_using_name(dataset_name):
@@ -44,11 +45,28 @@ def create_dataloader(opt):
     instance.initialize(opt)
     print("dataset [%s] of size %d was created" %
           (type(instance).__name__, len(instance)))
-    dataloader = torch.utils.data.DataLoader(
-        instance,
-        batch_size=opt.batchSize,
-        shuffle=not opt.serial_batches,
-        num_workers=int(opt.nThreads),
-        drop_last=opt.isTrain
-    )
+
+    if opt.distributed:
+        num_tasks = misc.get_world_size()
+        global_rank = misc.get_rank()
+        sampler = torch.utils.data.DistributedSampler(instance,
+                                                      num_replicas=num_tasks,
+                                                      rank=global_rank,
+                                                      shuffle=not opt.serial_batches)
+        print("Sampler_train = %s" % str(sampler))
+        dataloader = torch.utils.data.DataLoader(
+            instance,
+            sampler=sampler,
+            batch_size=opt.batchSize,
+            num_workers=int(opt.nThreads),
+            drop_last=opt.isTrain
+        )
+    else:
+        dataloader = torch.utils.data.DataLoader(
+            instance,
+            batch_size=opt.batchSize,
+            shuffle=not opt.serial_batches,
+            num_workers=int(opt.nThreads),
+            drop_last=opt.isTrain
+        )
     return dataloader

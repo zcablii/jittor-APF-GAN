@@ -6,6 +6,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 from models.networks.sync_batchnorm import DataParallelWithCallback
 from models.pix2pix_model import Pix2PixModel
 import torch
+import torch.nn as nn
 
 
 class Pix2PixTrainer():
@@ -19,8 +20,12 @@ class Pix2PixTrainer():
         self.opt = opt
         self.pix2pix_model = Pix2PixModel(opt)
         if len(opt.gpu_ids) > 0:
-            self.pix2pix_model = DataParallelWithCallback(self.pix2pix_model,
-                                                          device_ids=opt.gpu_ids)
+            if opt.distributed:
+                self.pix2pix_model = nn.parallel.DistributedDataParallel(self.pix2pix_model, device_ids=[opt.gpu], find_unused_parameters=True)
+            else:
+                # self.pix2pix_model = nn.DataParallel(self.pix2pix_model).cuda()
+                self.pix2pix_model = DataParallelWithCallback(self.pix2pix_model,
+                                                              device_ids=opt.gpu_ids)
             self.pix2pix_model_on_one_gpu = self.pix2pix_model.module
         else:
             self.pix2pix_model_on_one_gpu = self.pix2pix_model

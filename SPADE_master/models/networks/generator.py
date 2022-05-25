@@ -15,7 +15,7 @@ torch.backends.cudnn.benchmark = True
 class SPADEGenerator(BaseNetwork):
     @staticmethod
     def modify_commandline_options(parser, is_train):
-        parser.set_defaults(norm_G='spectralspadesyncbatch3x3')
+        # parser.set_defaults(norm_G='spectralspadesyncbatch3x3')
         parser.add_argument('--num_upsampling_layers',
                             choices=('normal', 'more', 'most'), default='normal',
                             help="If 'more', adds upsampling layer between the two middle resnet blocks. If 'most', also add one more upsampling + resnet layer at the end of the generator")
@@ -113,7 +113,7 @@ class SPADEGenerator(BaseNetwork):
             
             if self.layer_level - i < self.opt.num_D:
                 mid_res = self.conv_img[self.layer_level - i](F.leaky_relu(x, 2e-1))
-                results.append(F.tanh(mid_res))
+                results.append(torch.tanh(mid_res))
 
         # x = self.up(x)
         # x = self.up_0(x, seg)
@@ -129,7 +129,7 @@ class SPADEGenerator(BaseNetwork):
         #     x = self.up_4(x, seg)
 
         # x = self.conv_img(F.leaky_relu(x, 2e-1))
-        # x = F.tanh(x)
+        # x = torch.tanh(x)
 
         return results # list of rgb from low to high resolution
 

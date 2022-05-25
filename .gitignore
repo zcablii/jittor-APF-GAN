@@ -1,3 +1,7 @@
 SPADE_master/checkpoints
 SPADE_master/log.txt
 gitpush.sh
+Makefile*
+checkpoints/
+*.pyc
+results/

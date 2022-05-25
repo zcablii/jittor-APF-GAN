@@ -118,7 +118,8 @@ class SPADE(nn.Module):
         if param_free_norm_type == 'instance':
             self.param_free_norm = nn.InstanceNorm2d(norm_nc, affine=False)
         elif param_free_norm_type == 'syncbatch':
-            self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
+            # self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
+            self.param_free_norm = nn.SyncBatchNorm(norm_nc, affine=False)
         elif param_free_norm_type == 'batch':
             self.param_free_norm = nn.BatchNorm2d(norm_nc, affine=False)
         else:
