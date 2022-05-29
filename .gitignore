@@ -5,3 +5,5 @@ Makefile*
 checkpoints/
 *.pyc
 results/
+*.pth
+*.pkl

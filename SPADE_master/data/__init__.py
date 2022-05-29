@@ -45,7 +45,7 @@ def create_dataloader(opt):
     instance.initialize(opt)
     print("dataset [%s] of size %d was created" %
           (type(instance).__name__, len(instance)))
-
+    print("batchSize =", opt.batchSize)
     if opt.distributed:
         num_tasks = misc.get_world_size()
         global_rank = misc.get_rank()

@@ -155,7 +155,7 @@ class SPADE(nn.Module):
 
         # Part 2. produce scaling and bias conditioned on semantic map
         segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
-        actv = self.mlp_shared(segmap)
+        actv = self.mlp_shared(segmap).clone()
         if self.use_pos: # default with True
             if self.pos_embed is None:
                 B, C, H, W = actv.size()
