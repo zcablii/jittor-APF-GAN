@@ -1,5 +1,6 @@
 SPADE_master/checkpoints
 SPADE_master/log.txt
+SPADE_master/results
 gitpush.sh
 Makefile*
 checkpoints/

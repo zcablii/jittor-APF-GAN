@@ -57,7 +57,7 @@ class Pix2PixModel(torch.nn.Module):
         elif mode == 'inference':
             with torch.no_grad():
                 fake_image, _ = self.generate_fake(input_semantics, real_image)
-            return fake_image[-1]
+            return fake_image
         else:
             raise ValueError("|mode| is invalid")
 
@@ -159,16 +159,17 @@ class Pix2PixModel(torch.nn.Module):
             G_losses['GAN_Feat'] = GAN_Feat_loss
 
         if not self.opt.no_vgg_loss:
-            G_losses['VGG'] = self.criterionVGG(fake_image[-1], real_image) \
+            G_losses['VGG'] = self.criterionVGG(fake_image, real_image) \
                 * self.opt.lambda_vgg
 
-        return G_losses, fake_image[-1]
+        return G_losses, fake_image
 
     def compute_discriminator_loss(self, input_semantics, real_image):
         D_losses = {}
         with torch.no_grad():
             fake_image, _ = self.generate_fake(input_semantics, real_image)
-            fake_image = [fake_img.detach().requires_grad_() for fake_img in fake_image]
+            fake_image = fake_image.detach()
+            fake_image.requires_grad_()
 
         pred_fake, pred_real = self.discriminate(
             input_semantics, fake_image, real_image)
@@ -193,35 +194,27 @@ class Pix2PixModel(torch.nn.Module):
             if compute_kld_loss:
                 KLD_loss = self.KLDLoss(mu, logvar) * self.opt.lambda_kld
 
-        multiscalse_fake_image = self.netG(input_semantics, z=z)
+        fake_image = self.netG(input_semantics, z=z)
         # fake_image = multiscalse_fake_image[-1]
 
         assert (not compute_kld_loss) or self.opt.use_vae, \
             "You cannot compute KLD loss if opt.use_vae == False"
 
-        return multiscalse_fake_image, KLD_loss
+        return fake_image, KLD_loss
 
     # Given fake and real image, return the prediction of discriminator
     # for each fake and real image.
 
     def discriminate(self, input_semantics, fake_image, real_image):
-        fake_concat = []
-        real_concat = []
-        for i in range(self.opt.num_D-1,-1,-1):
-            fake_concat.append(torch.cat([input_semantics, fake_image[i]], dim=1))
-            real_concat.append(torch.cat([input_semantics, real_image], dim=1))
-            input_semantics = F.interpolate(input_semantics, scale_factor=0.5)
-            real_image = F.interpolate(real_image, scale_factor=0.5)
+        fake_concat = torch.cat([input_semantics, fake_image], dim=1)
+        real_concat = torch.cat([input_semantics, real_image], dim=1)
 
 
         # In Batch Normalization, the fake and real images are
         # recommended to be in the same batch to avoid disparate
         # statistics in fake and real images.
         # So both fake and real images are fed to D all at once.
-        fake_and_real = [] # list of 3 tensors from high to low resolution
-        
-        for i in range(len(fake_concat)):
-            fake_and_real.append(torch.cat([fake_concat[i], real_concat[i]], dim=0))
+        fake_and_real = torch.cat([fake_concat, real_concat], dim=0)
 
         discriminator_out = self.netD(fake_and_real)
 

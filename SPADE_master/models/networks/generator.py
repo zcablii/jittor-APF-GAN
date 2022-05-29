@@ -37,6 +37,20 @@ class SPADEGenerator(BaseNetwork):
             # downsampled segmentation map instead of random z
             self.fc = nn.Conv2d(self.opt.semantic_nc, 16 * nf, 3, padding=1)
 
+        if opt.use_interFeature_pos:
+            levels = 6 if opt.num_upsampling_layers == 'more' else 5
+            W = opt.crop_size // 2**levels
+            H = int(W / opt.aspect_ratio)
+
+            self.pos_emb_head = nn.Parameter(torch.zeros(1, 16 * nf, H, W), requires_grad=True).cuda()
+            self.pos_emb_middle = nn.Parameter(torch.zeros(1, 16 * nf, H*2, W*2), requires_grad=True).cuda()
+            self.pos_emb_0 = nn.Parameter(torch.zeros(1, 8 * nf, H*2**2, W*2**2), requires_grad=True).cuda()
+            self.pos_emb_1 = nn.Parameter(torch.zeros(1, 4 * nf, H*2**3, W*2**3), requires_grad=True).cuda()
+            self.pos_emb_2 = nn.Parameter(torch.zeros(1, 2 * nf, H*2**4, W*2**4), requires_grad=True).cuda()
+            self.pos_emb_3 = nn.Parameter(torch.zeros(1, nf, H*2**5, W*2**5), requires_grad=True).cuda()
+            if self.opt.num_upsampling_layers == 'more':
+                self.pos_emb_4 = nn.Parameter(torch.zeros(1, nf//2, H*2**6, W*2**6), requires_grad=True).cuda()
+
         self.head_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
 
         self.G_middle_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
@@ -46,19 +60,14 @@ class SPADEGenerator(BaseNetwork):
         self.up_1 = SPADEResnetBlock(8 * nf, 4 * nf, opt)
         self.up_2 = SPADEResnetBlock(4 * nf, 2 * nf, opt)
         self.up_3 = SPADEResnetBlock(2 * nf, 1 * nf, opt)
-        self.layer_level = 3
+
         final_nc = nf
 
         if opt.num_upsampling_layers == 'more':
             self.up_4 = SPADEResnetBlock(1 * nf, nf // 2, opt)
             final_nc = nf // 2
-            self.layer_level = 4
 
-        
-        self.conv_img = nn.ModuleList([])
-        for i in range(opt.num_D):
-            self.conv_img.append(nn.Conv2d(final_nc*(2**i), 3, 3, padding=1))
-        # self.conv_img = nn.Conv2d(final_nc, 3, 3, padding=1)
+        self.conv_img = nn.Conv2d(final_nc, 3, 3, padding=1)
 
         self.up = nn.Upsample(scale_factor=2)
 
@@ -94,44 +103,40 @@ class SPADEGenerator(BaseNetwork):
             x = self.fc(x)
 
         x = self.head_0(x, seg)
-
+        if self.opt.use_interFeature_pos: x = x + self.pos_emb_head
         x = self.up(x)
         x = self.G_middle_0(x, seg)
+        if self.opt.use_interFeature_pos: x = x + self.pos_emb_middle
 
         # if self.opt.num_upsampling_layers == 'more' or \
         #    self.opt.num_upsampling_layers == 'most':
         #     x = self.up(x)
 
         # x = self.G_middle_1(x, seg)
-        results = []
-        for i in range(self.layer_level+1):
+
+        x = self.up(x)
+        x = self.up_0(x, seg)
+        if self.opt.use_interFeature_pos: x = x + self.pos_emb_0
+        x = self.up(x)
+        x = self.up_1(x, seg)
+        if self.opt.use_interFeature_pos: x = x + self.pos_emb_1
+        x = self.up(x)
+        x = self.up_2(x, seg)
+        if self.opt.use_interFeature_pos: x = x + self.pos_emb_2
+        x = self.up(x)
+        x = self.up_3(x, seg)
+        if self.opt.use_interFeature_pos: x = x + self.pos_emb_3
+
+        if self.opt.num_upsampling_layers == 'more':
             x = self.up(x)
-            up_spade = eval(f'self.up_{i}')
-            x = up_spade(x, seg)
-           
-            # exec(f'x = self.up_{i}(x, seg)',globals(), locals() )
-            
-            if self.layer_level - i < self.opt.num_D:
-                mid_res = self.conv_img[self.layer_level - i](F.leaky_relu(x, 2e-1))
-                results.append(torch.tanh(mid_res))
+            x = self.up_4(x, seg)
+            if self.opt.use_interFeature_pos: x = x + self.pos_emb_4
 
-        # x = self.up(x)
-        # x = self.up_0(x, seg)
-        # x = self.up(x)
-        # x = self.up_1(x, seg)
-        # x = self.up(x)
-        # x = self.up_2(x, seg)
-        # x = self.up(x)
-        # x = self.up_3(x, seg)
+        x = self.conv_img(F.leaky_relu(x, 2e-1))
+        x = F.tanh(x)
 
-        # if self.opt.num_upsampling_layers == 'more':
-        #     x = self.up(x)
-        #     x = self.up_4(x, seg)
+        return x
 
-        # x = self.conv_img(F.leaky_relu(x, 2e-1))
-        # x = torch.tanh(x)
-
-        return results # list of rgb from low to high resolution
 
 
 class Pix2PixHDGenerator(BaseNetwork):

@@ -53,14 +53,20 @@ class MultiscaleDiscriminator(BaseNetwork):
     def forward(self, input):
         result = []
         get_intermediate_features = not self.opt.no_ganFeat_loss
-        ct = 0
+        # ct = 0
+        # for name, D in self.named_children() :
+        #     out = D(input[ct])
+        #     if not get_intermediate_features:
+        #         out = [out]
+        #     result.append(out)
+        #     ct+=1
+        #     # input = self.downsample(input)
         for name, D in self.named_children() :
-            out = D(input[ct])
+            out = D(input)
             if not get_intermediate_features:
                 out = [out]
             result.append(out)
-            ct+=1
-            # input = self.downsample(input)
+            input = self.downsample(input)
         return result
 
 
