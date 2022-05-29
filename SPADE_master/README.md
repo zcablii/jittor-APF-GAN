@@ -2,6 +2,7 @@
 ![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg)
 
 # Semantic Image Synthesis with SPADE
+
 ![GauGAN demo](https://nvlabs.github.io/SPADE//images/ocean.gif)
 
 # New implementation available at imaginaire repository
@@ -10,8 +11,8 @@ We have a reimplementation of the SPADE method that is more performant. It is av
 
 ### [Project page](https://nvlabs.github.io/SPADE/) |   [Paper](https://arxiv.org/abs/1903.07291) | [Online Interactive Demo of GauGAN](https://www.nvidia.com/en-us/research/ai-playground/) | [GTC 2019 demo](https://youtu.be/p5U4NgVGAwg) | [Youtube Demo of GauGAN](https://youtu.be/MXWm6w4E5q0)
 
-Semantic Image Synthesis with Spatially-Adaptive Normalization.<br>
-[Taesung Park](http://taesung.me/),  [Ming-Yu Liu](http://mingyuliu.net/), [Ting-Chun Wang](https://tcwang0509.github.io/),  and [Jun-Yan Zhu](http://people.csail.mit.edu/junyanz/).<br>
+Semantic Image Synthesis with Spatially-Adaptive Normalization.`<br>`
+[Taesung Park](http://taesung.me/),  [Ming-Yu Liu](http://mingyuliu.net/), [Ting-Chun Wang](https://tcwang0509.github.io/),  and [Jun-Yan Zhu](http://people.csail.mit.edu/junyanz/).`<br>`
 In CVPR 2019 (Oral).
 
 ### [License](https://raw.githubusercontent.com/nvlabs/SPADE/master/LICENSE.md)
@@ -28,17 +29,20 @@ For press and other inquiries, please contact [Hector Marinez](hmarinez@nvidia.c
 ## Installation
 
 Clone this repo.
+
 ```bash
 git clone https://github.com/NVlabs/SPADE.git
 cd SPADE/
 ```
 
 This code requires PyTorch 1.0 and python 3+. Please install dependencies by
+
 ```bash
 pip install -r requirements.txt
 ```
 
 This code also requires the Synchronized-BatchNorm-PyTorch rep.
+
 ```
 cd models/networks/
 git clone https://github.com/vacancy/Synchronized-BatchNorm-PyTorch
@@ -54,7 +58,7 @@ For COCO-Stuff, Cityscapes or ADE20K, the datasets must be downloaded beforehand
 
 **Preparing COCO-Stuff Dataset**. The dataset can be downloaded [here](https://github.com/nightrome/cocostuff). In particular, you will need to download train2017.zip, val2017.zip, stuffthingmaps_trainval2017.zip, and annotations_trainval2017.zip. The images, labels, and instance maps should be arranged in the same directory structure as in `datasets/coco_stuff/`. In particular, we used an instance map that combines both the boundaries of "things instance map" and "stuff label map". To do this, we used a simple script `datasets/coco_generate_instance_map.py`. Please install `pycocotools` using `pip install pycocotools` and refer to the script to generate instance maps.
 
-**Preparing ADE20K Dataset**. The dataset can be downloaded [here](http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip), which is from [MIT Scene Parsing BenchMark](http://sceneparsing.csail.mit.edu/). After unzipping the datgaset, put the jpg image files `ADEChallengeData2016/images/` and png label files `ADEChallengeData2016/annotatoins/` in the same directory. 
+**Preparing ADE20K Dataset**. The dataset can be downloaded [here](http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip), which is from [MIT Scene Parsing BenchMark](http://sceneparsing.csail.mit.edu/). After unzipping the datgaset, put the jpg image files `ADEChallengeData2016/images/` and png label files `ADEChallengeData2016/annotatoins/` in the same directory.
 
 There are different modes to load images by specifying `--preprocess_mode` along with `--load_size`. `--crop_size`. There are options such as `resize_and_crop`, which resizes the images into square images of side length `load_size` and randomly crops to `crop_size`. `scale_shortside_and_crop` scales the image to have a short side of length `load_size` and crops to `crop_size` x `crop_size` square. To see all modes, please use `python train.py --help` and take a look at `data/base_dataset.py`. By default at the training phase, the images are randomly flipped horizontally. To prevent this use `--no_flip`.
 
@@ -63,31 +67,30 @@ There are different modes to load images by specifying `--preprocess_mode` along
 Once the dataset is ready, the result images can be generated using pretrained models.
 
 1. Download the tar of the pretrained models from the [Google Drive Folder](https://drive.google.com/file/d/12gvlTbMvUcJewQlSEaZdeb2CdOB-b8kQ/view?usp=sharing), save it in 'checkpoints/', and run
-
-    ```
-    cd checkpoints
-    tar xvf checkpoints.tar.gz
-    cd ../
-    ```
-
+   
+   ```
+   cd checkpoints
+   tar xvf checkpoints.tar.gz
+   cd ../
+   ```
 2. Generate images using the pretrained model.
-    ```bash
-    python test.py --name [type]_pretrained --dataset_mode [dataset] --dataroot [path_to_dataset]
-    ```
-    `[type]_pretrained` is the directory name of the checkpoint file downloaded in Step 1, which should be one of `coco_pretrained`, `ade20k_pretrained`, and `cityscapes_pretrained`. `[dataset]` can be one of `coco`, `ade20k`, and `cityscapes`, and `[path_to_dataset]`, is the path to the dataset. If you are running on CPU mode, append `--gpu_ids -1`.
-
+   
+   ```bash
+   python test.py --name [type]_pretrained --dataset_mode [dataset] --dataroot [path_to_dataset]
+   ```
+   
+   `[type]_pretrained` is the directory name of the checkpoint file downloaded in Step 1, which should be one of `coco_pretrained`, `ade20k_pretrained`, and `cityscapes_pretrained`. `[dataset]` can be one of `coco`, `ade20k`, and `cityscapes`, and `[path_to_dataset]`, is the path to the dataset. If you are running on CPU mode, append `--gpu_ids -1`.
 3. The outputs images are stored at `./results/[type]_pretrained/` by default. You can view them using the autogenerated HTML file in the directory.
 
 ## Generating Landscape Image using GauGAN
 
-In the paper and the demo video, we showed GauGAN, our interactive app that generates realistic landscape images from the layout users draw. The model was trained on landscape images scraped from Flickr.com. We released an online demo that has the same features. Please visit [https://www.nvidia.com/en-us/research/ai-playground/](https://www.nvidia.com/en-us/research/ai-playground/). The model weights are not released. 
+In the paper and the demo video, we showed GauGAN, our interactive app that generates realistic landscape images from the layout users draw. The model was trained on landscape images scraped from Flickr.com. We released an online demo that has the same features. Please visit [https://www.nvidia.com/en-us/research/ai-playground/](https://www.nvidia.com/en-us/research/ai-playground/). The model weights are not released.
 
 ## Training New Models
 
 New models can be trained with the following commands.
 
 1. Prepare dataset. To train on the datasets shown in the paper, you can download the datasets and use `--dataset_mode` option, which will choose which subclass of `BaseDataset` is loaded. For custom datasets, the easiest way is to use `./data/custom_dataset.py` by specifying the option `--dataset_mode custom`, along with `--label_dir [path_to_labels] --image_dir [path_to_images]`. You also need to specify options such as `--label_nc` for the number of label classes in the dataset, `--contain_dontcare_label` to specify whether it has an unknown label, or `--no_instance` to denote the dataset doesn't have instance maps.
-
 2. Train.
 
 ```bash
@@ -124,14 +127,16 @@ Use `--results_dir` to specify the output directory. `--how_many` will specify t
 
 ## Options
 
-This code repo contains many options. Some options belong to only one specific model, and some options have different default values depending on other options. To address this, the `BaseOption` class dynamically loads and sets options depending on what model, network, and datasets are used. This is done by calling the static method `modify_commandline_options` of various classes. It takes in the`parser` of `argparse` package and modifies the list of options. For example, since COCO-stuff dataset contains a special label "unknown", when COCO-stuff dataset is used, it sets `--contain_dontcare_label` automatically at `data/coco_dataset.py`. You can take a look at `def gather_options()` of `options/base_options.py`, or `models/network/__init__.py` to get a sense of how this works.
+This code repo contains many options. Some options belong to only one specific model, and some options have different default values depending on other options. To address this, the `BaseOption` class dynamically loads and sets options depending on what model, network, and datasets are used. This is done by calling the static method `modify_commandline_options` of various classes. It takes in the `parser` of `argparse` package and modifies the list of options. For example, since COCO-stuff dataset contains a special label "unknown", when COCO-stuff dataset is used, it sets `--contain_dontcare_label` automatically at `data/coco_dataset.py`. You can take a look at `def gather_options()` of `options/base_options.py`, or `models/network/__init__.py` to get a sense of how this works.
 
 ## VAE-Style Training with an Encoder For Style Control and Multi-Modal Outputs
 
 To train our model along with an image encoder to enable multi-modal outputs as in Figure 15 of the [paper](https://arxiv.org/pdf/1903.07291.pdf), please use `--use_vae`. The model will create `netE` in addition to `netG` and `netD` and train with KL-Divergence loss.
 
 ### Citation
+
 If you use this code for your research, please cite our papers.
+
 ```
 @inproceedings{park2019SPADE,
   title={Semantic Image Synthesis with Spatially-Adaptive Normalization},
@@ -142,4 +147,26 @@ If you use this code for your research, please cite our papers.
 ```
 
 ## Acknowledgments
+
 This code borrows heavily from pix2pixHD. We thank Jiayuan Mao for his Synchronized Batch Normalization code.
+
+## Run scripts
+
+#### origin baseline 512pix with fp16 random crop from 640pix
+
+CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --batchSize=24 --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --use_pos=False --use_pos_proj=False --use_interFeature_pos=False
+
+#### +pos emb at sematic label
+
+CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --batchSize=24 --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --use_pos=False --use_pos_proj=False
+
+#### +pos emb at sematic label and generator intermediate features
+
+CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --batchSize=24 --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs'
+
+#### Test
+
+CUDA_VISIBLE_DEVICES=0 python test.py --name='label2img' --batchSize=32 --label_dir='../data/eval/gray_label' --image_dir='../data/eval/gray_label'
+
+
+
