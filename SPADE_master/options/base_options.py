@@ -36,7 +36,7 @@ class BaseOptions():
         parser.add_argument('--use_pos_proj', action='store_true', help='SPADE use pos_embed projection')
         parser.set_defaults(use_pos_proj=True)
         parser.add_argument('--use_interFeature_pos', action='store_true', help='SPADE use pos_embed projection')
-        parser.set_defaults(use_learnable_pos=True)
+        parser.set_defaults(use_interFeature_pos=True)
         
         # input/output sizes
         parser.add_argument('--batchSize', type=int, default=10, help='input batch size')
