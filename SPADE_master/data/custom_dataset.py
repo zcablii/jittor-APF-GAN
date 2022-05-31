@@ -23,7 +23,7 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(aspect_ratio=4/3)
         parser.set_defaults(display_winsize=256)
         parser.set_defaults(label_nc=29)
-        parser.set_defaults(batchSize=4) # 32 or 10 for diff. input size. default to 24
+        # parser.set_defaults(batchSize=4) # 32 or 10 for diff. input size. default to 24
         parser.set_defaults(contain_dontcare_label=False)
         # parser.set_defaults(num_D=3)
         parser.set_defaults(cache_filelist_read=True)

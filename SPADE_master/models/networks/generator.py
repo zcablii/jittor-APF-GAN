@@ -133,7 +133,7 @@ class SPADEGenerator(BaseNetwork):
             if self.opt.use_interFeature_pos: x = x + self.pos_emb_4
 
         x = self.conv_img(F.leaky_relu(x, 2e-1))
-        x = F.tanh(x)
+        x = torch.tanh(x)
 
         return x
 

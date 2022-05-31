@@ -59,7 +59,8 @@ def create_dataloader(opt):
             sampler=sampler,
             batch_size=opt.batchSize,
             num_workers=int(opt.nThreads),
-            drop_last=opt.isTrain
+            drop_last=opt.isTrain,
+            pin_memory=True,
         )
     else:
         dataloader = torch.utils.data.DataLoader(

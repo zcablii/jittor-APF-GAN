@@ -2,7 +2,9 @@
 Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-
+import os
+os.environ["OMP_NUM_THREADS"] = "1" 
+os.environ["MKL_NUM_THREADS"] = "1" 
 import sys
 from collections import OrderedDict
 from options.train_options import TrainOptions
@@ -10,7 +12,6 @@ import data
 from util.iter_counter import IterationCounter
 from util.visualizer import Visualizer
 from trainers.pix2pix_trainer import Pix2PixTrainer
-import os
 from tensorboardX import SummaryWriter
 import torch
 import misc
@@ -51,7 +52,7 @@ for epoch in iter_counter.training_epochs():
     if opt.distributed:
         dataloader.sampler.set_epoch(epoch)
     iter_counter.record_epoch_start(epoch)
-    for i, data_i in enumerate(dataloader, start=iter_counter.epoch_iter):
+    for i, data_i in enumerate(tqdm(dataloader, ncols=100), start=iter_counter.epoch_iter):
         iter_counter.record_one_iteration()
         # Training
         # train generator
@@ -72,13 +73,13 @@ for epoch in iter_counter.training_epochs():
                 writer.add_scalar(loss_names[ct], v, (epoch-1) * len(dataloader) + i)
                 ct+=1
 
-        if iter_counter.needs_printing():
+        if iter_counter.needs_printing() and misc.is_main_process():
             losses = trainer.get_latest_losses()
             visualizer.print_current_errors(epoch, iter_counter.epoch_iter,
                                             losses, iter_counter.time_per_iter)
             visualizer.plot_current_errors(losses, iter_counter.total_steps_so_far)
 
-        if iter_counter.needs_displaying():
+        if iter_counter.needs_displaying() and misc.is_main_process():
             visuals = OrderedDict([# ('input_label', data_i['label'][:print_sample_num]),
                                    ('synthesized_image', trainer.get_latest_generated()[:print_sample_num]),
                                    ('real_image', data_i['image'][:print_sample_num])])
@@ -91,7 +92,10 @@ for epoch in iter_counter.training_epochs():
             iter_counter.record_current_iter()
 
     trainer.update_learning_rate(epoch)
-    iter_counter.record_epoch_end()
+    if misc.is_main_process():
+        iter_counter.record_epoch_end()
+        if writer is not None:
+            writer.flush()
 
     if (epoch % opt.save_epoch_freq == 0 or \
        epoch == iter_counter.total_epochs) and misc.is_main_process():

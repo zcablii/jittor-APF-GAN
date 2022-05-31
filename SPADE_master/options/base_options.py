@@ -39,15 +39,12 @@ class BaseOptions():
         parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
         parser.add_argument('--num_D', type=int, default=3, help='number of discriminators to be used in multiscale')
         # for SPADE
-        parser.add_argument('--use_pos', action='store_true', help='SPADE use pos_embed')
-        parser.set_defaults(use_pos=True)
-        parser.add_argument('--use_pos_proj', action='store_true', help='SPADE use pos_embed projection')
-        parser.set_defaults(use_pos_proj=True)
-        parser.add_argument('--use_interFeature_pos', action='store_true', help='SPADE use pos_embed projection')
-        parser.set_defaults(use_learnable_pos=True)
+        parser.add_argument('--use_pos', type=util.str2bool, default=True, help='SPADE use pos_embed')
+        parser.add_argument('--use_pos_proj', type=util.str2bool, default=True, help='SPADE use pos_embed projection')
+        parser.add_argument('--use_interFeature_pos', type=util.str2bool, default=True, help='SPADE use pos_embed projection')
         
         # input/output sizes
-        parser.add_argument('--batchSize', type=int, default=10, help='input batch size')
+        parser.add_argument('--batchSize', type=int, default=4, help='input batch size')
         parser.add_argument('--preprocess_mode', type=str, default='scale_width_and_crop', help='scaling and cropping of images at load time.', choices=("resize_and_crop", "crop", "scale_width", "scale_width_and_crop", "scale_shortside", "scale_shortside_and_crop", "fixed", "none"))
         parser.add_argument('--load_size', type=int, default=256, help='Scale images to this size. The final image will be cropped to --crop_size.')
         parser.add_argument('--crop_size', type=int, default=256, help='Crop to the width of crop_size (after initially scaling the images to load_size.)')
@@ -61,7 +58,7 @@ class BaseOptions():
         parser.add_argument('--dataset_mode', type=str, default='custom')
         parser.add_argument('--serial_batches', action='store_true', help='if true, takes images in order to make batches, otherwise takes them randomly')
         parser.add_argument('--no_flip', action='store_true', help='if specified, do not flip the images for data argumentation')
-        parser.add_argument('--nThreads', default=8, type=int, help='# threads for loading data')
+        parser.add_argument('--nThreads', default=4, type=int, help='# threads for loading data')
         parser.add_argument('--max_dataset_size', type=int, default=sys.maxsize, help='Maximum number of samples allowed per dataset. If the dataset directory contains more than max_dataset_size, only a subset is loaded.')
         parser.add_argument('--load_from_opt_file', action='store_true', help='load the options from checkpoints and use that as default')
         parser.add_argument('--cache_filelist_write', action='store_true', help='saves the current filelist into a text file, so that it loads faster')
@@ -167,10 +164,6 @@ class BaseOptions():
         opt = self.gather_options()
         opt.isTrain = self.isTrain   # train or test
 
-        self.print_options(opt)
-        if opt.isTrain:
-            self.save_options(opt)
-
         # Set semantic_nc based on the option.
         # This will be convenient in many places
         opt.semantic_nc = opt.label_nc + \
@@ -194,5 +187,8 @@ class BaseOptions():
         cudnn.benchmark = True
         opt.gpu_ids = list(range(torch.cuda.device_count()))
 
+        self.print_options(opt)
+        if opt.isTrain:
+            self.save_options(opt)
         self.opt = opt
         return self.opt

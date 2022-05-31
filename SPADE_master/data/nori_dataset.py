@@ -36,7 +36,7 @@ class NoriDataset(Pix2pixDataset):
         parser.set_defaults(aspect_ratio=4/3)
         parser.set_defaults(display_winsize=256)
         parser.set_defaults(label_nc=29)
-        parser.set_defaults(batchSize=4) # 32 or 10 for diff. input size. default to 24
+        # parser.set_defaults(batchSize=4) # 32 or 10 for diff. input size. default to 24
         parser.set_defaults(contain_dontcare_label=False)
         parser.set_defaults(cache_filelist_read=True)
         parser.set_defaults(cache_filelist_write=True)
@@ -114,6 +114,7 @@ class NoriDataset(Pix2pixDataset):
         label_nid = self.label_paths[index]['nori_id']
         # label = Image.open(label_path)
         label = get_img_IO(label_nid)
+        # label.save(f'images/{index}.label.png')
         params = get_params(self.opt, label.size)
         transform_label = get_transform(self.opt, params, method=Image.NEAREST, normalize=False)
         label_tensor = transform_label(label) * 255.0
@@ -128,6 +129,7 @@ class NoriDataset(Pix2pixDataset):
         # image = Image.open(image_path)
         image = get_img_IO(image_nid)
         image = image.convert('RGB')
+        # image.save(f'images/{index}.image.png')
 
         transform_image = get_transform(self.opt, params)
         image_tensor = transform_image(image)
