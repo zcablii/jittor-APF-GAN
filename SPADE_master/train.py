@@ -19,13 +19,13 @@ from tqdm import tqdm
 # parse options
 # os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 opt = TrainOptions().parse()
-ngpus = torch.cuda.device_count()
-print(f'n_gpus={ngpus}')
+opt.lr = opt.lr * opt.batchSize * opt.ngpus / 24
+print(f'n_gpus={opt.ngpus}')
 print(f'gpu_ids={opt.gpu_ids}')
-opt.lr = opt.lr * opt.batchSize * ngpus / 24
+print(f'actual_lr={opt.lr}')
 if not opt.distributed:
-    opt.batchSize = opt.batchSize * ngpus
-    opt.nThreads = opt.nThreads * ngpus
+    opt.batchSize = opt.batchSize * opt.ngpus
+    opt.nThreads = opt.nThreads * opt.ngpus
 
 if misc.is_main_process():
     os.makedirs(os.path.join(opt.checkpoints_dir, opt.name), exist_ok=True)

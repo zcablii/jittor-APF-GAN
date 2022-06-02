@@ -9,3 +9,5 @@ results/
 *.pth
 *.pkl
 images/
+z1*
+z2*

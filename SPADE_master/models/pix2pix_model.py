@@ -7,6 +7,8 @@ import torch
 import models.networks as networks
 import util.util as util
 import torch.nn.functional as F
+import torch.optim
+
 
 class Pix2PixModel(torch.nn.Module):
     @staticmethod
@@ -137,7 +139,7 @@ class Pix2PixModel(torch.nn.Module):
         fake_image, KLD_loss = self.generate_fake(
             input_semantics, real_image, compute_kld_loss=self.opt.use_vae)
 
-        if self.opt.use_vae:
+        if self.opt.use_vae and KLD_loss is not None:
             G_losses['KLD'] = KLD_loss
 
         pred_fake, pred_real = self.discriminate(
@@ -186,13 +188,20 @@ class Pix2PixModel(torch.nn.Module):
         z = self.reparameterize(mu, logvar)
         return z, mu, logvar
 
+    def encode_m(self, mask):
+        z = self.netE(mask)
+        return z
+
     def generate_fake(self, input_semantics, real_image, compute_kld_loss=False):
         z = None
         KLD_loss = None
         if self.opt.use_vae:
-            z, mu, logvar = self.encode_z(real_image)
-            if compute_kld_loss:
-                KLD_loss = self.KLDLoss(mu, logvar) * self.opt.lambda_kld
+            if self.opt.encode_mask:
+                z = self.encode_m(input_semantics)
+            else:
+                z, mu, logvar = self.encode_z(real_image)
+                if compute_kld_loss:
+                    KLD_loss = self.KLDLoss(mu, logvar) * self.opt.lambda_kld
 
         fake_image = self.netG(input_semantics, z=z)
         # fake_image = multiscalse_fake_image[-1]
