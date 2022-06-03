@@ -33,7 +33,7 @@ class Pix2PixTrainer():
 
     def run_generator_one_step(self, data):
         self.optimizer_G.zero_grad()
-        with torch.cuda.amp.autocast():
+        with torch.cuda.amp.autocast(): # fp16
             g_losses, generated = self.pix2pix_model(data, mode='generator')
         g_loss = sum(g_losses.values()).mean()
         g_loss.backward()
@@ -43,7 +43,7 @@ class Pix2PixTrainer():
 
     def run_discriminator_one_step(self, data):
         self.optimizer_D.zero_grad()
-        with torch.cuda.amp.autocast():
+        with torch.cuda.amp.autocast(): # fp16
             d_losses = self.pix2pix_model(data, mode='discriminator')
         d_loss = sum(d_losses.values()).mean()
         d_loss.backward()

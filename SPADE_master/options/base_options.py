@@ -32,11 +32,11 @@ class BaseOptions():
                             help='number of discriminators to be used in multiscale')
         # for SPADE
         parser.add_argument('--use_pos', action='store_true', help='SPADE use pos_embed')
-        parser.set_defaults(use_pos=True)
+        parser.set_defaults(use_pos=False)
         parser.add_argument('--use_pos_proj', action='store_true', help='SPADE use pos_embed projection')
-        parser.set_defaults(use_pos_proj=True)
+        parser.set_defaults(use_pos_proj=False)
         parser.add_argument('--use_interFeature_pos', action='store_true', help='SPADE use pos_embed projection')
-        parser.set_defaults(use_interFeature_pos=True)
+        parser.set_defaults(use_interFeature_pos=False)
         
         # input/output sizes
         parser.add_argument('--batchSize', type=int, default=10, help='input batch size')
