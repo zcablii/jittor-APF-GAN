@@ -40,7 +40,10 @@ def get_nonspade_norm_layer(opt, norm_type='instance'):
         if subnorm_type == 'batch':
             norm_layer = nn.BatchNorm2d(get_out_channel(layer), affine=True)
         elif subnorm_type == 'sync_batch':
-            norm_layer = SynchronizedBatchNorm2d(get_out_channel(layer), affine=True)
+            if opt.distributed:
+                norm_layer = nn.SyncBatchNorm(get_out_channel(layer), affine=True)
+            else:
+                norm_layer = SynchronizedBatchNorm2d(get_out_channel(layer), affine=True)
         elif subnorm_type == 'instance':
             norm_layer = nn.InstanceNorm2d(get_out_channel(layer), affine=False)
         else:
@@ -107,7 +110,7 @@ def get_2d_sincos_pos_embed(embed_dim, grid_h_sz, grid_w_sz):
 # |norm_nc|: the #channels of the normalized activations, hence the output dim of SPADE
 # |label_nc|: the #channels of the input semantic map, hence the input dim of SPADE
 class SPADE(nn.Module):
-    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False):
+    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False, opt=None):
         super().__init__()
 
         assert config_text.startswith('spade')
@@ -118,8 +121,10 @@ class SPADE(nn.Module):
         if param_free_norm_type == 'instance':
             self.param_free_norm = nn.InstanceNorm2d(norm_nc, affine=False)
         elif param_free_norm_type == 'syncbatch':
-            # self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
-            self.param_free_norm = nn.SyncBatchNorm(norm_nc, affine=False)
+            if opt.distributed:
+                self.param_free_norm = nn.SyncBatchNorm(norm_nc, affine=False)
+            else:
+                self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
         elif param_free_norm_type == 'batch':
             self.param_free_norm = nn.BatchNorm2d(norm_nc, affine=False)
         else:
