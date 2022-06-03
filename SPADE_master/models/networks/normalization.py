@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from models.networks.sync_batchnorm import SynchronizedBatchNorm2d
 import torch.nn.utils.spectral_norm as spectral_norm
 
 
@@ -39,8 +40,10 @@ def get_nonspade_norm_layer(opt, norm_type='instance'):
         if subnorm_type == 'batch':
             norm_layer = nn.BatchNorm2d(get_out_channel(layer), affine=True)
         elif subnorm_type == 'sync_batch':
-            # norm_layer = SynchronizedBatchNorm2d(get_out_channel(layer), affine=True)
-            norm_layer = nn.SyncBatchNorm(get_out_channel(layer), affine=True)
+            if opt.distributed:
+                norm_layer = nn.SyncBatchNorm(get_out_channel(layer), affine=True)
+            else:
+                norm_layer = SynchronizedBatchNorm2d(get_out_channel(layer), affine=True)
         elif subnorm_type == 'instance':
             norm_layer = nn.InstanceNorm2d(get_out_channel(layer), affine=False)
         else:
@@ -118,8 +121,10 @@ class SPADE(nn.Module):
         if param_free_norm_type == 'instance':
             self.param_free_norm = nn.InstanceNorm2d(norm_nc, affine=False)
         elif param_free_norm_type == 'syncbatch':
-            # self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
-            self.param_free_norm = nn.SyncBatchNorm(norm_nc, affine=False)
+            if opt.distributed:
+                self.param_free_norm = nn.SyncBatchNorm(norm_nc, affine=False)
+            else:
+                self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
         elif param_free_norm_type == 'batch':
             self.param_free_norm = nn.BatchNorm2d(norm_nc, affine=False)
         else:
