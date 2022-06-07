@@ -91,6 +91,8 @@ for epoch in iter_counter.training_epochs():
             trainer.save('latest')
             iter_counter.record_current_iter()
 
+        # print('max mem: {memory:.0f}'.format(memory=torch.cuda.max_memory_allocated() / (1024.0 * 1024.0)))
+
     trainer.update_learning_rate(epoch)
     if misc.is_main_process():
         iter_counter.record_epoch_end()

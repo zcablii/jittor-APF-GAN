@@ -42,15 +42,21 @@ class ConvEncoder(BaseNetwork):
 
     def forward(self, x):
         if self.opt.encode_mask:
-            x = self.layer1(x)
-            x = self.layer2(self.actvn(x))
-            x = self.layer3(self.actvn(x))
-            x = self.layer4(self.actvn(x))
-            x = self.layer5(self.actvn(x))
-            x = self.layer6(self.actvn(x))
-            x = self.actvn(x)
+            f = [x,]
+            x = self.actvn(self.layer1(x))
+            f.append(x)
+            x = self.actvn(self.layer2(x))
+            f.append(x)
+            x = self.actvn(self.layer3(x))
+            f.append(x)
+            x = self.actvn(self.layer4(x))
+            f.append(x)
+            x = self.actvn(self.layer5(x))
+            f.append(x)
+            x = self.actvn(self.layer6(x))
+            f.append(x)
 
-            return x
+            return f  # [29, nf, 2 * nf, 4 * nf, 8 * nf, 8 * nf, 16 * nf]
         else:
             if x.size(2) != 256 or x.size(3) != 256:
                 x = F.interpolate(x, size=(256, 256), mode='bilinear', align_corners=False)

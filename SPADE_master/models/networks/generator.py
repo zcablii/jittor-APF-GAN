@@ -11,7 +11,8 @@ from models.networks.normalization import get_nonspade_norm_layer
 from models.networks.architecture import ResnetBlock as ResnetBlock
 from models.networks.architecture import SPADEResnetBlock as SPADEResnetBlock
 
-torch.backends.cudnn.benchmark = True
+
+# torch.backends.cudnn.benchmark = True  # already initialize in base_options.py
 class SPADEGenerator(BaseNetwork):
     @staticmethod
     def modify_commandline_options(parser, is_train):
@@ -55,20 +56,21 @@ class SPADEGenerator(BaseNetwork):
             if self.opt.num_upsampling_layers == 'more':
                 self.pos_emb_4 = nn.Parameter(torch.zeros(1, nf//2, H*2**6, W*2**6), requires_grad=True).cuda()
 
-        self.head_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
+        # [29, nf, 2*nf, 4*nf, 8*nf, 8*nf,  16*nf]
+        self.head_0 = SPADEResnetBlock(16 * nf, 16 * nf, fdim=16 * nf, opt=opt)
 
-        self.G_middle_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
-        # self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
+        self.G_middle_0 = SPADEResnetBlock(16 * nf, 16 * nf, fdim=8 * nf, opt=opt)
+        # self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, fdim=8 * nf, opt=opt)
 
-        self.up_0 = SPADEResnetBlock(16 * nf, 8 * nf, opt)
-        self.up_1 = SPADEResnetBlock(8 * nf, 4 * nf, opt)
-        self.up_2 = SPADEResnetBlock(4 * nf, 2 * nf, opt)
-        self.up_3 = SPADEResnetBlock(2 * nf, 1 * nf, opt)
+        self.up_0 = SPADEResnetBlock(16 * nf, 8 * nf, fdim=8 * nf, opt=opt)
+        self.up_1 = SPADEResnetBlock(8 * nf, 4 * nf, fdim=4 * nf, opt=opt)
+        self.up_2 = SPADEResnetBlock(4 * nf, 2 * nf, fdim=2 * nf, opt=opt)
+        self.up_3 = SPADEResnetBlock(2 * nf, 1 * nf, fdim=1 * nf, opt=opt)
 
         final_nc = nf
 
         if opt.num_upsampling_layers == 'more':
-            self.up_4 = SPADEResnetBlock(1 * nf, nf // 2, opt)
+            self.up_4 = SPADEResnetBlock(1 * nf, nf // 2, fdim=opt.semantic_nc, opt=opt)
             final_nc = nf // 2
 
         self.conv_img = nn.Conv2d(final_nc, 3, 3, padding=1)
@@ -98,7 +100,7 @@ class SPADEGenerator(BaseNetwork):
             if self.opt.encode_mask:
                 # assert list(z.shape[-2:]) == [self.sh, self.sw]
                 # z = F.interpolate(z, size=(self.sh, self.sw))
-                x = self.fc(z)
+                x = self.fc(z[-1])
             else:
                 # we sample z from unit normal and reshape the tensor
                 if z is None:
@@ -111,10 +113,14 @@ class SPADEGenerator(BaseNetwork):
             x = F.interpolate(seg, size=(self.sh, self.sw))
             x = self.fc(x)
 
-        x = self.head_0(x, seg)
+        fea = z if self.opt.encode_mask and self.opt.use_intermediate else [None,]*7
+        # encoder [29,    nf, 2*nf, 4*nf, 8*nf, 8*nf,  16*nf]
+        # decoder [nf//2, nf, 2*nf, 4*nf, 8*nf, 16*nf, 16*nf]
+
+        x = self.head_0(x, seg, fea[-1])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_head
         x = self.up(x)
-        x = self.G_middle_0(x, seg)
+        x = self.G_middle_0(x, seg, fea[-2])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_middle
 
         # if self.opt.num_upsampling_layers == 'more' or \
@@ -124,21 +130,21 @@ class SPADEGenerator(BaseNetwork):
         # x = self.G_middle_1(x, seg)
 
         x = self.up(x)
-        x = self.up_0(x, seg)
+        x = self.up_0(x, seg, fea[-3])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_0
         x = self.up(x)
-        x = self.up_1(x, seg)
+        x = self.up_1(x, seg, fea[-4])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_1
         x = self.up(x)
-        x = self.up_2(x, seg)
+        x = self.up_2(x, seg, fea[-5])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_2
         x = self.up(x)
-        x = self.up_3(x, seg)
+        x = self.up_3(x, seg, fea[-6])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_3
 
         if self.opt.num_upsampling_layers == 'more':
             x = self.up(x)
-            x = self.up_4(x, seg)
+            x = self.up_4(x, seg, fea[-7])
             if self.opt.use_interFeature_pos: x = x + self.pos_emb_4
 
         x = self.conv_img(F.leaky_relu(x, 2e-1))

@@ -11,3 +11,6 @@ results/
 images/
 z1*
 z2*
+reshensai/*.png
+reshensai/*.pkl
+debug.py

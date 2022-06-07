@@ -110,9 +110,10 @@ def get_2d_sincos_pos_embed(embed_dim, grid_h_sz, grid_w_sz):
 # |norm_nc|: the #channels of the normalized activations, hence the output dim of SPADE
 # |label_nc|: the #channels of the input semantic map, hence the input dim of SPADE
 class SPADE(nn.Module):
-    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False, opt=None):
+    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False, fdim=None, opt=None):
         super().__init__()
 
+        self.opt = opt
         assert config_text.startswith('spade')
         parsed = re.search('spade(\D+)(\d)x\d', config_text)
         param_free_norm_type = str(parsed.group(1))
@@ -146,21 +147,76 @@ class SPADE(nn.Module):
             self.pos_proj = nn.Conv2d(nhidden, nhidden, kernel_size=1)
 
         pw = ks // 2
-        self.mlp_shared = nn.Sequential(
-            nn.Conv2d(label_nc, nhidden, kernel_size=ks, padding=pw),
-            nn.ReLU()
-        )
+        if opt.use_intermediate:
+            if opt.use_intermediate_type == 'replace':
+                self.mlp_shared = nn.Sequential(
+                    nn.Conv2d(fdim, nhidden, kernel_size=ks, padding=pw),
+                    nn.ReLU()
+                )
+            elif opt.use_intermediate_type == 'add':
+                self.mlp_shared_fea = nn.Sequential(
+                    nn.Conv2d(fdim, nhidden, kernel_size=ks, padding=pw),
+                    nn.ReLU()
+                )
+                self.mlp_shared_seg = nn.Sequential(
+                    nn.Conv2d(label_nc, nhidden, kernel_size=ks, padding=pw),
+                    nn.ReLU()
+                )
+            elif opt.use_intermediate_type == 'sean':       
+                self.blending_gamma = nn.Parameter(torch.zeros(1), requires_grad=True)
+                self.blending_beta = nn.Parameter(torch.zeros(1), requires_grad=True)
+                self.conv_gamma = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
+                self.conv_beta = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
+                self.mlp_shared_fea = nn.Sequential(
+                    nn.Conv2d(fdim, nhidden, kernel_size=ks, padding=pw),
+                    nn.ReLU()
+                )
+                self.mlp_shared_seg = nn.Sequential(
+                    nn.Conv2d(label_nc, nhidden, kernel_size=ks, padding=pw),
+                    nn.ReLU()
+                )
+            else:
+                raise NotImplementedError
+        else:
+            self.mlp_shared = nn.Sequential(
+                nn.Conv2d(label_nc, nhidden, kernel_size=ks, padding=pw),
+                nn.ReLU()
+            )
+
         self.mlp_gamma = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
         self.mlp_beta = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
 
-    def forward(self, x, segmap):
+    def forward(self, x, segmap, fea=None):
 
         # Part 1. generate parameter-free normalized activations
         normalized = self.param_free_norm(x)
 
         # Part 2. produce scaling and bias conditioned on semantic map
-        segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
-        actv = self.mlp_shared(segmap).clone()
+        if self.opt.use_intermediate:
+            if self.opt.use_intermediate_type == 'replace':
+                actv = self.mlp_shared(fea).clone()
+            elif self.opt.use_intermediate_type == 'add':
+                segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
+                actv = self.mlp_shared_seg(segmap).clone()
+
+                actv_fea = self.mlp_shared_fea(fea).clone()
+                actv = actv + actv_fea
+            elif self.opt.use_intermediate_type == 'sean':
+                segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
+                actv = self.mlp_shared_seg(segmap).clone()
+
+                actv_fea = self.mlp_shared_fea(fea).clone()
+                gamma_avg = self.conv_gamma(actv_fea)
+                beta_avg = self.conv_beta(actv_fea)
+
+                gamma_alpha = torch.sigmoid(self.blending_gamma)
+                beta_alpha = torch.sigmoid(self.blending_beta)
+            else:
+                raise NotImplementedError
+        else:
+            segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
+            actv = self.mlp_shared(segmap).clone()
+
         if self.use_pos: # default with True
             if self.pos_embed is None:
                 B, C, H, W = actv.size()
@@ -175,6 +231,11 @@ class SPADE(nn.Module):
         beta = self.mlp_beta(actv)
 
         # apply scale and bias
-        out = normalized * (1 + gamma) + beta
+        if self.opt.use_intermediate and self.opt.use_intermediate_type == 'sean':
+            gamma_final = gamma_alpha * gamma_avg + (1 - gamma_alpha) * gamma
+            beta_final = beta_alpha * beta_avg + (1 - beta_alpha) * beta
+            out = normalized * (1 + gamma_final) + beta_final
+        else:
+            out = normalized * (1 + gamma) + beta
 
         return out

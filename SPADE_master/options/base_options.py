@@ -39,9 +39,9 @@ class BaseOptions():
         parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
         parser.add_argument('--num_D', type=int, default=3, help='number of discriminators to be used in multiscale')
         # for SPADE
-        parser.add_argument('--use_pos', type=util.str2bool, default=True, help='SPADE use pos_embed')
-        parser.add_argument('--use_pos_proj', type=util.str2bool, default=True, help='SPADE use pos_embed projection')
-        parser.add_argument('--use_interFeature_pos', type=util.str2bool, default=True, help='SPADE use pos_embed projection')
+        parser.add_argument('--use_pos', type=util.str2bool, default=False, help='SPADE use pos_embed')
+        parser.add_argument('--use_pos_proj', type=util.str2bool, default=False, help='SPADE use pos_embed projection')
+        parser.add_argument('--use_interFeature_pos', type=util.str2bool, default=False, help='SPADE use pos_embed projection')
         
         # input/output sizes
         parser.add_argument('--batchSize', type=int, default=4, help='input batch size')
@@ -79,7 +79,11 @@ class BaseOptions():
         parser.add_argument('--no_instance', action='store_true', help='if specified, do *not* add instance map as input')
         parser.add_argument('--nef', type=int, default=16, help='# of encoder filters in the first conv layer')
         parser.add_argument('--use_vae', action='store_true', help='enable training with an image encoder.')
+
+        # for encode
         parser.add_argument('--encode_mask', action='store_true', help='enable training with an image encoder to encode mask.')
+        parser.add_argument('--use_intermediate', action='store_true', help='use intermediate featuer inplace of interpolated segmap.')
+        parser.add_argument('--use_intermediate_type', type=str, default='replace', help='type of using intermediate featuer inplace of interpolated segmap.')
 
         self.initialized = True
         return parser
