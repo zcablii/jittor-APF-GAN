@@ -52,7 +52,7 @@ spade_old_D_110_sz572_enc_add:
 		--continue_train
 
 
-# 使用中间feature，sean: 
+# 使用中间feature，sean: https://arxiv.org/pdf/1911.12861.pdf
 # Specify: --use_intermediate --use_intermediate_type sean
 spade_old_D_110_sz572_enc_sean:
 	python -m torch.distributed.launch --nproc_per_node=8 SPADE_master/train.py \
