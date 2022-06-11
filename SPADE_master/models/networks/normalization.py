@@ -182,6 +182,8 @@ class SPADE(nn.Module):
                 nn.Conv2d(label_nc, nhidden, kernel_size=ks, padding=pw),
                 nn.ReLU()
             )
+        if opt.add_noise:
+            self.noise_var = nn.Parameter(torch.zeros(norm_nc), requires_grad=True)
 
         self.mlp_gamma = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
         self.mlp_beta = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
@@ -189,7 +191,11 @@ class SPADE(nn.Module):
     def forward(self, x, segmap, fea=None):
 
         # Part 1. generate parameter-free normalized activations
-        normalized = self.param_free_norm(x)
+        if self.opt.add_noise:
+            added_noise = (torch.randn(x.shape[0], x.shape[3], x.shape[2], 1).cuda() *self.noise_var).transpose(1, 3)
+            normalized = self.param_free_norm(x + added_noise)
+        else:
+            normalized = self.param_free_norm(x)
 
         # Part 2. produce scaling and bias conditioned on semantic map
         if self.opt.use_intermediate:

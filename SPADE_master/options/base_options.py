@@ -84,6 +84,7 @@ class BaseOptions():
         parser.add_argument('--encode_mask', action='store_true', help='enable training with an image encoder to encode mask.')
         parser.add_argument('--use_intermediate', action='store_true', help='use intermediate featuer inplace of interpolated segmap.')
         parser.add_argument('--use_intermediate_type', type=str, default='replace', help='type of using intermediate featuer inplace of interpolated segmap.')
+        parser.add_argument('--add_noise', action='store_true', help='add noise in spade')
 
         self.initialized = True
         return parser
