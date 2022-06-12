@@ -85,3 +85,7 @@ spade_old_D_110_sz572_enc_sean:
 		--use_vae --encode_mask --use_intermediate --use_intermediate_type sean \
 		--continue_train
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cc36f6b20aff5a2c7b71e77c32c94a6fdf3fe56a
