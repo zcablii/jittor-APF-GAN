@@ -34,7 +34,10 @@ class Pix2PixModel(torch.nn.Module):
                 opt.gan_mode, tensor=self.FloatTensor, opt=self.opt)
             self.criterionFeat = torch.nn.L1Loss()
             if not opt.no_vgg_loss:
-                self.criterionVGG = networks.VGGLoss(self.opt.gpu_ids)
+                if opt.inception_loss:
+                    self.criterionVGG = networks.InceptionLoss(self.opt.gpu_ids)                
+                else:
+                    self.criterionVGG = networks.VGGLoss(self.opt.gpu_ids)
             if opt.use_vae:
                 self.KLDLoss = networks.KLDLoss()
 
@@ -161,8 +164,12 @@ class Pix2PixModel(torch.nn.Module):
             G_losses['GAN_Feat'] = GAN_Feat_loss
 
         if not self.opt.no_vgg_loss:
-            G_losses['VGG'] = self.criterionVGG(fake_image, real_image) \
-                * self.opt.lambda_vgg
+            if self.opt.inception_loss:
+                G_losses['Inception'] = self.criterionVGG(fake_image, real_image) \
+                    * self.opt.lambda_vgg
+            else:
+                G_losses['VGG'] = self.criterionVGG(fake_image, real_image) \
+                    * self.opt.lambda_vgg
 
         return G_losses, fake_image
 

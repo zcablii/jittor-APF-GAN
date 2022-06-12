@@ -86,6 +86,9 @@ class BaseOptions():
         parser.add_argument('--use_intermediate_type', type=str, default='replace', help='type of using intermediate featuer inplace of interpolated segmap.')
         parser.add_argument('--add_noise', action='store_true', help='add noise in spade')
 
+        # for inception feature loss
+        parser.add_argument('--inception_loss', action='store_true', help='if specified, use Inception feature matching loss in place of VGG feature')
+
         self.initialized = True
         return parser
 
