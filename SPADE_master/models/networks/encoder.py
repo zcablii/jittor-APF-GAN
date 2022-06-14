@@ -28,6 +28,11 @@ class ConvEncoder(BaseNetwork):
         if opt.crop_size >= 256:
             self.layer6 = norm_layer(nn.Conv2d(ndf * 8, ndf * 8, kw, stride=2, padding=pw))
 
+        if opt.encode_mask:
+            # re-load layer1 and layer6
+            self.layer1 = norm_layer(nn.Conv2d(opt.semantic_nc, ndf, kw, stride=2, padding=pw))
+            self.layer6 = norm_layer(nn.Conv2d(ndf * 8, ndf * 16, kw, stride=2, padding=pw))
+
         self.so = s0 = 4
         self.fc_mu = nn.Linear(ndf * 8 * s0 * s0, 256)
         self.fc_var = nn.Linear(ndf * 8 * s0 * s0, 256)
@@ -36,20 +41,31 @@ class ConvEncoder(BaseNetwork):
         self.opt = opt
 
     def forward(self, x):
-        if x.size(2) != 256 or x.size(3) != 256:
-            x = F.interpolate(x, size=(256, 256), mode='bilinear')
-
-        x = self.layer1(x)
-        x = self.layer2(self.actvn(x))
-        x = self.layer3(self.actvn(x))
-        x = self.layer4(self.actvn(x))
-        x = self.layer5(self.actvn(x))
-        if self.opt.crop_size >= 256:
+        if self.opt.encode_mask:
+            x = self.layer1(x)
+            x = self.layer2(self.actvn(x))
+            x = self.layer3(self.actvn(x))
+            x = self.layer4(self.actvn(x))
+            x = self.layer5(self.actvn(x))
             x = self.layer6(self.actvn(x))
-        x = self.actvn(x)
+            x = self.actvn(x)
 
-        x = x.view(x.size(0), -1)
-        mu = self.fc_mu(x)
-        logvar = self.fc_var(x)
+            return x
+        else:
+            if x.size(2) != 256 or x.size(3) != 256:
+                x = F.interpolate(x, size=(256, 256), mode='bilinear', align_corners=False)
 
-        return mu, logvar
+            x = self.layer1(x)
+            x = self.layer2(self.actvn(x))
+            x = self.layer3(self.actvn(x))
+            x = self.layer4(self.actvn(x))
+            x = self.layer5(self.actvn(x))
+            if self.opt.crop_size >= 256:
+                x = self.layer6(self.actvn(x))
+            x = self.actvn(x)
+
+            x = x.view(x.size(0), -1)
+            mu = self.fc_mu(x)
+            logvar = self.fc_var(x)
+
+            return mu, logvar

@@ -24,15 +24,19 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(display_winsize=256)
 
         parser.add_argument('--remove_gray_imgs', action='store_false', help='ignore gray training imgs')
-        parser.set_defaults(remove_gray_imgs=False)
+        parser.set_defaults(remove_gray_imgs=True) 
         parser.add_argument('--brightness', type=tuple, default=(1,1), help='training image brightness augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--contrast', type=tuple, default=(1,1), help='training image contrast augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--saturation', type=tuple, default=(1,1), help='training image saturation augment. Tuple of float (min, max) in range(0,inf)')
+        # parser.set_defaults(brightness=(0.8,1.25))
+        # parser.set_defaults(contrast=(0.8,1.25))
+        # parser.set_defaults(saturation=(0.8,1.25))
 
         parser.set_defaults(label_nc=29)
-        parser.set_defaults(batchSize=24) # 32 or 10 for diff. input size
+        parser.set_defaults(batchSize=20) # 32 or 10 for diff. input size
         parser.set_defaults(contain_dontcare_label=False)
-        # parser.set_defaults(num_D=3)
+
+        
         parser.set_defaults(cache_filelist_read=True)
         parser.set_defaults(cache_filelist_write=True)
 

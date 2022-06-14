@@ -107,7 +107,7 @@ def get_2d_sincos_pos_embed(embed_dim, grid_h_sz, grid_w_sz):
 # |norm_nc|: the #channels of the normalized activations, hence the output dim of SPADE
 # |label_nc|: the #channels of the input semantic map, hence the input dim of SPADE
 class SPADE(nn.Module):
-    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False):
+    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False, add_noise = False):
         super().__init__()
 
         assert config_text.startswith('spade')
@@ -124,7 +124,7 @@ class SPADE(nn.Module):
         else:
             raise ValueError('%s is not a recognized param-free norm type in SPADE'
                              % param_free_norm_type)
-
+        self.add_noise = add_noise
         self.use_pos = use_pos
         self.use_pos_proj = use_pos_proj
         # if use_pos:
@@ -134,7 +134,8 @@ class SPADE(nn.Module):
 
         # The dimension of the intermediate embedding space. Yes, hardcoded.
         nhidden = 128
-
+        if self.add_noise:
+            self.noise_var = nn.Parameter(torch.zeros(norm_nc), requires_grad=True)
         self.pos_embed = None
         if use_pos_proj:
             self.pos_proj = nn.Conv2d(nhidden, nhidden, kernel_size=1)
@@ -150,8 +151,11 @@ class SPADE(nn.Module):
     def forward(self, x, segmap):
 
         # Part 1. generate parameter-free normalized activations
-        normalized = self.param_free_norm(x)
-
+        if self.add_noise:
+            added_noise = (torch.randn(x.shape[0], x.shape[3], x.shape[2], 1).cuda() * self.noise_var).transpose(1, 3)
+            normalized = self.param_free_norm(x + added_noise)
+        else: 
+            normalized = self.param_free_norm(x)
         # Part 2. produce scaling and bias conditioned on semantic map
         segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
         actv = self.mlp_shared(segmap)

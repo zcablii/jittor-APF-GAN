@@ -39,10 +39,10 @@ for epoch in iter_counter.training_epochs():
         # Training
         # train generator
         if i % opt.D_steps_per_G == 0:
-            trainer.run_generator_one_step(data_i)
+            trainer.run_generator_one_step(data_i, epoch)
 
         # train discriminator
-        trainer.run_discriminator_one_step(data_i)
+        trainer.run_discriminator_one_step(data_i, epoch)
         # Visualizations
         losses = trainer.get_latest_losses()
         loss_names = ['GAN','GAN_Feat','VGG','D_Fake','D_real']

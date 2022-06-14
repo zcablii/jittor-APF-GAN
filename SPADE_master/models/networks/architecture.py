@@ -24,7 +24,6 @@ class SPADEResnetBlock(nn.Module):
         # Attributes
         self.learned_shortcut = (fin != fout)
         fmiddle = min(fin, fout)
-
         # create conv layers
         self.conv_0 = nn.Conv2d(fin, fmiddle, kernel_size=3, padding=1)
         self.conv_1 = nn.Conv2d(fmiddle, fout, kernel_size=3, padding=1)
@@ -40,10 +39,10 @@ class SPADEResnetBlock(nn.Module):
 
         # define normalization layers
         spade_config_str = opt.norm_G.replace('spectral', '')
-        self.norm_0 = SPADE(spade_config_str, fin, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj)
-        self.norm_1 = SPADE(spade_config_str, fmiddle, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj)
+        self.norm_0 = SPADE(spade_config_str, fin, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj, add_noise = opt.add_noise)
+        self.norm_1 = SPADE(spade_config_str, fmiddle, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj, add_noise = opt.add_noise)
         if self.learned_shortcut:
-            self.norm_s = SPADE(spade_config_str, fin, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj)
+            self.norm_s = SPADE(spade_config_str, fin, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj, add_noise = opt.add_noise)
     # note the resnet block with SPADE also takes in |seg|,
     # the semantic segmentation map as input
     def forward(self, x, seg):

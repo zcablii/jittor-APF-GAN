@@ -28,7 +28,7 @@ class BaseOptions():
         parser.add_argument('--norm_D', type=str, default='spectralinstance', help='instance normalization or batch normalization')
         parser.add_argument('--norm_E', type=str, default='spectralinstance', help='instance normalization or batch normalization')
         parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
-        parser.add_argument('--num_D', type=int, default=3,
+        parser.add_argument('--num_D', type=int, default=3, 
                             help='number of discriminators to be used in multiscale')
         # for SPADE
         parser.add_argument('--use_pos', action='store_true', help='SPADE use pos_embed')
@@ -69,12 +69,18 @@ class BaseOptions():
         parser.add_argument('--init_variance', type=float, default=0.02, help='variance of the initialization distribution')
         parser.add_argument('--z_dim', type=int, default=256,
                             help="dimension of the latent z vector")
+        parser.add_argument('--sr_scale', type=int, default=0, help='scales using super resolution. e.g. If 0, use SPADE to generate final size output, if 2, spade generate to final size / 2**2, then pix2pix super resolution to final size.')
+        parser.add_argument('--sr_model', type=str, default='pix2pix') # pix2pix or unet
 
         # for instance-wise features
         parser.add_argument('--no_instance', action='store_true', help='if specified, do *not* add instance map as input')
         parser.add_argument('--nef', type=int, default=16, help='# of encoder filters in the first conv layer')
         parser.add_argument('--use_vae', action='store_true', help='enable training with an image encoder.')
-
+        parser.add_argument('--encode_mask', action='store_true', help='enable training with an image encoder to encode mask.')
+        parser.add_argument('--add_noise', action='store_true', help='enable training with an image encoder to encode mask.')
+        parser.set_defaults(use_vae=True)
+        parser.set_defaults(encode_mask=True)
+        parser.set_defaults(add_noise=False)
         self.initialized = True
         return parser
 
