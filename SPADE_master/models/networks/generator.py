@@ -216,7 +216,7 @@ class SPADEGenerator(BaseNetwork):
                         up_conv = eval(f'self.up_{i+1}')
                         if type(up_conv) == SPADEResnetBlock:
                             x = self.up(x)
-                        x = up_conv(x, seg, fea[-i - 3])
+                        x = up_conv(x, seg, fea[-i - 4])
                         if self.opt.use_interFeature_pos:
                             pos_emb = eval(f'self.pos_emb_{i+1}')
                             x = x + pos_emb
