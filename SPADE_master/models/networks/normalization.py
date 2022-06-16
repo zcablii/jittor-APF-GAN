@@ -12,6 +12,11 @@ from models.networks.sync_batchnorm import SynchronizedBatchNorm2d
 import torch.nn.utils.spectral_norm as spectral_norm
 
 
+class Swish(nn.Module):
+    def forward(self, x):
+        return x * torch.sigmoid(x)
+
+
 # Returns a function that creates a normalization function
 # that does not condition on semantic map
 def get_nonspade_norm_layer(opt, norm_type='instance'):
@@ -39,16 +44,20 @@ def get_nonspade_norm_layer(opt, norm_type='instance'):
 
         if subnorm_type == 'batch':
             norm_layer = nn.BatchNorm2d(get_out_channel(layer), affine=True)
-        elif subnorm_type == 'sync_batch':
+        elif subnorm_type == 'syncbatch':
             if opt.distributed:
                 norm_layer = nn.SyncBatchNorm(get_out_channel(layer), affine=True)
             else:
                 norm_layer = SynchronizedBatchNorm2d(get_out_channel(layer), affine=True)
         elif subnorm_type == 'instance':
             norm_layer = nn.InstanceNorm2d(get_out_channel(layer), affine=False)
+        elif subnorm_type == 'group':
+            norm_layer = nn.GroupNorm(32, get_out_channel(layer), affine=True)
         else:
             raise ValueError('normalization layer %s is not recognized' % subnorm_type)
 
+        if opt.use_swish:
+            return nn.Sequential(layer, norm_layer, Swish())
         return nn.Sequential(layer, norm_layer)
 
     return add_norm_layer
@@ -128,10 +137,14 @@ class SPADE(nn.Module):
                 self.param_free_norm = SynchronizedBatchNorm2d(norm_nc, affine=False)
         elif param_free_norm_type == 'batch':
             self.param_free_norm = nn.BatchNorm2d(norm_nc, affine=False)
+        elif param_free_norm_type == 'group':
+            self.param_free_norm = nn.GroupNorm(32, norm_nc, affine=True)
         else:
             raise ValueError('%s is not a recognized param-free norm type in SPADE'
                              % param_free_norm_type)
 
+        if opt.use_swish:
+            self.param_free_norm = nn.Sequential(self.param_free_norm, Swish())
         self.use_pos = use_pos
         self.use_pos_proj = use_pos_proj
         # if use_pos:

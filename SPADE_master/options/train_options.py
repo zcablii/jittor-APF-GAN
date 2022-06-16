@@ -45,5 +45,9 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--gan_mode', type=str, default='hinge', help='(ls|original|hinge)')
         parser.add_argument('--netD', type=str, default='multiscale', help='(n_layers|multiscale|image)')
         parser.add_argument('--lambda_kld', type=float, default=0.05)
+
+        # for inception feature loss
+        parser.add_argument('--inception_loss', action='store_true', help='if specified, use Inception feature matching loss in place of VGG feature')
+
         self.isTrain = True
         return parser

@@ -13,6 +13,8 @@ try:
     from StringIO import StringIO  # Python 2.7
 except ImportError:
     from io import BytesIO         # Python 3.x
+import numpy as np
+
 
 class Visualizer():
     def __init__(self, opt):
@@ -73,7 +75,10 @@ class Visualizer():
                 else:
                     img_path = os.path.join(self.img_dir, 'epoch%.3d_iter%.3d_%s.png' % (epoch, step, label))
                     if len(image_numpy.shape) >= 4:
-                        image_numpy = image_numpy[0]                    
+                        # image_numpy = image_numpy[0]
+                        # n, h, w, c = image_numpy
+                        image_numpy = np.concatenate(image_numpy, 0)
+                        # image_numpy = rearrange(image_numpy, '(n1 n2) (h) (w) (c)-> (n1 h) (n2 w) c', n1=2, n2=n//2, h=h, w=w, c=c)
                     util.save_image(image_numpy, img_path)
 
             # update website

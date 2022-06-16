@@ -121,3 +121,51 @@ class VGG19(torch.nn.Module):
         h_relu5 = self.slice5(h_relu4)
         out = [h_relu1, h_relu2, h_relu3, h_relu4, h_relu5]
         return out
+
+
+class InceptionV3(torch.nn.Module):
+    def __init__(self, requires_grad=False):
+        super().__init__()
+        r"""Get inception v3 layers"""
+        inception = torchvision.models.inception_v3(pretrained=True)
+        network = nn.Sequential(inception.Conv2d_1a_3x3,
+                                inception.Conv2d_2a_3x3,
+                                inception.Conv2d_2b_3x3,
+                                nn.MaxPool2d(kernel_size=3, stride=2),
+                                inception.Conv2d_3b_1x1,
+                                inception.Conv2d_4a_3x3,
+                                nn.MaxPool2d(kernel_size=3, stride=2),
+                                inception.Mixed_5b,
+                                inception.Mixed_5c,
+                                inception.Mixed_5d,
+                                inception.Mixed_6a,
+                                inception.Mixed_6b,
+                                inception.Mixed_6c,
+                                inception.Mixed_6d,
+                                inception.Mixed_6e,
+                                inception.Mixed_7a,
+                                inception.Mixed_7b,
+                                inception.Mixed_7c,
+                                nn.AdaptiveAvgPool2d(output_size=(1, 1)))
+        layer_name_mapping = {3: 'pool_1',
+                              6: 'pool_2',
+                              14: 'mixed_6e',
+                              18: 'pool_3'}
+
+        self.network = network
+        self.layer_name_mapping = layer_name_mapping
+        if not requires_grad:
+            for param in self.parameters():
+                param.requires_grad = False
+
+    def forward(self, x):
+        r"""Extract perceptual features."""
+        out = []
+        for i, layer in enumerate(self.network):
+            x = layer(x)
+            if i in self.layer_name_mapping:
+                # If the current layer is used by the perceptual loss.
+                out.append(x)
+                # print(i, self.layer_name_mapping[i])
+        return out
+

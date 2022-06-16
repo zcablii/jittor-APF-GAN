@@ -6,7 +6,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.networks.architecture import VGG19
+from models.networks.architecture import VGG19, InceptionV3
 
 
 # Defines the GAN loss which uses either LSGAN or the regular GAN.
@@ -111,6 +111,23 @@ class VGGLoss(nn.Module):
         loss = 0
         for i in range(len(x_vgg)):
             loss += self.weights[i] * self.criterion(x_vgg[i], y_vgg[i].detach())
+        return loss
+
+
+# Perceptual loss that uses a pretrained VGG network
+class InceptionLoss(nn.Module):
+    def __init__(self, gpu_ids):
+        super(InceptionLoss, self).__init__()
+        self.inception = InceptionV3().cuda()
+        self.criterion = nn.L1Loss()
+        # self.weights = [1.0 / 32, 1.0 / 16, 1.0 / 8, 1.0 / 4, 1.0]
+        self.weights = [1.0 / 16, 1.0 / 8, 1.0 / 4, 1.0]
+
+    def forward(self, x, y):
+        x_inception, y_inception = self.inception(x), self.inception(y)
+        loss = 0
+        for i in range(len(x_inception)):
+            loss += self.weights[i] * self.criterion(x_inception[i], y_inception[i].detach())
         return loss
 
 

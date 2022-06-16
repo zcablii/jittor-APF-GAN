@@ -80,11 +80,12 @@ class BaseOptions():
         parser.add_argument('--nef', type=int, default=16, help='# of encoder filters in the first conv layer')
         parser.add_argument('--use_vae', action='store_true', help='enable training with an image encoder.')
 
-        # for encode
+        # for networks
         parser.add_argument('--encode_mask', action='store_true', help='enable training with an image encoder to encode mask.')
         parser.add_argument('--use_intermediate', action='store_true', help='use intermediate featuer inplace of interpolated segmap.')
         parser.add_argument('--use_intermediate_type', type=str, default='replace', help='type of using intermediate featuer inplace of interpolated segmap.')
         parser.add_argument('--add_noise', action='store_true', help='add noise in spade')
+        parser.add_argument('--use_swish', action='store_true', help='if specified, use Swish module')
 
         self.initialized = True
         return parser
