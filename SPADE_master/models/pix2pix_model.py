@@ -7,6 +7,7 @@ import torch
 import models.networks as networks
 import util.util as util
 import torch.nn.functional as F
+from util.util import DiffAugment
 
 class Pix2PixModel(torch.nn.Module):
     @staticmethod
@@ -23,7 +24,6 @@ class Pix2PixModel(torch.nn.Module):
             else torch.ByteTensor
 
         self.netG, self.netD, self.netE = self.initialize_networks(opt)
-
         # set loss functions
         if opt.isTrain:
             self.criterionGAN = networks.GANLoss(
@@ -217,8 +217,10 @@ class Pix2PixModel(torch.nn.Module):
     # for each fake and real image.
 
     def discriminate(self, input_semantics, fake_image, real_image, epoch):
-
         if not type(fake_image) == list:
+            if len(self.opt.diff_aug)>0:
+                real_image, fake_image, input_semantics = DiffAugment(real_image, fake_image, input_semantics, policy=self.opt.diff_aug)
+        
             fake_concat = torch.cat([input_semantics, fake_image], dim=1)
             real_concat = torch.cat([input_semantics, real_image], dim=1)
             # In Batch Normalization, the fake and real images are
@@ -231,10 +233,14 @@ class Pix2PixModel(torch.nn.Module):
             fake_concat = []
             real_concat = []
             for i in range(len(fake_image)-1,-1,-1):
-                img_shape = fake_image[i].shape[-2:]
-                input_semantics = F.interpolate(input_semantics, img_shape)
-                real_image = F.interpolate(real_image, img_shape)
-                fake_concat.append(torch.cat([input_semantics, fake_image[i]], dim=1))
+                if len(self.opt.diff_aug)>0:
+                    generated_image, real_image, input_semantics = DiffAugment(fake_image[i], real_image, input_semantics, policy=self.opt.diff_aug)
+                else:
+                    img_shape = fake_image[i].shape[-2:]
+                    input_semantics = F.interpolate(input_semantics, img_shape)
+                    real_image = F.interpolate(real_image, img_shape)
+                    generated_image = fake_image[i]
+                fake_concat.append(torch.cat([input_semantics, generated_image], dim=1))
                 real_concat.append(torch.cat([input_semantics, real_image], dim=1))
             fake_and_real = [] # list of 3 tensors from high to low resolution
 
