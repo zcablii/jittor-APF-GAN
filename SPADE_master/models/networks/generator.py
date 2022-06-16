@@ -6,20 +6,25 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from models.networks.base_network import BaseNetwork
-from models.networks.normalization import get_nonspade_norm_layer
 from models.networks.architecture import ResnetBlock as ResnetBlock
 from models.networks.architecture import SPADEResnetBlock as SPADEResnetBlock
+from models.networks.base_network import BaseNetwork
+from models.networks.normalization import get_nonspade_norm_layer
 
 
 # torch.backends.cudnn.benchmark = True  # already initialize in base_options.py
 class SPADEGenerator(BaseNetwork):
+
     @staticmethod
     def modify_commandline_options(parser, is_train):
         # parser.set_defaults(norm_G='spectralspadesyncbatch3x3')
-        parser.add_argument('--num_upsampling_layers',
-                            choices=('normal', 'more', 'most'), default='normal',
-                            help="If 'more', adds upsampling layer between the two middle resnet blocks. If 'most', also add one more upsampling + resnet layer at the end of the generator")
+        parser.add_argument(
+            '--num_upsampling_layers',
+            choices=('normal', 'more', 'most'),
+            default='normal',
+            help=
+            "If 'more', adds upsampling layer between the two middle resnet blocks. If 'most', also add one more upsampling + resnet layer at the end of the generator"
+        )
 
         return parser
 
@@ -42,38 +47,61 @@ class SPADEGenerator(BaseNetwork):
             # downsampled segmentation map instead of random z
             self.fc = nn.Conv2d(opt.semantic_nc, 16 * nf, 3, padding=1)
 
+        self.layer_level = 4
+        if opt.num_upsampling_layers == 'more':
+            self.layer_level = 5
         if opt.use_interFeature_pos:
-            levels = 6 if opt.num_upsampling_layers == 'more' else 5
-            W = opt.crop_size // 2**levels
+            W = opt.crop_size // 2**(self.layer_level + 1)
             H = int(W / opt.aspect_ratio)
 
             self.pos_emb_head = nn.Parameter(torch.zeros(1, 16 * nf, H, W), requires_grad=True).cuda()
-            self.pos_emb_middle = nn.Parameter(torch.zeros(1, 16 * nf, H*2, W*2), requires_grad=True).cuda()
-            self.pos_emb_0 = nn.Parameter(torch.zeros(1, 8 * nf, H*2**2, W*2**2), requires_grad=True).cuda()
-            self.pos_emb_1 = nn.Parameter(torch.zeros(1, 4 * nf, H*2**3, W*2**3), requires_grad=True).cuda()
-            self.pos_emb_2 = nn.Parameter(torch.zeros(1, 2 * nf, H*2**4, W*2**4), requires_grad=True).cuda()
-            self.pos_emb_3 = nn.Parameter(torch.zeros(1, nf, H*2**5, W*2**5), requires_grad=True).cuda()
-            if self.opt.num_upsampling_layers == 'more':
-                self.pos_emb_4 = nn.Parameter(torch.zeros(1, nf//2, H*2**6, W*2**6), requires_grad=True).cuda()
+            self.pos_emb_middle = nn.Parameter(torch.zeros(1, 16 * nf, H * 2, W * 2), requires_grad=True).cuda()
 
         # [29, nf, 2*nf, 4*nf, 8*nf, 8*nf,  16*nf]
         self.head_0 = SPADEResnetBlock(16 * nf, 16 * nf, fdim=16 * nf, opt=opt)
-
         self.G_middle_0 = SPADEResnetBlock(16 * nf, 16 * nf, fdim=8 * nf, opt=opt)
-        # self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, fdim=8 * nf, opt=opt)
 
-        self.up_0 = SPADEResnetBlock(16 * nf, 8 * nf, fdim=8 * nf, opt=opt)
-        self.up_1 = SPADEResnetBlock(8 * nf, 4 * nf, fdim=4 * nf, opt=opt)
-        self.up_2 = SPADEResnetBlock(4 * nf, 2 * nf, fdim=2 * nf, opt=opt)
-        self.up_3 = SPADEResnetBlock(2 * nf, 1 * nf, fdim=1 * nf, opt=opt)
+        fdim_list = [8 * nf, 4 * nf, 2 * nf, 1 * nf, opt.semantic_nc]
+        for i in range(self.layer_level):
+            if opt.use_interFeature_pos:
+                self.register_parameter(
+                    'pos_emb_%d' % i,
+                    nn.Parameter(torch.zeros(1, int(2**(3 - i) * nf), H * 2**(i + 2), W * 2**(i + 2), device="cuda"),
+                                 requires_grad=True))
+            if i < self.layer_level - self.opt.sr_scale:
+                self.add_module(
+                    'up_%d' % i, SPADEResnetBlock(int(2**(4 - i) * nf),
+                                                  int(2**(3 - i) * nf),
+                                                  fdim=fdim_list[i],
+                                                  opt=opt))
+            else:
+                norm_layer = get_nonspade_norm_layer(opt, opt.norm_G)
+                self.add_module(
+                    'up_%d' % i,
+                    nn.Sequential(
+                        norm_layer(
+                            nn.ConvTranspose2d(int(2**(4 - i) * nf),
+                                               int(2**(3 - i) * nf),
+                                               kernel_size=3,
+                                               stride=2,
+                                               padding=1,
+                                               output_padding=1)), nn.ReLU(False)))
+            if i == self.layer_level - self.opt.sr_scale:
+                self.res_blocks = nn.Sequential(*[
+                    ResnetBlock(int(2**(3 - i) * nf),
+                                norm_layer=norm_layer,
+                                activation=nn.ReLU(False),
+                                kernel_size=opt.resnet_kernel_size) for j in range(4)
+                ])
+            final_nc = int(2**(3 - i) * nf)
 
-        final_nc = nf
-
-        if opt.num_upsampling_layers == 'more':
-            self.up_4 = SPADEResnetBlock(1 * nf, nf // 2, fdim=opt.semantic_nc, opt=opt)
-            final_nc = nf // 2
-
-        self.conv_img = nn.Conv2d(final_nc, 3, 3, padding=1)
+        if opt.isTrain:
+            self.num_mid_supervision_D = opt.num_D - 1
+            if self.num_mid_supervision_D > 0 and opt.pg_niter > 0:
+                self.inter_conv_img = nn.ModuleList([])
+                for i in range(1, self.num_mid_supervision_D + 1):
+                    self.inter_conv_img.append(nn.Conv2d(final_nc * (2**i), 3, 3, padding=1))
+        self.out_conv_img = nn.Conv2d(final_nc, 3, 3, padding=1)
 
         self.up = nn.Upsample(scale_factor=2)
 
@@ -85,17 +113,23 @@ class SPADEGenerator(BaseNetwork):
         elif opt.num_upsampling_layers == 'most':
             num_up_layers = 7
         else:
-            raise ValueError('opt.num_upsampling_layers [%s] not recognized' %
-                             opt.num_upsampling_layers)
+            raise ValueError('opt.num_upsampling_layers [%s] not recognized' % opt.num_upsampling_layers)
 
         sw = opt.crop_size // (2**num_up_layers)
         sh = round(sw / opt.aspect_ratio)
-
+        self.cur_ep = 0
         return sw, sh
 
-    def forward(self, input, z=None):
-        seg = input
+    def pg_merge(self, low_res, high_res, alpha):
+        up_res = F.interpolate(low_res, high_res.shape[-2:])
+        return high_res * alpha + up_res * (1 - alpha)
 
+    def forward(self, input, epoch=0, z=None):
+        seg = input
+        print_inf = False
+        if self.cur_ep != epoch:
+            print_inf = True
+            self.cur_ep = epoch
         if self.opt.use_vae:
             if self.opt.encode_mask:
                 # assert list(z.shape[-2:]) == [self.sh, self.sw]
@@ -104,8 +138,7 @@ class SPADEGenerator(BaseNetwork):
             else:
                 # we sample z from unit normal and reshape the tensor
                 if z is None:
-                    z = torch.randn(input.size(0), self.opt.z_dim,
-                                    dtype=torch.float32, device=input.get_device())
+                    z = torch.randn(input.size(0), self.opt.z_dim, dtype=torch.float32, device=input.get_device())
                 x = self.fc(z)
                 x = x.view(-1, 16 * self.opt.ngf, self.sh, self.sw)
         else:
@@ -113,7 +146,9 @@ class SPADEGenerator(BaseNetwork):
             x = F.interpolate(seg, size=(self.sh, self.sw))
             x = self.fc(x)
 
-        fea = z if self.opt.encode_mask and self.opt.use_intermediate else [None,]*7
+        fea = z if self.opt.encode_mask and self.opt.use_intermediate else [
+            None,
+        ] * 7
         # encoder [29,    nf, 2*nf, 4*nf, 8*nf, 8*nf,  16*nf]
         # decoder [nf//2, nf, 2*nf, 4*nf, 8*nf, 16*nf, 16*nf]
 
@@ -122,6 +157,7 @@ class SPADEGenerator(BaseNetwork):
         x = self.up(x)
         x = self.G_middle_0(x, seg, fea[-2])
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_middle
+        # x = self.G_middle_1(x, seg)
 
         # if self.opt.num_upsampling_layers == 'more' or \
         #    self.opt.num_upsampling_layers == 'most':
@@ -129,39 +165,100 @@ class SPADEGenerator(BaseNetwork):
 
         # x = self.G_middle_1(x, seg)
 
-        x = self.up(x)
-        x = self.up_0(x, seg, fea[-3])
-        if self.opt.use_interFeature_pos: x = x + self.pos_emb_0
-        x = self.up(x)
-        x = self.up_1(x, seg, fea[-4])
-        if self.opt.use_interFeature_pos: x = x + self.pos_emb_1
-        x = self.up(x)
-        x = self.up_2(x, seg, fea[-5])
-        if self.opt.use_interFeature_pos: x = x + self.pos_emb_2
-        x = self.up(x)
-        x = self.up_3(x, seg, fea[-6])
-        if self.opt.use_interFeature_pos: x = x + self.pos_emb_3
+        results = []
+        for i in range(self.layer_level):
+            if i == self.layer_level - self.opt.sr_scale:
+                x = self.res_blocks(x)
+            up_conv = eval(f'self.up_{i}')
+            if type(up_conv) == SPADEResnetBlock:
+                x = self.up(x)
+            x = up_conv(x, seg, fea[-i - 3])
+            if self.opt.use_interFeature_pos:
+                pos_emb = eval(f'self.pos_emb_{i}')
+                x = x + pos_emb
+            if self.opt.isTrain and self.opt.pg_strategy == 2:
+                if self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0:
+                    if epoch >= self.opt.pg_niter:
+                        continue
+                    lowest_D_level = epoch // (self.opt.pg_niter // (self.opt.num_D - 1))
+                    if lowest_D_level - 1 + self.num_mid_supervision_D >= self.opt.num_D - 1:
+                        self.num_mid_supervision_D = self.num_mid_supervision_D - 1
+                        if print_inf:
+                            print('del')
+                        del self.inter_conv_img[self.opt.num_D - 1 - lowest_D_level]
+                    if self.layer_level - i - 2 < self.num_mid_supervision_D and i < self.layer_level - 1:
+                        mid_res = self.inter_conv_img[self.layer_level - i - 2](F.leaky_relu(x, 2e-1))
+                        if print_inf:
+                            print('lowest_D_level: ', lowest_D_level, 'inter D index: ', self.layer_level - i - 2,
+                                  'mid_res shape: ', mid_res.shape)
+                        results.append(torch.tanh(mid_res))
 
-        if self.opt.num_upsampling_layers == 'more':
-            x = self.up(x)
-            x = self.up_4(x, seg, fea[-7])
-            if self.opt.use_interFeature_pos: x = x + self.pos_emb_4
+            if self.opt.isTrain and self.opt.pg_strategy == 1:
+                assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
 
-        x = self.conv_img(F.leaky_relu(x, 2e-1))
+                if epoch >= self.opt.pg_niter:
+                    if hasattr(self, 'inter_conv_img'):
+                        del self.inter_conv_img
+                    continue
+                current_level = epoch // (self.opt.pg_niter // (self.opt.num_D - 1))
+                alpha = (epoch % (self.opt.pg_niter // (self.opt.num_D - 1))) / (self.opt.pg_niter //
+                                                                                 (self.opt.num_D - 1) / 2) - 1
+                alpha = 0 if alpha < 0 else alpha
+                relative_level = self.opt.num_D - current_level - 1
+
+                if i == self.layer_level - relative_level - 1 and i + 1 - self.layer_level < 0:
+                    mid_res = self.inter_conv_img[self.opt.num_D - current_level - 2](F.leaky_relu(x, 2e-1))
+                    results.append(torch.tanh(mid_res))
+                    if alpha > 0:
+                        # print('epoch,alpha', epoch,alpha)
+                        if i + 1 == self.layer_level - self.opt.sr_scale:
+                            x = self.res_blocks(x)
+                        up_conv = eval(f'self.up_{i+1}')
+                        if type(up_conv) == SPADEResnetBlock:
+                            x = self.up(x)
+                        x = up_conv(x, seg, fea[-i - 3])
+                        if self.opt.use_interFeature_pos:
+                            pos_emb = eval(f'self.pos_emb_{i+1}')
+                            x = x + pos_emb
+                        if self.opt.num_D - current_level - 3 >= 0:
+                            mid_res = torch.tanh(self.inter_conv_img[self.opt.num_D - current_level - 3](F.leaky_relu(
+                                x, 2e-1)))
+                            results[0] = self.pg_merge(results[0], mid_res, alpha)
+                        else:
+                            mid_res = torch.tanh(self.out_conv_img(F.leaky_relu(x, 2e-1)))
+                            results[0] = self.pg_merge(results[0], mid_res, alpha)
+                    break
+
+        if self.opt.isTrain and self.opt.pg_strategy == 1:
+            if len(results) > 0:
+                return results  # list of rgb from low res to high
+            else:
+                x = self.out_conv_img(F.leaky_relu(x, 2e-1))
+                x = torch.tanh(x)
+                return x
+
+        x = self.out_conv_img(F.leaky_relu(x, 2e-1))
         x = torch.tanh(x)
-
-        return x
-
+        if len(results) > 0:
+            results.append(x)
+            return results
+        else:
+            return x
 
 
 class Pix2PixHDGenerator(BaseNetwork):
+
     @staticmethod
     def modify_commandline_options(parser, is_train):
         parser.add_argument('--resnet_n_downsample', type=int, default=4, help='number of downsampling layers in netG')
-        parser.add_argument('--resnet_n_blocks', type=int, default=9, help='number of residual blocks in the global generator network')
-        parser.add_argument('--resnet_kernel_size', type=int, default=3,
-                            help='kernel size of the resnet block')
-        parser.add_argument('--resnet_initial_kernel_size', type=int, default=7,
+        parser.add_argument('--resnet_n_blocks',
+                            type=int,
+                            default=9,
+                            help='number of residual blocks in the global generator network')
+        parser.add_argument('--resnet_kernel_size', type=int, default=3, help='kernel size of the resnet block')
+        parser.add_argument('--resnet_initial_kernel_size',
+                            type=int,
+                            default=7,
                             help='kernel size of the first convolution')
         parser.set_defaults(norm_G='instance')
         return parser
@@ -176,41 +273,41 @@ class Pix2PixHDGenerator(BaseNetwork):
         model = []
 
         # initial conv
-        model += [nn.ReflectionPad2d(opt.resnet_initial_kernel_size // 2),
-                  norm_layer(nn.Conv2d(input_nc, opt.ngf,
-                                       kernel_size=opt.resnet_initial_kernel_size,
-                                       padding=0)),
-                  activation]
+        model += [
+            nn.ReflectionPad2d(opt.resnet_initial_kernel_size // 2),
+            norm_layer(nn.Conv2d(input_nc, opt.ngf, kernel_size=opt.resnet_initial_kernel_size, padding=0)), activation
+        ]
 
         # downsample
         mult = 1
         for i in range(opt.resnet_n_downsample):
-            model += [norm_layer(nn.Conv2d(opt.ngf * mult, opt.ngf * mult * 2,
-                                           kernel_size=3, stride=2, padding=1)),
-                      activation]
+            model += [
+                norm_layer(nn.Conv2d(opt.ngf * mult, opt.ngf * mult * 2, kernel_size=3, stride=2, padding=1)),
+                activation
+            ]
             mult *= 2
 
         # resnet blocks
         for i in range(opt.resnet_n_blocks):
-            model += [ResnetBlock(opt.ngf * mult,
-                                  norm_layer=norm_layer,
-                                  activation=activation,
-                                  kernel_size=opt.resnet_kernel_size)]
+            model += [
+                ResnetBlock(opt.ngf * mult,
+                            norm_layer=norm_layer,
+                            activation=activation,
+                            kernel_size=opt.resnet_kernel_size)
+            ]
 
         # upsample
         for i in range(opt.resnet_n_downsample):
             nc_in = int(opt.ngf * mult)
             nc_out = int((opt.ngf * mult) / 2)
-            model += [norm_layer(nn.ConvTranspose2d(nc_in, nc_out,
-                                                    kernel_size=3, stride=2,
-                                                    padding=1, output_padding=1)),
-                      activation]
+            model += [
+                norm_layer(nn.ConvTranspose2d(nc_in, nc_out, kernel_size=3, stride=2, padding=1, output_padding=1)),
+                activation
+            ]
             mult = mult // 2
 
         # final output conv
-        model += [nn.ReflectionPad2d(3),
-                  nn.Conv2d(nc_out, opt.output_nc, kernel_size=7, padding=0),
-                  nn.Tanh()]
+        model += [nn.ReflectionPad2d(3), nn.Conv2d(nc_out, opt.output_nc, kernel_size=7, padding=0), nn.Tanh()]
 
         self.model = nn.Sequential(*model)
 

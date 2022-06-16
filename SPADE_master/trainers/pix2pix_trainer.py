@@ -3,10 +3,10 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
-from models.networks.sync_batchnorm import DataParallelWithCallback
-from models.pix2pix_model import Pix2PixModel
 import torch
 import torch.nn as nn
+from models.networks.sync_batchnorm import DataParallelWithCallback
+from models.pix2pix_model import Pix2PixModel
 
 
 class Pix2PixTrainer():
@@ -21,11 +21,12 @@ class Pix2PixTrainer():
         self.pix2pix_model = Pix2PixModel(opt)
         if len(opt.gpu_ids) > 0:
             if opt.distributed:
-                self.pix2pix_model = nn.parallel.DistributedDataParallel(self.pix2pix_model, device_ids=[opt.gpu], find_unused_parameters=True)
+                self.pix2pix_model = nn.parallel.DistributedDataParallel(self.pix2pix_model,
+                                                                         device_ids=[opt.gpu],
+                                                                         find_unused_parameters=True)
             else:
                 # self.pix2pix_model = nn.DataParallel(self.pix2pix_model).cuda()
-                self.pix2pix_model = DataParallelWithCallback(self.pix2pix_model,
-                                                              device_ids=opt.gpu_ids)
+                self.pix2pix_model = DataParallelWithCallback(self.pix2pix_model, device_ids=opt.gpu_ids)
             self.pix2pix_model_on_one_gpu = self.pix2pix_model.module
         else:
             self.pix2pix_model_on_one_gpu = self.pix2pix_model
@@ -36,20 +37,20 @@ class Pix2PixTrainer():
                 self.pix2pix_model_on_one_gpu.create_optimizers(opt)
             self.old_lr = opt.lr
 
-    def run_generator_one_step(self, data):
+    def run_generator_one_step(self, data, epoch):
         self.optimizer_G.zero_grad()
-        with torch.cuda.amp.autocast():
-            g_losses, generated = self.pix2pix_model(data, mode='generator')
+        with torch.cuda.amp.autocast():  # fp16
+            g_losses, generated = self.pix2pix_model(data, epoch, mode='generator')
         g_loss = sum(g_losses.values()).mean()
         g_loss.backward()
         self.optimizer_G.step()
         self.g_losses = g_losses
         self.generated = generated
 
-    def run_discriminator_one_step(self, data):
+    def run_discriminator_one_step(self, data, epoch):
         self.optimizer_D.zero_grad()
-        with torch.cuda.amp.autocast():
-            d_losses = self.pix2pix_model(data, mode='discriminator')
+        with torch.cuda.amp.autocast():  # fp16
+            d_losses = self.pix2pix_model(data, epoch, mode='discriminator')
         d_loss = sum(d_losses.values()).mean()
         d_loss.backward()
         self.optimizer_D.step()
@@ -72,7 +73,12 @@ class Pix2PixTrainer():
     ##################################################################
 
     def update_learning_rate(self, epoch):
+        if self.opt.pg_strategy != 0 and epoch % (self.opt.pg_niter //
+                                                  (self.opt.num_D - 1)) == 0 and epoch < self.opt.pg_niter + 1:
+            new_lr = self.old_lr * self.opt.pg_lr_decay
         if epoch > self.opt.niter:
+            if epoch - 1 == self.opt.niter:
+                self.opt.lr = self.old_lr
             lrd = self.opt.lr / self.opt.niter_decay
             new_lr = self.old_lr - lrd
         else:
