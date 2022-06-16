@@ -28,8 +28,7 @@ class BaseOptions():
         parser.add_argument('--norm_D', type=str, default='spectralinstance', help='instance normalization or batch normalization')
         parser.add_argument('--norm_E', type=str, default='spectralinstance', help='instance normalization or batch normalization')
         parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
-        parser.add_argument('--num_D', type=int, default=3, 
-                            help='number of discriminators to be used in multiscale')
+        
         # for SPADE
         parser.add_argument('--use_pos', action='store_true', help='SPADE use pos_embed')
         parser.set_defaults(use_pos=False)
@@ -78,9 +77,9 @@ class BaseOptions():
         parser.add_argument('--use_vae', action='store_true', help='enable training with an image encoder.')
         parser.add_argument('--encode_mask', action='store_true', help='enable training with an image encoder to encode mask.')
         parser.add_argument('--add_noise', action='store_true', help='enable training with an image encoder to encode mask.')
-        parser.set_defaults(use_vae=True)
-        parser.set_defaults(encode_mask=True)
-        parser.set_defaults(add_noise=False)
+        parser.set_defaults(use_vae=True) 
+        parser.set_defaults(encode_mask=True) 
+        parser.set_defaults(add_noise=False) 
         self.initialized = True
         return parser
 

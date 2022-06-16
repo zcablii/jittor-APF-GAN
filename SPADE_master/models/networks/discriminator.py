@@ -89,12 +89,14 @@ class MultiscaleDiscriminator(BaseNetwork):
         if self.opt.pg_strategy == 1:
             assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
             if epoch>=self.opt.pg_niter:
-                for i in range(self.opt.num_D):
+                for i in range(self.opt.num_D,-1,-1):
                     D = eval(f'self.multiscale_discriminator_{i}')
                     out = D(input)
                     if not get_intermediate_features:
                         out = [out]
                     result.append(out)
+                    if self.opt.one_pg_D:
+                        break
                     input = self.downsample(input)
             else:
                 current_level = epoch // (self.opt.pg_niter//(self.opt.num_D - 1))
@@ -107,11 +109,12 @@ class MultiscaleDiscriminator(BaseNetwork):
                         input = input[0]
                         for i in range( current_level,-1,-1):
                             D = eval(f'self.multiscale_discriminator_{i}')
-               
                             out = D(input)
                             if not get_intermediate_features:
                                 out = [out]
                             result.append(out)
+                            if self.opt.one_pg_D:
+                                break
                             input = self.downsample(input)
 
                     else:
@@ -120,6 +123,8 @@ class MultiscaleDiscriminator(BaseNetwork):
                             D = eval(f'self.multiscale_discriminator_{current_level+1}')
                             sub_D = eval(f'self.multiscale_discriminator_{current_level}')
                             D.load_state_dict(sub_D.state_dict(), strict=False)
+                            if self.opt.one_pg_D:
+                                del sub_D
                            
                         D = eval(f'self.multiscale_discriminator_{current_level+1}')
                         out = D(input, alpha=alpha)
@@ -128,6 +133,8 @@ class MultiscaleDiscriminator(BaseNetwork):
                         result.append(out)
                         input = self.downsample(input)
                         for i in range( current_level,-1,-1):
+                            if self.opt.one_pg_D:
+                                break
                             D = eval(f'self.multiscale_discriminator_{i}')
                             out = D(input)
                             if not get_intermediate_features:

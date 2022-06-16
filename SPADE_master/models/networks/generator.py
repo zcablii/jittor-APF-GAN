@@ -71,8 +71,8 @@ class SPADEGenerator(BaseNetwork):
             final_nc = int(2**(3-i) * nf)
 
 
-        self.num_mid_supervision_D = opt.num_D - 1
         if opt.isTrain:
+            self.num_mid_supervision_D = opt.num_D - 1
             if self.num_mid_supervision_D > 0 and opt.pg_niter>0:
                 self.inter_conv_img = nn.ModuleList([])
                 for i in range(1, self.num_mid_supervision_D+1):
