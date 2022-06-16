@@ -28,8 +28,8 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--pg_lr_decay', type=int, default=1, help='learning rate decay at every resolution transition.') 
         parser.add_argument('--diff_aug', type=str, default='', help='Diff aug policy')
         
-        parser.add_argument('--num_D', type=int, default=5,
-                            help='number of discriminators to be used in multiscale')
+        # parser.add_argument('--num_D', type=int, default=5,
+        #                     help='number of discriminators to be used in multiscale')
         parser.add_argument('--one_pg_D', action='store_true', help='Only use one last D in pg training')
         parser.set_defaults(one_pg_D=False)
         

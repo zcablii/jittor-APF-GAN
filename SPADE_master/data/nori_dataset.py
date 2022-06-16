@@ -4,11 +4,9 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 """
 
 import io
-import os
 import nori2
-import util.util as util
 from PIL import Image
-from data.base_dataset import BaseDataset, get_params, get_transform
+from data.base_dataset import get_params, get_transform
 from data.image_folder import make_dataset
 from data.pix2pix_dataset import Pix2pixDataset
 import refile
@@ -35,6 +33,16 @@ class NoriDataset(Pix2pixDataset):
         parser.set_defaults(crop_size=512) # 256 or 512 for diff. input size
         parser.set_defaults(aspect_ratio=4/3)
         parser.set_defaults(display_winsize=256)
+
+        parser.add_argument('--remove_gray_imgs', action='store_false', help='ignore gray training imgs')
+        parser.set_defaults(remove_gray_imgs=True) 
+        parser.add_argument('--brightness', type=tuple, default=(1,1), help='training image brightness augment. Tuple of float (min, max) in range(0,inf)')
+        parser.add_argument('--contrast', type=tuple, default=(1,1), help='training image contrast augment. Tuple of float (min, max) in range(0,inf)')
+        parser.add_argument('--saturation', type=tuple, default=(1,1), help='training image saturation augment. Tuple of float (min, max) in range(0,inf)')
+        # parser.set_defaults(brightness=(0.8,1.25))
+        # parser.set_defaults(contrast=(0.8,1.25))
+        # parser.set_defaults(saturation=(0.8,1.25))
+
         parser.set_defaults(label_nc=29)
         # parser.set_defaults(batchSize=4) # 32 or 10 for diff. input size. default to 24
         parser.set_defaults(contain_dontcare_label=False)
