@@ -21,8 +21,19 @@ class TrainOptions(BaseOptions):
         # for training
         parser.add_argument('--continue_train', action='store_true', help='continue training: load the latest model')
         parser.add_argument('--which_epoch', type=str, default='latest', help='which epoch to load? set to latest to use latest cached model')
-        parser.add_argument('--niter', type=int, default=200, help='# of iter at starting learning rate. This is NOT the total #epochs. Totla #epochs is niter*(growiong resolution scales) + fade_in_epochs*(growiong resolution scales -1) + niter_decay')
-        parser.add_argument('--niter_decay', type=int, default=0, help='# of iter to linearly decay learning rate to zero')
+        parser.add_argument('--niter', type=int, default=210, help='# of iter at starting learning rate. This is NOT the total #epochs. Totla #epochs is niter*(growiong resolution scales) + fade_in_epochs*(growiong resolution scales -1) + niter_decay') 
+        parser.add_argument('--pg_niter', type=int, default=180, help='# of iter uses mid supervision D')
+        parser.add_argument('--niter_decay', type=int, default=30, help='# of iter to linearly decay learning rate to zero')
+        parser.add_argument('--pg_strategy', type=int, default=1, help='0 is ont using pg, 1 is classic pg, 2 is all then discard strategy')
+        parser.add_argument('--pg_lr_decay', type=int, default=1, help='learning rate decay at every resolution transition.') 
+        parser.add_argument('--diff_aug', type=str, default='', help='Diff aug policy')
+        
+        parser.add_argument('--num_D', type=int, default=5,
+                            help='number of discriminators to be used in multiscale')
+        parser.add_argument('--one_pg_D', action='store_true', help='Only use one last D in pg training')
+        parser.set_defaults(one_pg_D=False)
+        
+
         parser.add_argument('--optimizer', type=str, default='adam')
         parser.add_argument('--beta1', type=float, default=0.0, help='momentum term of adam')
         parser.add_argument('--beta2', type=float, default=0.9, help='momentum term of adam')
