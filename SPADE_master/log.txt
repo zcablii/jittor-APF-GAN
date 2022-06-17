@@ -1,22 +1,26 @@
 set num_upsampling_layers to more
 ----------------- Options ---------------
             D_steps_per_G: 1                             
+                add_noise: False                         
              aspect_ratio: 1.3333333333333333            
-                batchSize: 24                            
+                batchSize: 20                            
                     beta1: 0.0                           
                     beta2: 0.9                           
+               brightness: (1, 1)                        
       cache_filelist_read: True                          
      cache_filelist_write: True                          
           checkpoints_dir: ./checkpoints                 
    contain_dontcare_label: False                         
-           continue_train: False                         
+           continue_train: True                          	[default: False]
+                 contrast: (1, 1)                        
                 crop_size: 512                           
                  dataroot: ./datasets/coco_stuff/        
              dataset_mode: custom                        
                     debug: False                         
-             display_freq: 10000                         
+                 diff_aug:                               
+             display_freq: 50000                         
           display_winsize: 256                           
-           fade_in_epochs: 50                            
+              encode_mask: True                          
                  gan_mode: hinge                         
                   gpu_ids: 0                             
                 image_dir: ../../CGAN/data/train/imgs    	[default: ../data/train/imgs]
@@ -30,21 +34,21 @@ set num_upsampling_layers to more
                lambda_kld: 0.05                          
                lambda_vgg: 10.0                          
        load_from_opt_file: False                         
-                load_size: 640                           
+                load_size: 572                           
                        lr: 0.0002                        
          max_dataset_size: 9223372036854775807           
                     model: pix2pix                       
                  nThreads: 8                             
                n_layers_D: 4                             
-                     name: label2imgs_512x384            	[default: label2img]
+                     name: pg_D5                         	[default: label2img]
                       ndf: 64                            
                       nef: 16                            
                      netD: multiscale                    
              netD_subarch: n_layer                       
                      netG: spade                         
                       ngf: 64                            
-                    niter: 300                           
-              niter_decay: 0                             
+                    niter: 270                           	[default: 210]
+              niter_decay: 30                            
                   no_TTUR: False                         
                   no_flip: False                         
           no_ganFeat_loss: False                         
@@ -55,32 +59,564 @@ set num_upsampling_layers to more
                    norm_D: spectralinstance              
                    norm_E: spectralinstance              
                    norm_G: spectralspadesyncbatch3x3     
-                    num_D: 3                             
+                    num_D: 5                             
     num_upsampling_layers: more                          
+                 one_pg_D: False                         
                 optimizer: adam                          
                 output_nc: 3                             
+              pg_lr_decay: 1                             
+                 pg_niter: 240                           	[default: 180]
+              pg_strategy: 1                             
                     phase: train                         
           preprocess_mode: scale_width_and_crop          
                print_freq: 10000                         
+         remove_gray_imgs: True                          
+               saturation: (1, 1)                        
           save_epoch_freq: 20                            
          save_latest_freq: 50000                         
            serial_batches: False                         
+                 sr_model: pix2pix                       
+                 sr_scale: 0                             
                    tf_log: False                         
-                  use_pos: True                          
-             use_pos_proj: True                          
-                  use_vae: False                         
+     use_interFeature_pos: False                         
+                  use_pos: False                         
+             use_pos_proj: False                         
+                  use_vae: True                          
               which_epoch: latest                        
                     z_dim: 256                           
 ----------------- End -------------------
-train.py --name=label2imgs_512x384 --label_dir=../../CGAN/data/train/gray_label --image_dir=../../CGAN/data/train/imgs
-dataset [CustomDataset] of size 10000 was created
-Network [SPADEGenerator] was created. Total number of parameters: 70.0 million. To see the architecture, do print(network).
-Network [MultiscaleDiscriminator] was created. Total number of parameters: 8.4 million. To see the architecture, do print(network).
-create web directory ./checkpoints/label2imgs_512x384/web...
-End of epoch 1 / 300 	 Time Taken: 1159 sec
+train.py --name=pg_D5 --label_dir=../../CGAN/data/train/gray_label --image_dir=../../CGAN/data/train/imgs --niter=270 --pg_niter=240 --niter_decay=30 --pg_strategy=1 --num_D=5 --continue_train
+dataset [CustomDataset] of size 9939 was created
+Network [SPADEGenerator] was created. Total number of parameters: 69.4 million. To see the architecture, do print(network).
+Network [MultiscaleDiscriminator] was created. Total number of parameters: 35.2 million. To see the architecture, do print(network).
+Network [ConvEncoder] was created. Total number of parameters: 12.8 million. To see the architecture, do print(network).
+Resuming from epoch 21 at iteration 1600
+create web directory ./checkpoints/pg_D5/web...
+(epoch: 21, iters: 8480, time: 0.016) GAN: 0.893 GAN_Feat: 14.764 VGG: 13.094 D_Fake: 0.554 D_real: 0.214 
+End of epoch 21 / 300 	 Time Taken: 151 sec
 /home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/functional.py:1698: UserWarning: nn.functional.tanh is deprecated. Use torch.tanh instead.
   warnings.warn("nn.functional.tanh is deprecated. Use torch.tanh instead.")
+(epoch: 22, iters: 8560, time: 0.015) GAN: 0.179 GAN_Feat: 14.535 VGG: 13.462 D_Fake: 1.667 D_real: 0.025 
+End of epoch 22 / 300 	 Time Taken: 148 sec
+(epoch: 23, iters: 8640, time: 0.016) GAN: 1.942 GAN_Feat: 14.512 VGG: 12.605 D_Fake: 0.067 D_real: 1.015 
+End of epoch 23 / 300 	 Time Taken: 150 sec
+(epoch: 24, iters: 8720, time: 0.015) GAN: 0.916 GAN_Feat: 13.463 VGG: 11.940 D_Fake: 0.738 D_real: 0.516 
+saving the latest model (epoch 24, total_steps 50000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 24 / 300 	 Time Taken: 153 sec
+(epoch: 25, iters: 8800, time: 0.014) GAN: 1.602 GAN_Feat: 13.904 VGG: 12.483 D_Fake: 0.169 D_real: 1.088 
+End of epoch 25 / 300 	 Time Taken: 148 sec
+(epoch: 26, iters: 8880, time: 0.015) GAN: 1.594 GAN_Feat: 14.997 VGG: 13.115 D_Fake: 0.215 D_real: 0.792 
+End of epoch 26 / 300 	 Time Taken: 147 sec
+(epoch: 27, iters: 8960, time: 0.015) GAN: 1.328 GAN_Feat: 14.042 VGG: 12.705 D_Fake: 0.374 D_real: 0.539 
+End of epoch 27 / 300 	 Time Taken: 149 sec
+(epoch: 28, iters: 9040, time: 0.015) GAN: 0.294 GAN_Feat: 13.930 VGG: 12.183 D_Fake: 1.549 D_real: 0.208 
+End of epoch 28 / 300 	 Time Taken: 148 sec
+(epoch: 29, iters: 9120, time: 0.016) GAN: 1.574 GAN_Feat: 12.872 VGG: 12.088 D_Fake: 0.287 D_real: 1.142 
+saving the latest model (epoch 29, total_steps 100000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 29 / 300 	 Time Taken: 155 sec
+(epoch: 30, iters: 9200, time: 0.015) GAN: 1.987 GAN_Feat: 13.876 VGG: 12.140 D_Fake: 0.075 D_real: 1.117 
+End of epoch 30 / 300 	 Time Taken: 148 sec
+(epoch: 31, iters: 9280, time: 0.021) GAN: 0.592 GAN_Feat: 14.065 VGG: 11.500 D_Fake: 0.945 D_real: 0.646 
+End of epoch 31 / 300 	 Time Taken: 211 sec
 /home/lyx/anaconda3/envs/spade/lib/python3.6/site-packages/torch/nn/functional.py:3503: UserWarning: The default behavior for interpolate/upsample with float scale_factor changed in 1.6.0 to align with other frameworks/libraries, and now uses scale_factor directly, instead of relying on the computed output size. If you wish to restore the old behavior, please set recompute_scale_factor=True. See the documentation of nn.Upsample for details. 
   "The default behavior for interpolate/upsample with float scale_factor changed "
-(epoch: 2, iters: 24, time: 0.056) GAN: 0.749 GAN_Feat: 14.757 VGG: 4.831 D_Fake: 0.564 D_real: 0.706 
-End of epoch 2 / 300 	 Time Taken: 1136 sec
+(epoch: 32, iters: 9360, time: 0.020) GAN: 2.240 GAN_Feat: 15.559 VGG: 11.685 D_Fake: 0.287 D_real: 0.194 
+End of epoch 32 / 300 	 Time Taken: 206 sec
+(epoch: 33, iters: 9440, time: 0.021) GAN: 2.406 GAN_Feat: 14.218 VGG: 10.873 D_Fake: 0.284 D_real: 0.263 
+End of epoch 33 / 300 	 Time Taken: 207 sec
+(epoch: 34, iters: 9520, time: 0.021) GAN: 1.650 GAN_Feat: 14.642 VGG: 11.871 D_Fake: 0.295 D_real: 0.278 
+saving the latest model (epoch 34, total_steps 150000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 34 / 300 	 Time Taken: 219 sec
+(epoch: 35, iters: 9600, time: 0.021) GAN: 1.609 GAN_Feat: 14.222 VGG: 10.645 D_Fake: 0.457 D_real: 0.215 
+End of epoch 35 / 300 	 Time Taken: 207 sec
+(epoch: 36, iters: 9680, time: 0.020) GAN: 2.184 GAN_Feat: 14.999 VGG: 11.057 D_Fake: 0.184 D_real: 0.244 
+End of epoch 36 / 300 	 Time Taken: 207 sec
+(epoch: 37, iters: 9760, time: 0.022) GAN: 2.109 GAN_Feat: 13.978 VGG: 10.640 D_Fake: 0.171 D_real: 0.391 
+End of epoch 37 / 300 	 Time Taken: 207 sec
+(epoch: 38, iters: 9840, time: 0.021) GAN: 1.162 GAN_Feat: 14.679 VGG: 11.155 D_Fake: 0.562 D_real: 0.126 
+End of epoch 38 / 300 	 Time Taken: 214 sec
+(epoch: 39, iters: 9920, time: 0.020) GAN: 1.446 GAN_Feat: 14.776 VGG: 11.481 D_Fake: 0.408 D_real: 0.186 
+saving the latest model (epoch 39, total_steps 200000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 39 / 300 	 Time Taken: 209 sec
+End of epoch 40 / 300 	 Time Taken: 207 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 40, iters 209920
+(epoch: 41, iters: 80, time: 0.021) GAN: 1.305 GAN_Feat: 12.649 VGG: 10.016 D_Fake: 0.427 D_real: 0.526 
+End of epoch 41 / 300 	 Time Taken: 203 sec
+(epoch: 42, iters: 160, time: 0.021) GAN: 1.645 GAN_Feat: 13.237 VGG: 10.557 D_Fake: 0.151 D_real: 0.775 
+End of epoch 42 / 300 	 Time Taken: 212 sec
+(epoch: 43, iters: 240, time: 0.021) GAN: 1.328 GAN_Feat: 13.428 VGG: 10.468 D_Fake: 0.349 D_real: 0.370 
+End of epoch 43 / 300 	 Time Taken: 211 sec
+(epoch: 44, iters: 320, time: 0.022) GAN: 0.590 GAN_Feat: 13.303 VGG: 11.337 D_Fake: 1.115 D_real: 0.196 
+End of epoch 44 / 300 	 Time Taken: 211 sec
+(epoch: 45, iters: 400, time: 0.021) GAN: 1.492 GAN_Feat: 13.038 VGG: 10.545 D_Fake: 0.257 D_real: 0.745 
+saving the latest model (epoch 45, total_steps 250000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 45 / 300 	 Time Taken: 209 sec
+(epoch: 46, iters: 480, time: 0.020) GAN: 1.220 GAN_Feat: 12.975 VGG: 11.288 D_Fake: 0.650 D_real: 0.467 
+End of epoch 46 / 300 	 Time Taken: 213 sec
+(epoch: 47, iters: 560, time: 0.021) GAN: 1.594 GAN_Feat: 13.242 VGG: 10.902 D_Fake: 0.194 D_real: 0.735 
+End of epoch 47 / 300 	 Time Taken: 206 sec
+(epoch: 48, iters: 640, time: 0.020) GAN: 1.483 GAN_Feat: 11.816 VGG: 9.910 D_Fake: 0.147 D_real: 1.370 
+End of epoch 48 / 300 	 Time Taken: 205 sec
+(epoch: 49, iters: 720, time: 0.021) GAN: 0.240 GAN_Feat: 12.164 VGG: 10.603 D_Fake: 1.072 D_real: 0.375 
+End of epoch 49 / 300 	 Time Taken: 207 sec
+(epoch: 50, iters: 800, time: 0.021) GAN: 1.073 GAN_Feat: 12.421 VGG: 10.915 D_Fake: 0.519 D_real: 0.585 
+saving the latest model (epoch 50, total_steps 300000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 50 / 300 	 Time Taken: 216 sec
+(epoch: 51, iters: 880, time: 0.020) GAN: 1.584 GAN_Feat: 12.428 VGG: 10.438 D_Fake: 0.254 D_real: 1.008 
+End of epoch 51 / 300 	 Time Taken: 209 sec
+(epoch: 52, iters: 960, time: 0.021) GAN: 1.272 GAN_Feat: 12.725 VGG: 10.469 D_Fake: 0.331 D_real: 0.808 
+End of epoch 52 / 300 	 Time Taken: 205 sec
+(epoch: 53, iters: 1040, time: 0.020) GAN: 0.994 GAN_Feat: 11.498 VGG: 9.323 D_Fake: 0.493 D_real: 0.702 
+End of epoch 53 / 300 	 Time Taken: 207 sec
+(epoch: 54, iters: 1120, time: 0.021) GAN: 0.633 GAN_Feat: 11.906 VGG: 10.396 D_Fake: 0.870 D_real: 0.414 
+End of epoch 54 / 300 	 Time Taken: 212 sec
+(epoch: 55, iters: 1200, time: 0.023) GAN: 0.332 GAN_Feat: 11.848 VGG: 9.966 D_Fake: 1.240 D_real: 0.304 
+saving the latest model (epoch 55, total_steps 350000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 55 / 300 	 Time Taken: 210 sec
+(epoch: 56, iters: 1280, time: 0.021) GAN: 1.216 GAN_Feat: 12.290 VGG: 10.579 D_Fake: 0.451 D_real: 1.005 
+End of epoch 56 / 300 	 Time Taken: 207 sec
+(epoch: 57, iters: 1360, time: 0.020) GAN: 0.816 GAN_Feat: 12.498 VGG: 9.977 D_Fake: 0.563 D_real: 0.712 
+End of epoch 57 / 300 	 Time Taken: 207 sec
+(epoch: 58, iters: 1440, time: 0.020) GAN: 0.533 GAN_Feat: 12.844 VGG: 9.908 D_Fake: 1.140 D_real: 0.306 
+End of epoch 58 / 300 	 Time Taken: 210 sec
+(epoch: 59, iters: 1520, time: 0.023) GAN: 1.021 GAN_Feat: 12.486 VGG: 10.204 D_Fake: 0.647 D_real: 0.720 
+End of epoch 59 / 300 	 Time Taken: 208 sec
+(epoch: 60, iters: 1600, time: 0.021) GAN: 1.076 GAN_Feat: 13.351 VGG: 9.293 D_Fake: 0.457 D_real: 0.904 
+saving the latest model (epoch 60, total_steps 400000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 60 / 300 	 Time Taken: 208 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 60, iters 408320
+(epoch: 61, iters: 1680, time: 0.020) GAN: 0.990 GAN_Feat: 13.619 VGG: 8.877 D_Fake: 0.488 D_real: 0.708 
+End of epoch 61 / 300 	 Time Taken: 202 sec
+(epoch: 62, iters: 1760, time: 0.021) GAN: 1.098 GAN_Feat: 13.445 VGG: 8.959 D_Fake: 0.606 D_real: 0.693 
+End of epoch 62 / 300 	 Time Taken: 206 sec
+(epoch: 63, iters: 1840, time: 0.022) GAN: 0.724 GAN_Feat: 14.001 VGG: 9.367 D_Fake: 0.783 D_real: 0.566 
+End of epoch 63 / 300 	 Time Taken: 208 sec
+(epoch: 64, iters: 1920, time: 0.021) GAN: 1.385 GAN_Feat: 13.764 VGG: 9.502 D_Fake: 0.569 D_real: 1.004 
+End of epoch 64 / 300 	 Time Taken: 204 sec
+(epoch: 65, iters: 2000, time: 0.020) GAN: 1.206 GAN_Feat: 13.805 VGG: 9.380 D_Fake: 0.563 D_real: 0.725 
+saving the latest model (epoch 65, total_steps 450000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 65 / 300 	 Time Taken: 206 sec
+(epoch: 66, iters: 2080, time: 0.021) GAN: 0.457 GAN_Feat: 13.289 VGG: 9.809 D_Fake: 0.991 D_real: 0.488 
+End of epoch 66 / 300 	 Time Taken: 205 sec
+(epoch: 67, iters: 2160, time: 0.022) GAN: 1.003 GAN_Feat: 13.784 VGG: 9.591 D_Fake: 0.716 D_real: 0.587 
+End of epoch 67 / 300 	 Time Taken: 210 sec
+(epoch: 68, iters: 2240, time: 0.020) GAN: 0.881 GAN_Feat: 15.123 VGG: 10.796 D_Fake: 1.006 D_real: 0.443 
+End of epoch 68 / 300 	 Time Taken: 203 sec
+(epoch: 69, iters: 2320, time: 0.021) GAN: 1.742 GAN_Feat: 12.822 VGG: 8.805 D_Fake: 0.169 D_real: 1.473 
+End of epoch 69 / 300 	 Time Taken: 204 sec
+(epoch: 70, iters: 2400, time: 0.021) GAN: 1.441 GAN_Feat: 14.778 VGG: 10.480 D_Fake: 0.622 D_real: 0.532 
+saving the latest model (epoch 70, total_steps 500000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 70 / 300 	 Time Taken: 208 sec
+(epoch: 71, iters: 2480, time: 0.022) GAN: 0.390 GAN_Feat: 13.983 VGG: 9.721 D_Fake: 1.342 D_real: 0.191 
+End of epoch 71 / 300 	 Time Taken: 212 sec
+(epoch: 72, iters: 2560, time: 0.020) GAN: 0.649 GAN_Feat: 14.036 VGG: 9.767 D_Fake: 1.180 D_real: 0.298 
+End of epoch 72 / 300 	 Time Taken: 203 sec
+(epoch: 73, iters: 2640, time: 0.021) GAN: 0.962 GAN_Feat: 13.480 VGG: 9.295 D_Fake: 0.906 D_real: 0.542 
+End of epoch 73 / 300 	 Time Taken: 205 sec
+(epoch: 74, iters: 2720, time: 0.020) GAN: 0.776 GAN_Feat: 13.943 VGG: 9.480 D_Fake: 0.984 D_real: 0.439 
+End of epoch 74 / 300 	 Time Taken: 204 sec
+(epoch: 75, iters: 2800, time: 0.021) GAN: 1.370 GAN_Feat: 13.702 VGG: 9.067 D_Fake: 0.511 D_real: 0.798 
+saving the latest model (epoch 75, total_steps 550000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 75 / 300 	 Time Taken: 214 sec
+(epoch: 76, iters: 2880, time: 0.020) GAN: 1.267 GAN_Feat: 13.133 VGG: 9.111 D_Fake: 0.486 D_real: 0.872 
+End of epoch 76 / 300 	 Time Taken: 206 sec
+(epoch: 77, iters: 2960, time: 0.020) GAN: 1.104 GAN_Feat: 13.661 VGG: 9.430 D_Fake: 0.715 D_real: 0.565 
+End of epoch 77 / 300 	 Time Taken: 203 sec
+(epoch: 78, iters: 3040, time: 0.021) GAN: 0.646 GAN_Feat: 12.906 VGG: 8.776 D_Fake: 1.013 D_real: 0.466 
+End of epoch 78 / 300 	 Time Taken: 203 sec
+(epoch: 79, iters: 3120, time: 0.021) GAN: 0.614 GAN_Feat: 13.622 VGG: 9.537 D_Fake: 1.033 D_real: 0.335 
+End of epoch 79 / 300 	 Time Taken: 212 sec
+(epoch: 80, iters: 3200, time: 0.021) GAN: 1.792 GAN_Feat: 13.244 VGG: 9.140 D_Fake: 0.303 D_real: 1.058 
+saving the latest model (epoch 80, total_steps 600000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 80 / 300 	 Time Taken: 208 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 80, iters 606720
+(epoch: 81, iters: 3280, time: 0.021) GAN: 1.024 GAN_Feat: 13.151 VGG: 9.077 D_Fake: 0.513 D_real: 0.758 
+End of epoch 81 / 300 	 Time Taken: 207 sec
+(epoch: 82, iters: 3360, time: 0.020) GAN: 0.535 GAN_Feat: 13.410 VGG: 9.180 D_Fake: 1.206 D_real: 0.286 
+End of epoch 82 / 300 	 Time Taken: 205 sec
+(epoch: 83, iters: 3440, time: 0.022) GAN: 1.079 GAN_Feat: 13.289 VGG: 8.832 D_Fake: 0.569 D_real: 0.625 
+End of epoch 83 / 300 	 Time Taken: 208 sec
+(epoch: 84, iters: 3520, time: 0.020) GAN: 0.893 GAN_Feat: 12.537 VGG: 8.685 D_Fake: 0.914 D_real: 0.703 
+End of epoch 84 / 300 	 Time Taken: 207 sec
+(epoch: 85, iters: 3600, time: 0.023) GAN: 1.508 GAN_Feat: 12.811 VGG: 8.566 D_Fake: 0.360 D_real: 1.055 
+saving the latest model (epoch 85, total_steps 650000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 85 / 300 	 Time Taken: 210 sec
+(epoch: 86, iters: 3680, time: 0.021) GAN: 1.104 GAN_Feat: 13.414 VGG: 8.626 D_Fake: 0.774 D_real: 0.507 
+End of epoch 86 / 300 	 Time Taken: 208 sec
+(epoch: 87, iters: 3760, time: 0.021) GAN: 1.392 GAN_Feat: 14.260 VGG: 9.420 D_Fake: 0.755 D_real: 0.585 
+End of epoch 87 / 300 	 Time Taken: 207 sec
+(epoch: 88, iters: 3840, time: 0.021) GAN: 0.336 GAN_Feat: 12.545 VGG: 8.414 D_Fake: 1.291 D_real: 0.302 
+End of epoch 88 / 300 	 Time Taken: 203 sec
+(epoch: 89, iters: 3920, time: 0.020) GAN: 0.771 GAN_Feat: 13.616 VGG: 8.706 D_Fake: 1.225 D_real: 0.353 
+End of epoch 89 / 300 	 Time Taken: 197 sec
+(epoch: 90, iters: 4000, time: 0.020) GAN: 1.740 GAN_Feat: 12.931 VGG: 8.705 D_Fake: 0.469 D_real: 0.806 
+saving the latest model (epoch 90, total_steps 700000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 90 / 300 	 Time Taken: 201 sec
+(epoch: 91, iters: 4080, time: 0.030) GAN: 1.309 GAN_Feat: 14.986 VGG: 8.867 D_Fake: 0.499 D_real: 0.632 
+End of epoch 91 / 300 	 Time Taken: 313 sec
+(epoch: 92, iters: 4160, time: 0.030) GAN: 1.886 GAN_Feat: 16.014 VGG: 8.038 D_Fake: 0.313 D_real: 0.428 
+End of epoch 92 / 300 	 Time Taken: 302 sec
+(epoch: 93, iters: 4240, time: 0.030) GAN: 1.441 GAN_Feat: 14.677 VGG: 7.962 D_Fake: 0.480 D_real: 0.543 
+End of epoch 93 / 300 	 Time Taken: 297 sec
+(epoch: 94, iters: 4320, time: 0.030) GAN: 2.002 GAN_Feat: 15.267 VGG: 8.205 D_Fake: 0.362 D_real: 0.520 
+End of epoch 94 / 300 	 Time Taken: 303 sec
+(epoch: 95, iters: 4400, time: 0.030) GAN: 1.243 GAN_Feat: 15.683 VGG: 8.526 D_Fake: 0.759 D_real: 0.276 
+saving the latest model (epoch 95, total_steps 750000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 95 / 300 	 Time Taken: 298 sec
+(epoch: 96, iters: 4480, time: 0.030) GAN: 1.429 GAN_Feat: 16.363 VGG: 8.697 D_Fake: 0.593 D_real: 0.342 
+End of epoch 96 / 300 	 Time Taken: 297 sec
+(epoch: 97, iters: 4560, time: 0.030) GAN: 1.253 GAN_Feat: 14.609 VGG: 7.628 D_Fake: 0.558 D_real: 0.441 
+End of epoch 97 / 300 	 Time Taken: 306 sec
+(epoch: 98, iters: 4640, time: 0.029) GAN: 1.275 GAN_Feat: 14.031 VGG: 7.501 D_Fake: 0.467 D_real: 0.482 
+End of epoch 98 / 300 	 Time Taken: 297 sec
+(epoch: 99, iters: 4720, time: 0.029) GAN: 1.036 GAN_Feat: 15.490 VGG: 8.034 D_Fake: 0.788 D_real: 0.152 
+End of epoch 99 / 300 	 Time Taken: 296 sec
+(epoch: 100, iters: 4800, time: 0.032) GAN: 0.982 GAN_Feat: 14.795 VGG: 7.820 D_Fake: 0.695 D_real: 0.371 
+saving the latest model (epoch 100, total_steps 800000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 100 / 300 	 Time Taken: 307 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 100, iters 805120
+(epoch: 101, iters: 4880, time: 0.030) GAN: 1.043 GAN_Feat: 13.813 VGG: 7.955 D_Fake: 0.732 D_real: 0.364 
+End of epoch 101 / 300 	 Time Taken: 296 sec
+(epoch: 102, iters: 4960, time: 0.029) GAN: 1.496 GAN_Feat: 13.135 VGG: 6.868 D_Fake: 0.224 D_real: 1.018 
+End of epoch 102 / 300 	 Time Taken: 296 sec
+(epoch: 103, iters: 5040, time: 0.032) GAN: 0.874 GAN_Feat: 13.194 VGG: 7.316 D_Fake: 0.660 D_real: 0.552 
+End of epoch 103 / 300 	 Time Taken: 306 sec
+(epoch: 104, iters: 5120, time: 0.030) GAN: 1.312 GAN_Feat: 12.862 VGG: 7.293 D_Fake: 0.444 D_real: 0.951 
+End of epoch 104 / 300 	 Time Taken: 299 sec
+(epoch: 105, iters: 5200, time: 0.030) GAN: 0.651 GAN_Feat: 13.106 VGG: 7.033 D_Fake: 0.787 D_real: 0.722 
+saving the latest model (epoch 105, total_steps 850000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 105 / 300 	 Time Taken: 304 sec
+(epoch: 106, iters: 5280, time: 0.030) GAN: 0.869 GAN_Feat: 13.181 VGG: 7.174 D_Fake: 0.682 D_real: 0.747 
+End of epoch 106 / 300 	 Time Taken: 309 sec
+(epoch: 107, iters: 5360, time: 0.030) GAN: 0.268 GAN_Feat: 12.704 VGG: 7.459 D_Fake: 1.072 D_real: 0.456 
+End of epoch 107 / 300 	 Time Taken: 300 sec
+(epoch: 108, iters: 5440, time: 0.030) GAN: 0.341 GAN_Feat: 12.644 VGG: 7.015 D_Fake: 1.325 D_real: 0.259 
+End of epoch 108 / 300 	 Time Taken: 303 sec
+(epoch: 109, iters: 5520, time: 0.030) GAN: 0.805 GAN_Feat: 13.392 VGG: 7.614 D_Fake: 0.888 D_real: 0.591 
+End of epoch 109 / 300 	 Time Taken: 306 sec
+(epoch: 110, iters: 5600, time: 0.030) GAN: 0.924 GAN_Feat: 12.787 VGG: 7.048 D_Fake: 0.611 D_real: 0.874 
+saving the latest model (epoch 110, total_steps 900000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 110 / 300 	 Time Taken: 302 sec
+(epoch: 111, iters: 5680, time: 0.030) GAN: 0.336 GAN_Feat: 12.633 VGG: 6.977 D_Fake: 1.101 D_real: 0.382 
+End of epoch 111 / 300 	 Time Taken: 305 sec
+(epoch: 112, iters: 5760, time: 0.030) GAN: 0.183 GAN_Feat: 14.026 VGG: 7.839 D_Fake: 1.477 D_real: 0.349 
+End of epoch 112 / 300 	 Time Taken: 303 sec
+(epoch: 113, iters: 5840, time: 0.031) GAN: 1.148 GAN_Feat: 12.378 VGG: 7.332 D_Fake: 0.415 D_real: 1.022 
+End of epoch 113 / 300 	 Time Taken: 302 sec
+(epoch: 114, iters: 5920, time: 0.032) GAN: 0.116 GAN_Feat: 12.305 VGG: 6.790 D_Fake: 1.120 D_real: 0.479 
+End of epoch 114 / 300 	 Time Taken: 310 sec
+(epoch: 115, iters: 6000, time: 0.030) GAN: 0.910 GAN_Feat: 12.575 VGG: 6.746 D_Fake: 0.541 D_real: 0.846 
+saving the latest model (epoch 115, total_steps 950000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 115 / 300 	 Time Taken: 304 sec
+(epoch: 116, iters: 6080, time: 0.031) GAN: 0.822 GAN_Feat: 12.588 VGG: 7.459 D_Fake: 0.738 D_real: 0.674 
+End of epoch 116 / 300 	 Time Taken: 304 sec
+(epoch: 117, iters: 6160, time: 0.032) GAN: 0.841 GAN_Feat: 12.863 VGG: 7.322 D_Fake: 0.779 D_real: 0.690 
+End of epoch 117 / 300 	 Time Taken: 307 sec
+(epoch: 118, iters: 6240, time: 0.030) GAN: 1.073 GAN_Feat: 12.436 VGG: 7.016 D_Fake: 0.414 D_real: 1.070 
+End of epoch 118 / 300 	 Time Taken: 302 sec
+(epoch: 119, iters: 6320, time: 0.031) GAN: 0.646 GAN_Feat: 12.104 VGG: 6.492 D_Fake: 0.744 D_real: 0.693 
+End of epoch 119 / 300 	 Time Taken: 302 sec
+(epoch: 120, iters: 6400, time: 0.032) GAN: 0.561 GAN_Feat: 14.015 VGG: 7.130 D_Fake: 1.083 D_real: 0.614 
+saving the latest model (epoch 120, total_steps 1000000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 120 / 300 	 Time Taken: 306 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 120, iters 1003520
+(epoch: 121, iters: 6480, time: 0.030) GAN: 0.495 GAN_Feat: 14.279 VGG: 7.241 D_Fake: 1.000 D_real: 0.543 
+End of epoch 121 / 300 	 Time Taken: 296 sec
+(epoch: 122, iters: 6560, time: 0.030) GAN: 0.308 GAN_Feat: 13.368 VGG: 6.817 D_Fake: 1.005 D_real: 0.628 
+End of epoch 122 / 300 	 Time Taken: 296 sec
+(epoch: 123, iters: 6640, time: 0.030) GAN: 1.056 GAN_Feat: 14.297 VGG: 7.515 D_Fake: 0.611 D_real: 0.956 
+End of epoch 123 / 300 	 Time Taken: 304 sec
+(epoch: 124, iters: 6720, time: 0.029) GAN: 0.729 GAN_Feat: 14.222 VGG: 6.931 D_Fake: 0.740 D_real: 0.724 
+End of epoch 124 / 300 	 Time Taken: 298 sec
+(epoch: 125, iters: 6800, time: 0.029) GAN: 1.020 GAN_Feat: 13.698 VGG: 6.836 D_Fake: 0.679 D_real: 0.857 
+saving the latest model (epoch 125, total_steps 1050000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 125 / 300 	 Time Taken: 299 sec
+(epoch: 126, iters: 6880, time: 0.030) GAN: 0.480 GAN_Feat: 14.207 VGG: 6.792 D_Fake: 1.055 D_real: 0.519 
+End of epoch 126 / 300 	 Time Taken: 303 sec
+(epoch: 127, iters: 6960, time: 0.030) GAN: 0.779 GAN_Feat: 13.616 VGG: 6.696 D_Fake: 0.716 D_real: 0.884 
+End of epoch 127 / 300 	 Time Taken: 296 sec
+(epoch: 128, iters: 7040, time: 0.029) GAN: 0.741 GAN_Feat: 13.881 VGG: 7.162 D_Fake: 0.787 D_real: 0.884 
+End of epoch 128 / 300 	 Time Taken: 298 sec
+(epoch: 129, iters: 7120, time: 0.029) GAN: 0.483 GAN_Feat: 14.212 VGG: 7.545 D_Fake: 1.093 D_real: 0.456 
+End of epoch 129 / 300 	 Time Taken: 300 sec
+(epoch: 130, iters: 7200, time: 0.031) GAN: 1.009 GAN_Feat: 13.638 VGG: 7.129 D_Fake: 0.606 D_real: 1.072 
+saving the latest model (epoch 130, total_steps 1100000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 130 / 300 	 Time Taken: 300 sec
+(epoch: 131, iters: 7280, time: 0.031) GAN: 0.543 GAN_Feat: 13.232 VGG: 6.630 D_Fake: 0.920 D_real: 0.703 
+End of epoch 131 / 300 	 Time Taken: 302 sec
+(epoch: 132, iters: 7360, time: 0.031) GAN: 1.188 GAN_Feat: 14.305 VGG: 6.745 D_Fake: 0.279 D_real: 1.272 
+End of epoch 132 / 300 	 Time Taken: 299 sec
+(epoch: 133, iters: 7440, time: 0.030) GAN: 1.231 GAN_Feat: 14.376 VGG: 7.301 D_Fake: 0.417 D_real: 1.017 
+End of epoch 133 / 300 	 Time Taken: 297 sec
+(epoch: 134, iters: 7520, time: 0.032) GAN: 1.170 GAN_Feat: 13.258 VGG: 6.493 D_Fake: 0.461 D_real: 1.122 
+End of epoch 134 / 300 	 Time Taken: 304 sec
+(epoch: 135, iters: 7600, time: 0.029) GAN: 0.833 GAN_Feat: 14.971 VGG: 8.315 D_Fake: 0.982 D_real: 0.520 
+saving the latest model (epoch 135, total_steps 1150000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 135 / 300 	 Time Taken: 299 sec
+(epoch: 136, iters: 7680, time: 0.030) GAN: 0.500 GAN_Feat: 13.946 VGG: 7.272 D_Fake: 1.327 D_real: 0.355 
+End of epoch 136 / 300 	 Time Taken: 297 sec
+(epoch: 137, iters: 7760, time: 0.031) GAN: 0.915 GAN_Feat: 13.312 VGG: 6.513 D_Fake: 0.684 D_real: 0.877 
+End of epoch 137 / 300 	 Time Taken: 303 sec
+(epoch: 138, iters: 7840, time: 0.030) GAN: 1.104 GAN_Feat: 12.941 VGG: 7.225 D_Fake: 0.461 D_real: 1.059 
+End of epoch 138 / 300 	 Time Taken: 297 sec
+(epoch: 139, iters: 7920, time: 0.029) GAN: 0.625 GAN_Feat: 14.745 VGG: 7.433 D_Fake: 0.932 D_real: 0.516 
+End of epoch 139 / 300 	 Time Taken: 295 sec
+(epoch: 140, iters: 8000, time: 0.030) GAN: 0.706 GAN_Feat: 13.680 VGG: 6.749 D_Fake: 1.089 D_real: 0.566 
+saving the latest model (epoch 140, total_steps 1200000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 140 / 300 	 Time Taken: 306 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 140, iters 1201920
+(epoch: 141, iters: 8080, time: 0.029) GAN: 0.726 GAN_Feat: 13.564 VGG: 6.459 D_Fake: 0.782 D_real: 0.815 
+End of epoch 141 / 300 	 Time Taken: 296 sec
+(epoch: 142, iters: 8160, time: 0.030) GAN: 1.020 GAN_Feat: 14.005 VGG: 6.719 D_Fake: 0.757 D_real: 0.785 
+End of epoch 142 / 300 	 Time Taken: 296 sec
+(epoch: 143, iters: 8240, time: 0.030) GAN: 0.986 GAN_Feat: 14.882 VGG: 7.208 D_Fake: 0.740 D_real: 0.742 
+End of epoch 143 / 300 	 Time Taken: 304 sec
+(epoch: 144, iters: 8320, time: 0.030) GAN: 1.213 GAN_Feat: 13.407 VGG: 6.722 D_Fake: 0.457 D_real: 1.203 
+End of epoch 144 / 300 	 Time Taken: 298 sec
+(epoch: 145, iters: 8400, time: 0.030) GAN: 0.299 GAN_Feat: 13.334 VGG: 6.931 D_Fake: 1.340 D_real: 0.400 
+saving the latest model (epoch 145, total_steps 1250000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 145 / 300 	 Time Taken: 302 sec
+(epoch: 146, iters: 8480, time: 0.030) GAN: -0.048 GAN_Feat: 13.383 VGG: 6.560 D_Fake: 1.677 D_real: 0.176 
+End of epoch 146 / 300 	 Time Taken: 303 sec
+(epoch: 147, iters: 8560, time: 0.030) GAN: 0.891 GAN_Feat: 13.561 VGG: 7.053 D_Fake: 0.651 D_real: 0.873 
+End of epoch 147 / 300 	 Time Taken: 301 sec
+(epoch: 148, iters: 8640, time: 0.032) GAN: 0.155 GAN_Feat: 13.336 VGG: 6.734 D_Fake: 1.310 D_real: 0.355 
+End of epoch 148 / 300 	 Time Taken: 304 sec
+(epoch: 149, iters: 8720, time: 0.030) GAN: 0.831 GAN_Feat: 13.929 VGG: 6.870 D_Fake: 0.798 D_real: 0.798 
+End of epoch 149 / 300 	 Time Taken: 302 sec
+(epoch: 150, iters: 8800, time: 0.029) GAN: 1.171 GAN_Feat: 12.999 VGG: 6.734 D_Fake: 0.668 D_real: 0.864 
+saving the latest model (epoch 150, total_steps 1300000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 150 / 300 	 Time Taken: 298 sec
+(epoch: 151, iters: 8880, time: 0.054) GAN: 0.670 GAN_Feat: 15.302 VGG: 6.335 D_Fake: 0.743 D_real: 0.406 
+End of epoch 151 / 300 	 Time Taken: 544 sec
+(epoch: 152, iters: 8960, time: 0.054) GAN: 1.166 GAN_Feat: 16.338 VGG: 6.940 D_Fake: 0.688 D_real: 0.487 
+End of epoch 152 / 300 	 Time Taken: 536 sec
+(epoch: 153, iters: 9040, time: 0.053) GAN: 1.691 GAN_Feat: 15.771 VGG: 6.556 D_Fake: 0.359 D_real: 0.801 
+End of epoch 153 / 300 	 Time Taken: 540 sec
+(epoch: 154, iters: 9120, time: 0.054) GAN: 1.252 GAN_Feat: 15.240 VGG: 5.778 D_Fake: 0.680 D_real: 0.651 
+End of epoch 154 / 300 	 Time Taken: 540 sec
+(epoch: 155, iters: 9200, time: 0.054) GAN: 1.548 GAN_Feat: 16.107 VGG: 6.517 D_Fake: 0.440 D_real: 0.579 
+saving the latest model (epoch 155, total_steps 1350000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 155 / 300 	 Time Taken: 537 sec
+(epoch: 156, iters: 9280, time: 0.054) GAN: 1.269 GAN_Feat: 15.256 VGG: 5.901 D_Fake: 0.466 D_real: 0.752 
+End of epoch 156 / 300 	 Time Taken: 540 sec
+(epoch: 157, iters: 9360, time: 0.056) GAN: 1.153 GAN_Feat: 14.714 VGG: 6.147 D_Fake: 0.517 D_real: 0.643 
+End of epoch 157 / 300 	 Time Taken: 539 sec
+(epoch: 158, iters: 9440, time: 0.054) GAN: 0.914 GAN_Feat: 14.741 VGG: 5.897 D_Fake: 0.718 D_real: 0.458 
+End of epoch 158 / 300 	 Time Taken: 536 sec
+(epoch: 159, iters: 9520, time: 0.054) GAN: 0.846 GAN_Feat: 15.250 VGG: 6.353 D_Fake: 0.802 D_real: 0.368 
+End of epoch 159 / 300 	 Time Taken: 541 sec
+(epoch: 160, iters: 9600, time: 0.056) GAN: 0.735 GAN_Feat: 15.522 VGG: 6.240 D_Fake: 0.944 D_real: 0.327 
+saving the latest model (epoch 160, total_steps 1400000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 160 / 300 	 Time Taken: 540 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 160, iters 1400320
+(epoch: 161, iters: 9680, time: 0.054) GAN: 0.679 GAN_Feat: 15.359 VGG: 6.261 D_Fake: 0.894 D_real: 0.336 
+End of epoch 161 / 300 	 Time Taken: 538 sec
+(epoch: 162, iters: 9760, time: 0.054) GAN: 1.451 GAN_Feat: 15.224 VGG: 6.209 D_Fake: 0.343 D_real: 0.964 
+End of epoch 162 / 300 	 Time Taken: 539 sec
+(epoch: 163, iters: 9840, time: 0.054) GAN: 0.497 GAN_Feat: 14.081 VGG: 5.579 D_Fake: 0.872 D_real: 0.478 
+End of epoch 163 / 300 	 Time Taken: 536 sec
+(epoch: 164, iters: 9920, time: 0.053) GAN: 1.055 GAN_Feat: 16.014 VGG: 6.348 D_Fake: 0.487 D_real: 0.763 
+End of epoch 164 / 300 	 Time Taken: 539 sec
+End of epoch 165 / 300 	 Time Taken: 542 sec
+(epoch: 166, iters: 80, time: 0.054) GAN: 0.727 GAN_Feat: 14.902 VGG: 6.184 D_Fake: 0.897 D_real: 0.641 
+saving the latest model (epoch 166, total_steps 1450000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 166 / 300 	 Time Taken: 540 sec
+(epoch: 167, iters: 160, time: 0.054) GAN: 0.545 GAN_Feat: 14.372 VGG: 5.770 D_Fake: 0.880 D_real: 0.403 
+End of epoch 167 / 300 	 Time Taken: 540 sec
+(epoch: 168, iters: 240, time: 0.054) GAN: 0.204 GAN_Feat: 14.666 VGG: 5.816 D_Fake: 1.251 D_real: 0.361 
+End of epoch 168 / 300 	 Time Taken: 538 sec
+(epoch: 169, iters: 320, time: 0.056) GAN: 0.809 GAN_Feat: 14.274 VGG: 5.800 D_Fake: 0.700 D_real: 0.849 
+End of epoch 169 / 300 	 Time Taken: 537 sec
+(epoch: 170, iters: 400, time: 0.054) GAN: 0.871 GAN_Feat: 15.153 VGG: 6.095 D_Fake: 0.946 D_real: 0.594 
+End of epoch 170 / 300 	 Time Taken: 540 sec
+(epoch: 171, iters: 480, time: 0.054) GAN: 1.276 GAN_Feat: 13.699 VGG: 4.888 D_Fake: 0.146 D_real: 1.350 
+saving the latest model (epoch 171, total_steps 1500000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 171 / 300 	 Time Taken: 538 sec
+(epoch: 172, iters: 560, time: 0.054) GAN: 0.712 GAN_Feat: 14.429 VGG: 5.279 D_Fake: 0.795 D_real: 0.613 
+End of epoch 172 / 300 	 Time Taken: 540 sec
+(epoch: 173, iters: 640, time: 0.054) GAN: 0.424 GAN_Feat: 15.799 VGG: 5.776 D_Fake: 1.086 D_real: 0.426 
+End of epoch 173 / 300 	 Time Taken: 540 sec
+(epoch: 174, iters: 720, time: 0.054) GAN: 0.928 GAN_Feat: 14.894 VGG: 6.124 D_Fake: 0.750 D_real: 0.824 
+End of epoch 174 / 300 	 Time Taken: 535 sec
+(epoch: 175, iters: 800, time: 0.054) GAN: 0.944 GAN_Feat: 14.822 VGG: 6.147 D_Fake: 0.760 D_real: 0.763 
+End of epoch 175 / 300 	 Time Taken: 540 sec
+(epoch: 176, iters: 880, time: 0.053) GAN: 0.718 GAN_Feat: 14.962 VGG: 5.733 D_Fake: 0.806 D_real: 0.654 
+saving the latest model (epoch 176, total_steps 1550000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 176 / 300 	 Time Taken: 542 sec
+(epoch: 177, iters: 960, time: 0.054) GAN: 0.736 GAN_Feat: 15.115 VGG: 6.193 D_Fake: 0.695 D_real: 0.753 
+End of epoch 177 / 300 	 Time Taken: 537 sec
+(epoch: 178, iters: 1040, time: 0.055) GAN: 0.468 GAN_Feat: 15.081 VGG: 6.527 D_Fake: 1.341 D_real: 0.421 
+End of epoch 178 / 300 	 Time Taken: 544 sec
+(epoch: 179, iters: 1120, time: 0.056) GAN: 0.428 GAN_Feat: 14.476 VGG: 5.377 D_Fake: 0.850 D_real: 0.565 
+End of epoch 179 / 300 	 Time Taken: 542 sec
+(epoch: 180, iters: 1200, time: 0.056) GAN: 0.672 GAN_Feat: 15.964 VGG: 6.025 D_Fake: 0.932 D_real: 0.476 
+End of epoch 180 / 300 	 Time Taken: 528 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 180, iters 1598720
+(epoch: 181, iters: 1280, time: 0.053) GAN: 0.419 GAN_Feat: 16.223 VGG: 5.814 D_Fake: 1.215 D_real: 0.381 
+saving the latest model (epoch 181, total_steps 1600000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 181 / 300 	 Time Taken: 535 sec
+(epoch: 182, iters: 1360, time: 0.053) GAN: 0.938 GAN_Feat: 17.093 VGG: 6.556 D_Fake: 0.709 D_real: 0.945 
+End of epoch 182 / 300 	 Time Taken: 529 sec
+(epoch: 183, iters: 1440, time: 0.054) GAN: 1.104 GAN_Feat: 16.042 VGG: 5.841 D_Fake: 0.489 D_real: 0.792 
+End of epoch 183 / 300 	 Time Taken: 530 sec
+(epoch: 184, iters: 1520, time: 0.053) GAN: 0.773 GAN_Feat: 15.777 VGG: 5.813 D_Fake: 1.007 D_real: 0.502 
+End of epoch 184 / 300 	 Time Taken: 534 sec
+(epoch: 185, iters: 1600, time: 0.052) GAN: 1.045 GAN_Feat: 16.229 VGG: 6.005 D_Fake: 0.485 D_real: 0.905 
+End of epoch 185 / 300 	 Time Taken: 525 sec
+(epoch: 186, iters: 1680, time: 0.053) GAN: 0.625 GAN_Feat: 15.631 VGG: 5.525 D_Fake: 0.761 D_real: 0.643 
+saving the latest model (epoch 186, total_steps 1650000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 186 / 300 	 Time Taken: 532 sec
+(epoch: 187, iters: 1760, time: 0.053) GAN: 0.251 GAN_Feat: 16.609 VGG: 5.873 D_Fake: 1.260 D_real: 0.316 
+End of epoch 187 / 300 	 Time Taken: 526 sec
+(epoch: 188, iters: 1840, time: 0.056) GAN: 0.836 GAN_Feat: 16.232 VGG: 5.888 D_Fake: 0.772 D_real: 0.714 
+End of epoch 188 / 300 	 Time Taken: 529 sec
+(epoch: 189, iters: 1920, time: 0.052) GAN: 0.704 GAN_Feat: 15.975 VGG: 5.428 D_Fake: 0.722 D_real: 0.598 
+End of epoch 189 / 300 	 Time Taken: 529 sec
+(epoch: 190, iters: 2000, time: 0.053) GAN: 1.097 GAN_Feat: 15.677 VGG: 5.562 D_Fake: 0.417 D_real: 1.038 
+End of epoch 190 / 300 	 Time Taken: 527 sec
+(epoch: 191, iters: 2080, time: 0.056) GAN: 0.609 GAN_Feat: 16.883 VGG: 6.315 D_Fake: 0.714 D_real: 0.533 
+saving the latest model (epoch 191, total_steps 1700000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 191 / 300 	 Time Taken: 533 sec
+(epoch: 192, iters: 2160, time: 0.053) GAN: 0.230 GAN_Feat: 16.944 VGG: 5.772 D_Fake: 1.105 D_real: 0.290 
+End of epoch 192 / 300 	 Time Taken: 529 sec
+(epoch: 193, iters: 2240, time: 0.054) GAN: 1.346 GAN_Feat: 17.093 VGG: 5.998 D_Fake: 0.229 D_real: 0.953 
+End of epoch 193 / 300 	 Time Taken: 526 sec
+(epoch: 194, iters: 2320, time: 0.052) GAN: 0.625 GAN_Feat: 17.510 VGG: 5.855 D_Fake: 0.604 D_real: 0.513 
+End of epoch 194 / 300 	 Time Taken: 530 sec
+(epoch: 195, iters: 2400, time: 0.053) GAN: 0.737 GAN_Feat: 17.600 VGG: 6.488 D_Fake: 0.537 D_real: 0.570 
+End of epoch 195 / 300 	 Time Taken: 526 sec
+(epoch: 196, iters: 2480, time: 0.054) GAN: 1.283 GAN_Feat: 17.395 VGG: 6.221 D_Fake: 0.305 D_real: 0.996 
+saving the latest model (epoch 196, total_steps 1750000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 196 / 300 	 Time Taken: 534 sec
+(epoch: 197, iters: 2560, time: 0.053) GAN: 0.434 GAN_Feat: 17.265 VGG: 6.000 D_Fake: 0.760 D_real: 0.579 
+End of epoch 197 / 300 	 Time Taken: 530 sec
+(epoch: 198, iters: 2640, time: 0.053) GAN: 1.156 GAN_Feat: 17.575 VGG: 6.128 D_Fake: 0.347 D_real: 0.811 
+End of epoch 198 / 300 	 Time Taken: 526 sec
+(epoch: 199, iters: 2720, time: 0.056) GAN: 0.641 GAN_Feat: 17.754 VGG: 6.013 D_Fake: 0.499 D_real: 0.528 
+End of epoch 199 / 300 	 Time Taken: 530 sec
+(epoch: 200, iters: 2800, time: 0.053) GAN: 1.543 GAN_Feat: 17.834 VGG: 6.343 D_Fake: 0.272 D_real: 0.834 
+End of epoch 200 / 300 	 Time Taken: 530 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 200, iters 1797120
+(epoch: 201, iters: 2880, time: 0.053) GAN: 0.863 GAN_Feat: 18.336 VGG: 6.152 D_Fake: 0.626 D_real: 0.302 
+saving the latest model (epoch 201, total_steps 1800000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 201 / 300 	 Time Taken: 530 sec
+(epoch: 202, iters: 2960, time: 0.053) GAN: 1.016 GAN_Feat: 17.557 VGG: 6.077 D_Fake: 0.363 D_real: 0.733 
+End of epoch 202 / 300 	 Time Taken: 530 sec
+(epoch: 203, iters: 3040, time: 0.053) GAN: 1.010 GAN_Feat: 18.284 VGG: 6.114 D_Fake: 0.306 D_real: 0.757 
+End of epoch 203 / 300 	 Time Taken: 526 sec
+(epoch: 204, iters: 3120, time: 0.053) GAN: 1.048 GAN_Feat: 17.198 VGG: 5.816 D_Fake: 0.443 D_real: 0.518 
+End of epoch 204 / 300 	 Time Taken: 530 sec
+(epoch: 205, iters: 3200, time: 0.053) GAN: 0.380 GAN_Feat: 19.087 VGG: 6.608 D_Fake: 0.928 D_real: 0.289 
+End of epoch 205 / 300 	 Time Taken: 530 sec
+(epoch: 206, iters: 3280, time: 0.054) GAN: 1.417 GAN_Feat: 18.144 VGG: 6.231 D_Fake: 0.265 D_real: 0.773 
+saving the latest model (epoch 206, total_steps 1850000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 206 / 300 	 Time Taken: 530 sec
+(epoch: 207, iters: 3360, time: 0.055) GAN: 0.658 GAN_Feat: 18.023 VGG: 6.001 D_Fake: 0.600 D_real: 0.468 
+End of epoch 207 / 300 	 Time Taken: 532 sec
+(epoch: 208, iters: 3440, time: 0.053) GAN: 1.079 GAN_Feat: 17.808 VGG: 6.130 D_Fake: 0.481 D_real: 0.624 
+End of epoch 208 / 300 	 Time Taken: 528 sec
+(epoch: 209, iters: 3520, time: 0.053) GAN: 1.405 GAN_Feat: 18.428 VGG: 6.298 D_Fake: 0.365 D_real: 0.733 
+End of epoch 209 / 300 	 Time Taken: 528 sec
+(epoch: 210, iters: 3600, time: 0.053) GAN: 1.753 GAN_Feat: 17.924 VGG: 6.341 D_Fake: 0.119 D_real: 0.973 
+End of epoch 210 / 300 	 Time Taken: 530 sec
+(epoch: 211, iters: 3680, time: 0.125) GAN: 0.939 GAN_Feat: 20.276 VGG: 6.216 D_Fake: 0.371 D_real: 0.499 
+saving the latest model (epoch 211, total_steps 1900000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 211 / 300 	 Time Taken: 1250 sec
+(epoch: 212, iters: 3760, time: 0.127) GAN: 1.869 GAN_Feat: 19.351 VGG: 5.023 D_Fake: 0.463 D_real: 0.851 
+End of epoch 212 / 300 	 Time Taken: 1240 sec
+(epoch: 213, iters: 3840, time: 0.124) GAN: 1.023 GAN_Feat: 19.394 VGG: 5.032 D_Fake: 0.774 D_real: 0.400 
+End of epoch 213 / 300 	 Time Taken: 1238 sec
+(epoch: 214, iters: 3920, time: 0.126) GAN: 1.305 GAN_Feat: 19.423 VGG: 5.627 D_Fake: 0.366 D_real: 0.389 
+End of epoch 214 / 300 	 Time Taken: 1241 sec
+(epoch: 215, iters: 4000, time: 0.125) GAN: 1.344 GAN_Feat: 19.575 VGG: 5.435 D_Fake: 0.321 D_real: 0.431 
+End of epoch 215 / 300 	 Time Taken: 1239 sec
+(epoch: 216, iters: 4080, time: 0.124) GAN: 1.128 GAN_Feat: 19.393 VGG: 5.088 D_Fake: 0.591 D_real: 0.273 
+saving the latest model (epoch 216, total_steps 1950000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 216 / 300 	 Time Taken: 1242 sec
+(epoch: 217, iters: 4160, time: 0.125) GAN: 1.227 GAN_Feat: 18.948 VGG: 4.802 D_Fake: 0.446 D_real: 0.439 
+End of epoch 217 / 300 	 Time Taken: 1240 sec
+(epoch: 218, iters: 4240, time: 0.124) GAN: 1.894 GAN_Feat: 21.413 VGG: 5.988 D_Fake: 0.345 D_real: 0.363 
+End of epoch 218 / 300 	 Time Taken: 1240 sec
+(epoch: 219, iters: 4320, time: 0.125) GAN: 1.700 GAN_Feat: 20.011 VGG: 5.666 D_Fake: 0.358 D_real: 0.494 
+End of epoch 219 / 300 	 Time Taken: 1240 sec
+(epoch: 220, iters: 4400, time: 0.126) GAN: 1.486 GAN_Feat: 19.616 VGG: 5.258 D_Fake: 0.339 D_real: 0.385 
+End of epoch 220 / 300 	 Time Taken: 1229 sec
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+saving the model at the end of epoch 220, iters 1995520
+(epoch: 221, iters: 4480, time: 0.125) GAN: 1.193 GAN_Feat: 19.069 VGG: 4.866 D_Fake: 0.568 D_real: 0.388 
+saving the latest model (epoch 221, total_steps 2000000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 221 / 300 	 Time Taken: 1237 sec
+(epoch: 222, iters: 4560, time: 0.126) GAN: 1.706 GAN_Feat: 20.542 VGG: 5.825 D_Fake: 0.295 D_real: 0.433 
+End of epoch 222 / 300 	 Time Taken: 1234 sec
+(epoch: 223, iters: 4640, time: 0.124) GAN: 1.706 GAN_Feat: 19.443 VGG: 5.462 D_Fake: 0.243 D_real: 0.560 
+End of epoch 223 / 300 	 Time Taken: 1232 sec
+(epoch: 224, iters: 4720, time: 0.123) GAN: 1.481 GAN_Feat: 19.879 VGG: 5.235 D_Fake: 0.318 D_real: 0.496 
+End of epoch 224 / 300 	 Time Taken: 1229 sec
+(epoch: 225, iters: 4800, time: 0.124) GAN: 1.205 GAN_Feat: 20.513 VGG: 5.779 D_Fake: 0.598 D_real: 0.153 
+End of epoch 225 / 300 	 Time Taken: 1228 sec
+(epoch: 226, iters: 4880, time: 0.123) GAN: 1.900 GAN_Feat: 20.321 VGG: 5.431 D_Fake: 0.282 D_real: 0.452 
+saving the latest model (epoch 226, total_steps 2050000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 226 / 300 	 Time Taken: 1233 sec
+(epoch: 227, iters: 4960, time: 0.124) GAN: 2.184 GAN_Feat: 21.157 VGG: 5.898 D_Fake: 0.116 D_real: 0.473 
+End of epoch 227 / 300 	 Time Taken: 1229 sec
+(epoch: 228, iters: 5040, time: 0.123) GAN: 1.850 GAN_Feat: 20.478 VGG: 5.234 D_Fake: 0.183 D_real: 0.410 
+End of epoch 228 / 300 	 Time Taken: 1230 sec
+(epoch: 229, iters: 5120, time: 0.126) GAN: 1.659 GAN_Feat: 20.452 VGG: 5.169 D_Fake: 0.290 D_real: 0.437 
+End of epoch 229 / 300 	 Time Taken: 1228 sec
+(epoch: 230, iters: 5200, time: 0.124) GAN: 0.928 GAN_Feat: 20.732 VGG: 5.289 D_Fake: 0.570 D_real: 0.112 
+End of epoch 230 / 300 	 Time Taken: 1230 sec
+(epoch: 231, iters: 5280, time: 0.125) GAN: 1.776 GAN_Feat: 20.739 VGG: 5.128 D_Fake: 0.385 D_real: 0.252 
+saving the latest model (epoch 231, total_steps 2100000)
+Saved current iteration count at ./checkpoints/pg_D5/iter.txt.
+End of epoch 231 / 300 	 Time Taken: 1233 sec

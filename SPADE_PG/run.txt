@@ -1,3 +1,0 @@
-CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' > log.txt 2>&1
-CUDA_VISIBLE_DEVICES=2 python test.py --name='label2img' --batchSize=32 --label_dir='../data/eval/gray_label' --image_dir='../data/eval/gray_label' > log.txt2 2>&1
-zip -q -r result.zip *
