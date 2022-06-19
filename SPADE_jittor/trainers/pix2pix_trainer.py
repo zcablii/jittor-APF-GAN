@@ -5,49 +5,36 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 
 from models.networks.sync_batchnorm import DataParallelWithCallback
 from models.pix2pix_model import Pix2PixModel
-import torch
-
+import jittor as jt
 
 class Pix2PixTrainer():
-    """
-    Trainer creates the model and optimizers, and uses them to
-    updates the weights of the network while reporting losses
-    and the latest visuals to visualize the progress in training.
-    """
 
     def __init__(self, opt):
         self.opt = opt
         self.pix2pix_model = Pix2PixModel(opt)
-        if len(opt.gpu_ids) > 0:
-            self.pix2pix_model = DataParallelWithCallback(self.pix2pix_model,
-                                                          device_ids=opt.gpu_ids)
-            self.pix2pix_model_on_one_gpu = self.pix2pix_model.module
-        else:
-            self.pix2pix_model_on_one_gpu = self.pix2pix_model
-
         self.generated = None
         if opt.isTrain:
-            self.optimizer_G, self.optimizer_D = \
-                self.pix2pix_model_on_one_gpu.create_optimizers(opt)
+            (self.optimizer_G, self.optimizer_D) = self.pix2pix_model.create_optimizers(opt)
             self.old_lr = opt.lr
 
     def run_generator_one_step(self, data, epoch):
         self.optimizer_G.zero_grad()
-        with torch.cuda.amp.autocast(): # fp16
-            g_losses, generated = self.pix2pix_model(data, epoch, mode='generator')
+        (g_losses, generated) = self.pix2pix_model(data, epoch, mode='generator')
+        # with jt.flag_scope(auto_mixed_precision_level=5):
+        #     (g_losses, generated) = self.pix2pix_model(data, epoch, mode='generator')
         g_loss = sum(g_losses.values()).mean()
-        g_loss.backward()
-        self.optimizer_G.step()
+        self.optimizer_G.step(g_loss)
         self.g_losses = g_losses
         self.generated = generated
 
     def run_discriminator_one_step(self, data, epoch):
+        # print('run_discriminator_one_step is ok',data )
         self.optimizer_D.zero_grad()
-        with torch.cuda.amp.autocast(): # fp16
-            d_losses = self.pix2pix_model(data, epoch, mode='discriminator')
+        d_losses = self.pix2pix_model(data, epoch, mode='discriminator')
+        # with jt.flag_scope(auto_mixed_precision_level=5):
+        #     d_losses = self.pix2pix_model(data, epoch, mode='discriminator')
         d_loss = sum(d_losses.values()).mean()
-        d_loss.backward()
-        self.optimizer_D.step()
+        self.optimizer_D.step(d_loss)
         self.d_losses = d_losses
 
     def get_latest_losses(self):
@@ -60,34 +47,29 @@ class Pix2PixTrainer():
         self.update_learning_rate(epoch)
 
     def save(self, epoch):
-        self.pix2pix_model_on_one_gpu.save(epoch)
-
-    ##################################################################
-    # Helper functions
-    ##################################################################
+        self.pix2pix_model.save(epoch)
 
     def update_learning_rate(self, epoch):
-        if self.opt.pg_strategy !=0 and epoch % (self.opt.pg_niter // (self.opt.num_D-1)) == 0 and epoch<self.opt.pg_niter+1:
-            new_lr = self.old_lr * self.opt.pg_lr_decay
-        if epoch > self.opt.niter:
-            if epoch-1 == self.opt.niter:
+        if ((self.opt.pg_strategy != 0) and ((epoch % (self.opt.pg_niter // (self.opt.num_D - 1))) == 0) and (epoch < (self.opt.pg_niter + 1))):
+            new_lr = (self.old_lr * self.opt.pg_lr_decay)
+        if (epoch > self.opt.niter):
+            if ((epoch - 1) == self.opt.niter):
                 self.opt.lr = self.old_lr
-            lrd = self.opt.lr / self.opt.niter_decay
-            new_lr = self.old_lr - lrd
+            lrd = (self.opt.lr / self.opt.niter_decay)
+            new_lr = (self.old_lr - lrd)
         else:
             new_lr = self.old_lr
-
-        if new_lr != self.old_lr:
+        if (new_lr != self.old_lr):
             if self.opt.no_TTUR:
                 new_lr_G = new_lr
                 new_lr_D = new_lr
             else:
-                new_lr_G = new_lr / 2
-                new_lr_D = new_lr * 2
-
+                new_lr_G = (new_lr / 2)
+                new_lr_D = (new_lr * 2)
             for param_group in self.optimizer_D.param_groups:
                 param_group['lr'] = new_lr_D
             for param_group in self.optimizer_G.param_groups:
                 param_group['lr'] = new_lr_G
-            print('update learning rate: %f -> %f' % (self.old_lr, new_lr))
+            print(('update learning rate: %f -> %f' % (self.old_lr, new_lr)))
             self.old_lr = new_lr
+

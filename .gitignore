@@ -2,3 +2,6 @@ SPADE_master/checkpoints
 SPADE_master/*.txt
 SPADE_master/results
 SPADE_master/log.txt
+SPADE_jittor/*.txt
+SPADE_jittor/results
+SPADE_jittor/checkpoints

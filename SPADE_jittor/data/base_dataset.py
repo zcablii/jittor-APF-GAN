@@ -3,14 +3,13 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
-import torch.utils.data as data
 from PIL import Image
-import torchvision.transforms as transforms
+import jittor.transform as transforms
+from jittor.dataset.dataset import Dataset
 import numpy as np
 import random
 
-
-class BaseDataset(data.Dataset):
+class BaseDataset(Dataset):
     def __init__(self):
         super(BaseDataset, self).__init__()
 
@@ -76,13 +75,13 @@ def get_transform(opt, params, method=Image.BICUBIC, normalize=True, toTensor=Tr
         transform_list += [transforms.ToTensor()]
 
     if normalize:
-        transform_list += [transforms.Normalize((0.5, 0.5, 0.5),
+        transform_list += [transforms.ImageNormalize((0.5, 0.5, 0.5),
                                                 (0.5, 0.5, 0.5))]
     return transforms.Compose(transform_list)
 
 
 def normalize():
-    return transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    return transforms.ImageNormalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 
 
 def __resize(img, w, h, method=Image.BICUBIC):

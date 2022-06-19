@@ -3,9 +3,10 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
-import torch.nn as nn
+import jittor as jt
+from jittor import init
+from jittor import nn
 import numpy as np
-import torch.nn.functional as F
 from models.networks.base_network import BaseNetwork
 from models.networks.normalization import get_nonspade_norm_layer
 import util.util as util
@@ -35,19 +36,23 @@ class MultiscaleDiscriminator(BaseNetwork):
         if self.opt.pg_strategy == 1:
             for i in range(opt.num_D):
                 subnetD = self.create_single_discriminator(opt, i)
-                self.add_module('multiscale_discriminator_%d' % i, subnetD)
+                exec('self.multiscale_discriminator_%d = subnetD' % i)
 
         elif self.opt.pg_strategy == 2:
             for i in range(self.num_mid_supervision_D):
                 subnetD = self.create_single_discriminator(opt)
-                self.add_module('mid_sup_discriminator_%d' % i, subnetD)
+                exec('self.mid_sup_discriminator_%d = subnetD' % i)
             for i in range(opt.num_D):
                 subnetD = self.create_single_discriminator(opt)
-                self.add_module('multiscale_discriminator_%d' % i, subnetD)
+                exec('self.multiscale_discriminator_%d = subnetD' % i)
+        
+        elif self.opt.pg_strategy == 3:
+            self.multiscale_discriminator= self.create_single_discriminator(opt, 3)
+
         else:
             for i in range(opt.num_D):
                 subnetD = self.create_single_discriminator(opt)
-                self.add_module('multiscale_discriminator_%d' % i, subnetD)
+                exec('self.multiscale_discriminator_%d = subnetD' % i)
         self.current_alpha = 0
             
 
@@ -60,13 +65,17 @@ class MultiscaleDiscriminator(BaseNetwork):
         return netD
 
     def downsample(self, input):
-        return F.avg_pool2d(input, kernel_size=3,
-                            stride=2, padding=[1, 1],
+        if self.opt.USE_AMP:
+            return jt.float16(nn.avg_pool2d(input, kernel_size=3,
+                            stride=2, padding=1,
+                            count_include_pad=False))
+        return nn.avg_pool2d(input, kernel_size=3,
+                            stride=2, padding=1,
                             count_include_pad=False)
 
     # Returns list of lists of discriminator outputs.
     # The final result is of size opt.num_D x opt.n_layers_D
-    def forward(self, input, epoch):
+    def execute(self, input, epoch):
         result = []
         get_intermediate_features = not self.opt.no_ganFeat_loss
 
@@ -86,10 +95,10 @@ class MultiscaleDiscriminator(BaseNetwork):
                 input = input[0]
                 assert input.shape[-1] == self.opt.crop_size
 
-        if self.opt.pg_strategy == 1:
+        elif self.opt.pg_strategy == 1:
             assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
             if epoch>=self.opt.pg_niter:
-                for i in range(self.opt.num_D,-1,-1):
+                for i in range(self.opt.num_D-1,-1,-1):
                     D = eval(f'self.multiscale_discriminator_{i}')
                     out = D(input)
                     if not get_intermediate_features:
@@ -122,7 +131,7 @@ class MultiscaleDiscriminator(BaseNetwork):
                         if ((epoch-1) % (self.opt.pg_niter//(self.opt.num_D - 1))) / (self.opt.pg_niter//(self.opt.num_D - 1)/2) - 1 <=0:
                             D = eval(f'self.multiscale_discriminator_{current_level+1}')
                             sub_D = eval(f'self.multiscale_discriminator_{current_level}')
-                            D.load_state_dict(sub_D.state_dict(), strict=False)
+                            D.load_state_dict(sub_D.state_dict())
                             if self.opt.one_pg_D:
                                 del sub_D
                            
@@ -142,6 +151,64 @@ class MultiscaleDiscriminator(BaseNetwork):
                             result.append(out)
                             input = self.downsample(input)
 
+        elif self.opt.pg_strategy == 3:
+            if type(input)==list:
+                input = input[0]
+            D = self.multiscale_discriminator
+            out = D(input)
+            if not get_intermediate_features:
+                out = [out]
+            result.append(out)
+
+        elif self.opt.pg_strategy == 4:
+            assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
+            if epoch>=self.opt.pg_niter:
+                for i in range(self.opt.num_D-1,-1,-1):
+                    D = eval(f'self.multiscale_discriminator_{i}')
+                    out = D(input)
+                    if not get_intermediate_features:
+                        out = [out]
+                    result.append(out)
+                    if self.opt.one_pg_D:
+                        break
+                    input = self.downsample(input)
+            else:
+                current_level = epoch // (self.opt.pg_niter//(self.opt.num_D - 1))
+                alpha = (epoch % (self.opt.pg_niter//(self.opt.num_D - 1))) / (self.opt.pg_niter//(self.opt.num_D - 1)/2) - 1
+                alpha = 0 if alpha<0 else alpha
+                relative_level = self.opt.num_D - current_level - 1
+                if relative_level > 0:
+                    if alpha == 0:
+                        assert len(input) == 1
+                        input = input[0]
+                        for i in range( current_level,-1,-1):
+                            D = eval(f'self.multiscale_discriminator_{i}')
+                            out = D(input)
+                            if not get_intermediate_features:
+                                out = [out]
+                            result.append(out)
+                            if self.opt.one_pg_D:
+                                break
+                            input = self.downsample(input)
+
+                    else:
+                        input = input[0]
+                        if ((epoch-1) % (self.opt.pg_niter//(self.opt.num_D - 1))) / (self.opt.pg_niter//(self.opt.num_D - 1)/2) - 1 <=0:
+                            D = eval(f'self.multiscale_discriminator_{current_level+1}')
+                            sub_D = eval(f'self.multiscale_discriminator_{current_level}')
+                            D.load_state_dict(sub_D.state_dict())
+                            if self.opt.one_pg_D:
+                                del sub_D
+                          
+                        for i in range( current_level+1,-1,-1):
+                            D = eval(f'self.multiscale_discriminator_{i}')
+                            out = D(input)
+                            if not get_intermediate_features:
+                                out = [out]
+                            result.append(out)
+                            if self.opt.one_pg_D:
+                                break
+                            input = self.downsample(input)
         else:
             for i in range(self.opt.num_D):
                 D = eval(f'self.multiscale_discriminator_{i}')
@@ -179,9 +246,9 @@ class NLayerDiscriminator(BaseNetwork):
 
 
         for n in range(level, -1, -1):
-            self.add_module('toRGB_extra' + str(n), nn.Sequential(nn.Conv2d(input_nc, nf, kernel_size=kw,
-                                                stride=1, padding=padw),
-                            nn.LeakyReLU(0.2, False)))
+            
+            exec('self.toRGB_extra%d = nn.Sequential(nn.Conv2d(input_nc, nf, kernel_size=kw,stride=1, padding=padw),nn.LeakyReLU(0.2))' % n)
+          
             nf = min(nf * 2, 512)
 
         nf = opt.ndf // (2**level)
@@ -191,7 +258,7 @@ class NLayerDiscriminator(BaseNetwork):
             stride = 1 if n == opt.n_layers_D - 1 else 2
             sequence += [[norm_layer(nn.Conv2d(nf_prev, nf, kernel_size=kw,
                                                stride=stride, padding=padw)),
-                          nn.LeakyReLU(0.2, False)
+                          nn.LeakyReLU(0.2)
                           ]]
 
         sequence += [[nn.Conv2d(nf, 1, kernel_size=kw, stride=1, padding=padw)]]
@@ -199,9 +266,9 @@ class NLayerDiscriminator(BaseNetwork):
 
         # We divide the layers into groups to extract intermediate layer outputs
         for n in range(level, 0, -1):
-            self.add_module('extra' + str(n), nn.Sequential(*sequence[level-n]))
+            exec('self.extra%d = nn.Sequential(*sequence[level-n])' % n)
         for n in range(level, len(sequence)):
-            self.add_module('model' + str(n-level), nn.Sequential(*sequence[n]))
+            exec('self.model%d = nn.Sequential(*sequence[n])' % (n-level))
 
     def compute_D_input_nc(self, opt):
         input_nc = opt.label_nc + opt.output_nc
@@ -212,10 +279,10 @@ class NLayerDiscriminator(BaseNetwork):
         return input_nc
     
 
-    def forward(self, input, alpha = 0): # id of extra level
+    def execute(self, input, alpha = 0): # id of extra level
         level = self.level
         if alpha > 0:
-            low_res = F.interpolate(input, scale_factor=0.5)
+            low_res = nn.interpolate(input, scale_factor=0.5)
             lowres_toRGB = eval(f'self.toRGB_extra{self.level-1}')
             highres_toRGB = eval(f'self.toRGB_extra{self.level}')
             extra_m = eval(f'self.extra{self.level}')
