@@ -24,9 +24,9 @@ class TrainOptions(BaseOptions):
         parser.add_argument('--niter', type=int, default=210, help=' # of iter at starting learning rate. This is NOT the total #epochs. Totla #epochs is niter*(growiong resolution scales) + fade_in_epochs*(growiong resolution scales -1) + niter_decay') 
         parser.add_argument('--pg_niter', type=int, default=180, help='# of iter uses mid supervision D') 
         parser.add_argument('--niter_decay', type=int, default=30, help=' # of iter to linearly decay learning rate to zero')
-        parser.add_argument('--pg_strategy', type=int, default=1, help=' 0 is ont using pg, 1 is classic pg, 2 is all then discard strategy')
+        parser.add_argument('--pg_strategy', type=int, default=1, help=' 0 is ont using pg, 1 is classic pg, 2 is all then discard strategy, 3 is using only one D for all pg resolutions, 4')
         parser.add_argument('--pg_lr_decay', type=int, default=1, help='learning rate decay at every resolution transition.') 
-        parser.add_argument('--diff_aug', type=str, default='', help='Diff augment policy')
+        parser.add_argument('--diff_aug', type=str, default='', help='Diff augment policy: color,crop,translation')
         
         parser.add_argument('--num_D', type=int, default=4,
                             help='number of discriminators to be used in multiscale') 

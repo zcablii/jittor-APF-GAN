@@ -44,6 +44,10 @@ class MultiscaleDiscriminator(BaseNetwork):
             for i in range(opt.num_D):
                 subnetD = self.create_single_discriminator(opt)
                 self.add_module('multiscale_discriminator_%d' % i, subnetD)
+
+        elif self.opt.pg_strategy == 3:
+            self.multiscale_discriminator= self.create_single_discriminator(opt, 3)
+
         else:
             for i in range(opt.num_D):
                 subnetD = self.create_single_discriminator(opt)
@@ -86,7 +90,7 @@ class MultiscaleDiscriminator(BaseNetwork):
                 input = input[0]
                 assert input.shape[-1] == self.opt.crop_size
 
-        if self.opt.pg_strategy == 1:
+        elif self.opt.pg_strategy == 1:
             assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
             if epoch>=self.opt.pg_niter:
                 for i in range(self.opt.num_D-1,-1,-1):
@@ -141,7 +145,64 @@ class MultiscaleDiscriminator(BaseNetwork):
                                 out = [out]
                             result.append(out)
                             input = self.downsample(input)
+        elif self.opt.pg_strategy == 3:
+            if type(input)==list:
+                input = input[0]
+            D = self.multiscale_discriminator
+            out = D(input)
+            if not get_intermediate_features:
+                out = [out]
+            result.append(out)
 
+        elif self.opt.pg_strategy == 4:
+            assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
+            if epoch>=self.opt.pg_niter:
+                for i in range(self.opt.num_D-1,-1,-1):
+                    D = eval(f'self.multiscale_discriminator_{i}')
+                    out = D(input)
+                    if not get_intermediate_features:
+                        out = [out]
+                    result.append(out)
+                    if self.opt.one_pg_D:
+                        break
+                    input = self.downsample(input)
+            else:
+                current_level = epoch // (self.opt.pg_niter//(self.opt.num_D - 1))
+                alpha = (epoch % (self.opt.pg_niter//(self.opt.num_D - 1))) / (self.opt.pg_niter//(self.opt.num_D - 1)/2) - 1
+                alpha = 0 if alpha<0 else alpha
+                relative_level = self.opt.num_D - current_level - 1
+                if relative_level > 0:
+                    if alpha == 0:
+                        assert len(input) == 1
+                        input = input[0]
+                        for i in range( current_level,-1,-1):
+                            D = eval(f'self.multiscale_discriminator_{i}')
+                            out = D(input)
+                            if not get_intermediate_features:
+                                out = [out]
+                            result.append(out)
+                            if self.opt.one_pg_D:
+                                break
+                            input = self.downsample(input)
+
+                    else:
+                        input = input[0]
+                        if ((epoch-1) % (self.opt.pg_niter//(self.opt.num_D - 1))) / (self.opt.pg_niter//(self.opt.num_D - 1)/2) - 1 <=0:
+                            D = eval(f'self.multiscale_discriminator_{current_level+1}')
+                            sub_D = eval(f'self.multiscale_discriminator_{current_level}')
+                            D.load_state_dict(sub_D.state_dict())
+                            if self.opt.one_pg_D:
+                                del sub_D
+                           
+                        for i in range( current_level+1,-1,-1):
+                            D = eval(f'self.multiscale_discriminator_{i}')
+                            out = D(input)
+                            if not get_intermediate_features:
+                                out = [out]
+                            result.append(out)
+                            if self.opt.one_pg_D:
+                                break
+                            input = self.downsample(input)
         else:
             for i in range(self.opt.num_D):
                 D = eval(f'self.multiscale_discriminator_{i}')

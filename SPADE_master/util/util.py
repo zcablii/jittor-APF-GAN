@@ -3,6 +3,7 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
+from email.policy import strict
 import re
 import importlib
 import torch
@@ -307,7 +308,7 @@ def load_network(net, label, epoch, opt):
     save_dir = os.path.join(opt.checkpoints_dir, opt.name)
     save_path = os.path.join(save_dir, save_filename)
     weights = torch.load(save_path)
-    net.load_state_dict(weights)
+    net.load_state_dict(weights,strict=False)
     return net
 
 
