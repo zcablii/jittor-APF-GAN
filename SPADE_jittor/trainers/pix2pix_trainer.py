@@ -20,20 +20,15 @@ class Pix2PixTrainer():
     def run_generator_one_step(self, data, epoch):
         self.optimizer_G.zero_grad()
         (g_losses, generated) = self.pix2pix_model(data, epoch, mode='generator')
-        # with jt.flag_scope(auto_mixed_precision_level=5):
-        #     (g_losses, generated) = self.pix2pix_model(data, epoch, mode='generator')
-        g_loss = sum(g_losses.values()).mean()
+        g_loss = sum(g_losses.values()).mean().float_auto()
         self.optimizer_G.step(g_loss)
         self.g_losses = g_losses
         self.generated = generated
 
     def run_discriminator_one_step(self, data, epoch):
-        # print('run_discriminator_one_step is ok',data )
         self.optimizer_D.zero_grad()
         d_losses = self.pix2pix_model(data, epoch, mode='discriminator')
-        # with jt.flag_scope(auto_mixed_precision_level=5):
-        #     d_losses = self.pix2pix_model(data, epoch, mode='discriminator')
-        d_loss = sum(d_losses.values()).mean()
+        d_loss = sum(d_losses.values()).mean().float_auto()
         self.optimizer_D.step(d_loss)
         self.d_losses = d_losses
 

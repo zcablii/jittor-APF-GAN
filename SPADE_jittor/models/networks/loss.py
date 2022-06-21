@@ -108,7 +108,7 @@ class VGGLoss(nn.Module):
         x_vgg, y_vgg = self.vgg(x), self.vgg(y)
         loss = 0
         for i in range(len(x_vgg)):
-            l1_loss = jt.abs(jt.float32(x_vgg[i] - y_vgg[i].detach())).float_auto().mean()
+            l1_loss = jt.abs(jt.float32(x_vgg[i] - y_vgg[i].detach())).mean().float_auto()
             loss += self.weights[i] * l1_loss
         return loss
 
@@ -123,7 +123,7 @@ class InceptionLoss(nn.Module):
         x_inception, y_inception = self.inception(x), self.inception(y)
         loss = 0
         for i in range(len(x_inception)):
-            l1_loss = jt.abs(jt.float32(x_inception[i] - y_inception[i].detach())).float_auto().mean()
+            l1_loss = jt.abs(jt.float32(x_inception[i] - y_inception[i].detach())).mean().float_auto()
             loss += self.weights[i] * l1_loss
         return loss
 

@@ -43,9 +43,7 @@ class ConvEncoder(BaseNetwork):
 
     def execute(self, x):
         if self.opt.encode_mask:
-            # print('qwe',x.shape,x) #OK
             x = self.layer1(x)
-            # print('qwe2',x.shape,x) # error
             x = self.layer2(nn.leaky_relu(x,0.2))
             x = self.layer3(nn.leaky_relu(x,0.2))
             x = self.layer4(nn.leaky_relu(x,0.2))
