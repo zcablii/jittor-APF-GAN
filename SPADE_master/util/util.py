@@ -59,7 +59,7 @@ def rand_crop(img, fake,label, strength=0.5):
     label_large = F.interpolate(label, size=size, mode='nearest')
     _, _, h_large, w_large = img_large.size()
     h_start, w_start = random.randint(0, (h_large - h)), random.randint(0, (w_large - w))
-    print(h_start, w_start)
+    # print(h_start, w_start)
     img_crop = img_large[:, :, h_start:h_start+h, w_start:w_start+w]
     fake_crop = fake_large[:, :, h_start:h_start+h, w_start:w_start+w]
     label_crop = label_large[:, :, h_start:h_start+h, w_start:w_start+w]

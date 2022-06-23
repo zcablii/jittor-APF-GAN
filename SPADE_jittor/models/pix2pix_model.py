@@ -108,28 +108,18 @@ class Pix2PixModel(nn.Module):
 
     def preprocess_input(self, data):
         # move to GPU and change data types
-        # print(self.opt.USE_AMP)
-        # print("data['image'] is ok", data['image'])
         data['label'] = data['label'].float_auto()
         
         # create one-hot label map
         label_map = data['label']
-        # print('label_map is ok', label_map)
         bs, _, h, w = label_map.size()
         nc = self.opt.label_nc + 1 if self.opt.contain_dontcare_label \
             else self.opt.label_nc
             
-        # if self.opt.USE_AMP:
-        #     input_label = jt.zeros((bs,nc,h,w),dtype='float16')
-        # else:
-        #     input_label = jt.zeros((bs,nc,h,w),dtype='float32')
         input_label = jt.zeros((bs,nc,h,w)).float_auto()
-        test_var = jt.randn(4,4).float32()
-        # print('test_var',test_var)
-        # print('input_label is ok', input_label)
-        input_semantics = input_label.scatter_(1, label_map, jt.array(1.0).float_auto())
-        # print('input_semantics is ok', input_semantics)
 
+        input_semantics = input_label.scatter_(1, label_map, jt.array(1.0).float_auto())
+ 
         # concatenate instance map if it exists
         if not self.opt.no_instance:
             inst_map = data['instance']
@@ -140,32 +130,24 @@ class Pix2PixModel(nn.Module):
         
 
     def compute_generator_loss(self, input_semantics, real_image, epoch):
-        # print('compute_generator_loss')
+
         G_losses = {}
         (fake_image, KLD_loss) = self.generate_fake(input_semantics, real_image, epoch, compute_kld_loss=self.opt.use_vae)
         if (self.opt.use_vae and (KLD_loss is not None)):
             G_losses['KLD'] = KLD_loss
         (pred_fake, pred_real) = self.discriminate(input_semantics, fake_image, real_image, epoch)
         G_losses['GAN'] = self.criterionGAN(pred_fake, True, for_discriminator=False)
-        # print('------------')
-        # print('fake_image is ok',fake_image) # return f"jt.Var({v.data}, dtype={v.dtype})" runtimeError
-        # print('=========')
-        # print(pred_fake[0][0]) # return f"jt.Var({v.data}, dtype={v.dtype})" runtimeError
+
         if (not self.opt.no_ganFeat_loss):
             num_D = len(pred_fake)
             GAN_Feat_loss = self.FloatTensor(0)
-            # print('GAN_Feat_loss_0 is ok', GAN_Feat_loss)
             for i in range(num_D):
                 num_intermediate_outputs = (len(pred_fake[i]) - 1)
                 for j in range(num_intermediate_outputs):
-                    # print('pred_fake[i][j] is ok', pred_fake[i][j])
-                    # print('pred_real[i][j] is ok', pred_real[i][j])
-                    unweighted_loss = jt.abs(jt.float32(pred_fake[i][j]-pred_real[i][j].detach())).float_auto().mean()
-                    # unweighted_loss = self.criterionFeat(pred_fake[i][j].float32(), pred_real[i][j].float32().detach())
-                    # print(type(unweighted_loss), unweighted_loss.dtype)
-                    # print('unweighted_loss is ok', unweighted_loss)
+                    unweighted_loss = jt.abs(jt.float32(pred_fake[i][j]-pred_real[i][j].detach())).mean().float_auto()
+            
                     GAN_Feat_loss += ((unweighted_loss * self.opt.lambda_feat) / num_D)
-            # print('GAN_Feat_loss is ok', GAN_Feat_loss)
+        
             G_losses['GAN_Feat'] = GAN_Feat_loss
         if (not self.opt.no_vgg_loss):
             if (type(fake_image) == list):
@@ -174,15 +156,11 @@ class Pix2PixModel(nn.Module):
             real_image = nn.interpolate(real_image, img_shape)
             if self.opt.inception_loss:
                 G_losses['Inception'] = (self.criterionVGG(fake_image, real_image) * self.opt.lambda_vgg)
-                # print("G_losses['Inception'] is ok", G_losses['Inception'] )
             else:
                 G_losses['VGG'] = (self.criterionVGG(fake_image, real_image) * self.opt.lambda_vgg)
-        #         print("G_losses['VGG'] is ok", G_losses['VGG'] )
-        # print('G_losses is ok',G_losses)
         return (G_losses, fake_image)
 
     def compute_discriminator_loss(self, input_semantics, real_image, epoch):
-        # print('compute_discriminator_loss')
         D_losses = {}
         with jt.no_grad():
             (fake_image, _) = self.generate_fake(input_semantics, real_image, epoch)
@@ -195,7 +173,6 @@ class Pix2PixModel(nn.Module):
         (pred_fake, pred_real) = self.discriminate(input_semantics, fake_image, real_image, epoch)
         D_losses['D_Fake'] = self.criterionGAN(pred_fake, False, for_discriminator=True)
         D_losses['D_real'] = self.criterionGAN(pred_real, True, for_discriminator=True)
-        # print('D_losses is ok', D_losses)
         return D_losses
 
     def encode_z(self, real_image):
@@ -204,13 +181,8 @@ class Pix2PixModel(nn.Module):
         return (z, mu, logvar)
 
     def encode_m(self, mask):
-        # print('mask.dtype', mask.dtype)
-        # print('mask is ok', mask)
         z = self.netE(mask)
-        # print('self.netE.layer1.weight.dtype', self.netE.fc_mu.weight.dtype)
-        # print('self.netG.layer1.weight.dtype', self.netG.out_conv_img.weight.dtype)
-        # print(z.dtype)
-        # print('z is ok',z[0][0][0])
+
         return z
 
     def generate_fake(self, input_semantics, real_image, epoch=0, compute_kld_loss=False):
@@ -223,12 +195,8 @@ class Pix2PixModel(nn.Module):
                 (z, mu, logvar) = self.encode_z(real_image)
                 if compute_kld_loss:
                     KLD_loss = (self.KLDLoss(mu, logvar) * self.opt.lambda_kld)
-        # print('------input_semantics:------') 
-        # print(input_semantics, real_image)  # ok
-        # print('------Z:------')          
-        # print('z is ok',z)
+
         fake_image = self.netG(input_semantics, epoch, z=z)
-        # print('fake_image is ok', fake_image)
         assert ((not compute_kld_loss) or self.opt.use_vae), 'You cannot compute KLD loss if opt.use_vae == False'
         return (fake_image, KLD_loss)
 
@@ -255,21 +223,8 @@ class Pix2PixModel(nn.Module):
             fake_and_real = []
             for i in range(len(fake_concat)):
                 fake_and_real.append(jt.contrib.concat([fake_concat[i], real_concat[i]], dim=0))
-       
-        # print('fake_and_real.dtype', fake_and_real.dtype)
-        # # print(self.netD.multiscale_discriminator_0.model0)
-        # print('self.netD.layer1.weight.dtype', self.netD.multiscale_discriminator_1.toRGB_extra0[0].weight.dtype)
-        # print( self.netD.multiscale_discriminator_0.toRGB_extra0[0].weight.dtype,
-        #     self.netD.multiscale_discriminator_0.model0[0][0].weight.dtype,
-        #     self.netD.multiscale_discriminator_0.model1[0][0].weight.dtype,
-        #     self.netD.multiscale_discriminator_0.model2[0][0].weight.dtype,
-        #     self.netD.multiscale_discriminator_0.model3[0][0].weight.dtype,
-        #     self.netD.multiscale_discriminator_0.model4[0].weight.dtype,
-        
-        # )
-        # with jt.flag_scope(auto_mixed_precision_level=5):
+   
         discriminator_out = self.netD(fake_and_real, epoch)
-        # print('discriminator_out is ok',discriminator_out)
         (pred_fake, pred_real) = self.divide_pred(discriminator_out)
         return (pred_fake, pred_real)
 

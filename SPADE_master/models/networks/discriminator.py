@@ -93,7 +93,7 @@ class MultiscaleDiscriminator(BaseNetwork):
         elif self.opt.pg_strategy == 1:
             assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
             if epoch>=self.opt.pg_niter:
-                for i in range(self.opt.num_D-1,-1,-1):
+                for i in range(self.opt.num_D): # empirical working version
                     D = eval(f'self.multiscale_discriminator_{i}')
                     out = D(input)
                     if not get_intermediate_features:
@@ -249,7 +249,7 @@ class NLayerDiscriminator(BaseNetwork):
         for n in range(level + opt.n_layers_D):
             nf_prev = nf
             nf = min(nf * 2, 512)
-            stride = 1 if n == opt.n_layers_D - 1 else 2
+            stride = 1 if n == level + opt.n_layers_D - 1 else 2
             sequence += [[norm_layer(nn.Conv2d(nf_prev, nf, kernel_size=kw,
                                                stride=stride, padding=padw)),
                           nn.LeakyReLU(0.2, False)
