@@ -98,7 +98,7 @@ class MultiscaleDiscriminator(BaseNetwork):
         elif self.opt.pg_strategy == 1:
             assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
             if epoch>=self.opt.pg_niter:
-                for i in range(self.opt.num_D-1,-1,-1):
+                for i in range(self.opt.num_D): # empirical working version
                     D = eval(f'self.multiscale_discriminator_{i}')
                     out = D(input)
                     if not get_intermediate_features:
