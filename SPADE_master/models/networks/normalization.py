@@ -107,7 +107,7 @@ def get_2d_sincos_pos_embed(embed_dim, grid_h_sz, grid_w_sz):
 # |norm_nc|: the #channels of the normalized activations, hence the output dim of SPADE
 # |label_nc|: the #channels of the input semantic map, hence the input dim of SPADE
 class SPADE(nn.Module):
-    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False, add_noise = False):
+    def __init__(self, config_text, norm_nc, label_nc, use_pos=False, use_pos_proj=False, add_noise = False, opt=None):
         super().__init__()
 
         assert config_text.startswith('spade')
@@ -127,6 +127,12 @@ class SPADE(nn.Module):
         self.add_noise = add_noise
         self.use_pos = use_pos
         self.use_pos_proj = use_pos_proj
+        if opt.use_seg_noise:
+            k = opt.use_seg_noise_kernel
+            self.seg_noise_var = nn.Conv2d(label_nc, norm_nc, k, padding=(k-1)//2)
+            self.seg_noise_var.weight.data.fill_(0)
+            self.seg_noise_var.bias.data.fill_(0)
+            print('use seg noise var!!!! initialize all 0, use kernel:', opt.use_seg_noise_kernel)
         # if use_pos:
         #     print('use_pos true!!!!!!!!')
         #     if use_pos_proj:
@@ -148,14 +154,21 @@ class SPADE(nn.Module):
         self.mlp_gamma = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
         self.mlp_beta = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
 
-    def forward(self, x, segmap):
+        self.opt = opt
 
+    def forward(self, x, segmap):
         # Part 1. generate parameter-free normalized activations
-        if self.add_noise:
+        if self.opt.use_seg_noise:
+            seg = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
+            noise = self.seg_noise_var(seg)
+            added_noise = (torch.randn(noise.shape[0], 1, noise.shape[2], noise.shape[3]).cuda() * noise)
+            normalized = self.param_free_norm(x + added_noise)
+        elif self.add_noise:
             added_noise = (torch.randn(x.shape[0], x.shape[3], x.shape[2], 1).cuda() * self.noise_var).transpose(1, 3)
             normalized = self.param_free_norm(x + added_noise)
         else: 
             normalized = self.param_free_norm(x)
+
         # Part 2. produce scaling and bias conditioned on semantic map
         segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
         actv = self.mlp_shared(segmap)

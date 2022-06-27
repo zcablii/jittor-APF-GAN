@@ -188,7 +188,7 @@ class NLayerDiscriminator(BaseNetwork):
         for n in range(level + opt.n_layers_D):
             nf_prev = nf
             nf = min(nf * 2, 512)
-            stride = 1 if n == opt.n_layers_D - 1 else 2
+            stride = 1 if n == level + opt.n_layers_D - 1 else 2
             sequence += [[norm_layer(nn.Conv2d(nf_prev, nf, kernel_size=kw,
                                                stride=stride, padding=padw)),
                           nn.LeakyReLU(0.2, False)
