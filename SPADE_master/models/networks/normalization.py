@@ -1,7 +1,3 @@
-"""
-Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
-Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
-"""
 
 import re
 import numpy as np
@@ -133,6 +129,10 @@ class SPADE(nn.Module):
             self.seg_noise_var.weight.data.fill_(0)
             self.seg_noise_var.bias.data.fill_(0)
             print('use seg noise var!!!! initialize all 0, use kernel:', opt.use_seg_noise_kernel)
+        # if use_pos:
+        #     print('use_pos true!!!!!!!!')
+        #     if use_pos_proj:
+        #         print('use_pos_proj true!!!!!!!!')
 
         # The dimension of the intermediate embedding space. Yes, hardcoded.
         nhidden = 128
@@ -149,6 +149,7 @@ class SPADE(nn.Module):
         )
         self.mlp_gamma = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
         self.mlp_beta = nn.Conv2d(nhidden, norm_nc, kernel_size=ks, padding=pw)
+
         self.opt = opt
 
     def forward(self, x, segmap):
@@ -163,6 +164,7 @@ class SPADE(nn.Module):
             normalized = self.param_free_norm(x + added_noise)
         else: 
             normalized = self.param_free_norm(x)
+
         # Part 2. produce scaling and bias conditioned on semantic map
         segmap = F.interpolate(segmap, size=x.size()[2:], mode='nearest')
         actv = self.mlp_shared(segmap)
@@ -182,4 +184,4 @@ class SPADE(nn.Module):
         # apply scale and bias
         out = normalized * (1 + gamma) + beta
 
-        return out
+        return 
