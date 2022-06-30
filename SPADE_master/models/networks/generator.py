@@ -165,7 +165,7 @@ class SPADEGenerator(BaseNetwork):
                         results.append(F.tanh(mid_res))
 
 
-            if self.opt.isTrain and self.opt.pg_strategy==1:
+            if self.opt.isTrain and self.opt.pg_strategy in [1,3,4]:
                 assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
                
                 if epoch>=self.opt.pg_niter:
@@ -199,7 +199,7 @@ class SPADEGenerator(BaseNetwork):
                             results[0] = self.pg_merge(results[0], mid_res, alpha)
                     break
         
-        if self.opt.isTrain and self.opt.pg_strategy==1:
+        if self.opt.isTrain and self.opt.pg_strategy in [1,3,4]:
             if len(results) > 0:
                 return results  # list of rgb from low res to high
             else:

@@ -5,7 +5,8 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 
 import re
 import importlib
-import torch
+import jittor as jt
+from jittor import nn
 from argparse import Namespace
 import numpy as np
 from PIL import Image
@@ -14,7 +15,6 @@ import argparse
 import dill as pickle
 import util.coco
 import random
-import torch.nn.functional as F
 
 def DiffAugment(real_img, fake_img, label, policy=''):
     if policy:
@@ -26,36 +26,36 @@ def DiffAugment(real_img, fake_img, label, policy=''):
 
 
 def rand_brightness(real_img, fake_img, label, strength=1.):
-    real_img = real_img + (torch.rand(real_img.size(0), 1, 1, 1, dtype=real_img.dtype, device=real_img.device) - 0.5)*strength
-    fake_img = fake_img + (torch.rand(fake_img.size(0), 1, 1, 1, dtype=fake_img.dtype, device=fake_img.device) - 0.5)*strength
+    real_img = real_img + (jt.rand(real_img.size(0), 1, 1, 1, dtype=real_img.dtype, device=real_img.device) - 0.5)*strength
+    fake_img = fake_img + (jt.rand(fake_img.size(0), 1, 1, 1, dtype=fake_img.dtype, device=fake_img.device) - 0.5)*strength
     return real_img, fake_img, label
 
 
 def rand_saturation(real_img, fake_img, label):
     real_img_mean = real_img.mean(dim=1, keepdim=True)
-    real_img = (real_img - real_img_mean) * (torch.rand(real_img.size(0), 1, 1, 1, dtype=real_img.dtype, device=real_img.device) * 2) + real_img_mean
+    real_img = (real_img - real_img_mean) * (jt.rand(real_img.size(0), 1, 1, 1, dtype=real_img.dtype, device=real_img.device) * 2) + real_img_mean
     fake_img_mean = fake_img.mean(dim=1, keepdim=True)
-    fake_img = (fake_img - fake_img_mean) * (torch.rand(fake_img.size(0), 1, 1, 1, dtype=fake_img.dtype, device=fake_img.device) * 2) + fake_img_mean
+    fake_img = (fake_img - fake_img_mean) * (jt.rand(fake_img.size(0), 1, 1, 1, dtype=fake_img.dtype, device=fake_img.device) * 2) + fake_img_mean
     return real_img, fake_img, label
 
 
 def rand_contrast(real_img, fake_img, label):
     real_img_mean = real_img.mean(dim=[1, 2, 3], keepdim=True)
-    real_img = (real_img - real_img_mean) * (torch.rand(real_img.size(0), 1, 1, 1, dtype=real_img.dtype, device=real_img.device) + 0.5) + real_img_mean
+    real_img = (real_img - real_img_mean) * (jt.rand(real_img.size(0), 1, 1, 1, dtype=real_img.dtype, device=real_img.device) + 0.5) + real_img_mean
     fake_img_mean = fake_img.mean(dim=[1, 2, 3], keepdim=True)
-    fake_img = (fake_img - fake_img_mean) * (torch.rand(fake_img.size(0), 1, 1, 1, dtype=fake_img.dtype, device=fake_img.device) + 0.5) + fake_img_mean
+    fake_img = (fake_img - fake_img_mean) * (jt.rand(fake_img.size(0), 1, 1, 1, dtype=fake_img.dtype, device=fake_img.device) + 0.5) + fake_img_mean
     
     return real_img, fake_img, label
 
 def rand_crop(img, fake,label, strength=0.5):
     b, _, h, w = img.shape
     size = (h, w)
-    fake =  F.interpolate(fake, size=size, mode='bicubic')
-    label =  F.interpolate(label, size=size, mode='nearest')
+    fake =  nn.interpolate(fake, size=size, mode='bicubic')
+    label =  nn.interpolate(label, size=size, mode='nearest')
     size = (int(h*1.2), int(w*1.2))
-    img_large = F.interpolate(img, size=size, mode='bicubic')
-    fake_large = F.interpolate(fake, size=size, mode='bicubic')
-    label_large = F.interpolate(label, size=size, mode='nearest')
+    img_large = nn.interpolate(img, size=size, mode='bicubic')
+    fake_large = nn.interpolate(fake, size=size, mode='bicubic')
+    label_large = nn.interpolate(label, size=size, mode='nearest')
     _, _, h_large, w_large = img_large.size()
     h_start, w_start = random.randint(0, (h_large - h)), random.randint(0, (w_large - w))
     print(h_start, w_start)
@@ -63,46 +63,46 @@ def rand_crop(img, fake,label, strength=0.5):
     fake_crop = fake_large[:, :, h_start:h_start+h, w_start:w_start+w]
     label_crop = label_large[:, :, h_start:h_start+h, w_start:w_start+w]
     assert img_crop.size() == img.size()
-    is_crop = torch.rand([b, 1, 1, 1], device=img.device) < strength
-    img = torch.where(is_crop, img_crop, img)
-    fake = torch.where(is_crop, fake_crop, fake)
-    label = torch.where(is_crop, label_crop, label)
+    is_crop = jt.rand([b, 1, 1, 1], device=img.device) < strength
+    img = jt.where(is_crop, img_crop, img)
+    fake = jt.where(is_crop, fake_crop, fake)
+    label = jt.where(is_crop, label_crop, label)
     return img, fake,label
 
 
 def rand_translation(real_img, fake_img, label, ratio=0.125):
     x = real_img
     shift_x, shift_y = int(x.size(2) * ratio + 0.5), int(x.size(3) * ratio + 0.5)
-    translation_x = torch.randint(-shift_x, shift_x + 1, size=[x.size(0), 1, 1], device=x.device)
-    translation_y = torch.randint(-shift_y, shift_y + 1, size=[x.size(0), 1, 1], device=x.device)
-    grid_batch, grid_x, grid_y = torch.meshgrid(
-        torch.arange(x.size(0), dtype=torch.long, device=x.device),
-        torch.arange(x.size(2), dtype=torch.long, device=x.device),
-        torch.arange(x.size(3), dtype=torch.long, device=x.device),
+    translation_x = jt.randint(-shift_x, shift_x + 1, size=[x.size(0), 1, 1], device=x.device)
+    translation_y = jt.randint(-shift_y, shift_y + 1, size=[x.size(0), 1, 1], device=x.device)
+    grid_batch, grid_x, grid_y = jt.meshgrid(
+        jt.arange(x.size(0), dtype=jt.long, device=x.device),
+        jt.arange(x.size(2), dtype=jt.long, device=x.device),
+        jt.arange(x.size(3), dtype=jt.long, device=x.device),
     )
-    grid_x = torch.clamp(grid_x + translation_x + 1, 0, x.size(2) + 1)
-    grid_y = torch.clamp(grid_y + translation_y + 1, 0, x.size(3) + 1)
-    real_img_pad = F.pad(real_img, [1, 1, 1, 1, 0, 0, 0, 0])
+    grid_x = jt.clamp(grid_x + translation_x + 1, 0, x.size(2) + 1)
+    grid_y = jt.clamp(grid_y + translation_y + 1, 0, x.size(3) + 1)
+    real_img_pad = nn.pad(real_img, [1, 1, 1, 1, 0, 0, 0, 0])
     real_img = real_img_pad.permute(0, 2, 3, 1).contiguous()[grid_batch, grid_x, grid_y].permute(0, 3, 1, 2).contiguous()
-    fake_img_pad = F.pad(fake_img, [1, 1, 1, 1, 0, 0, 0, 0])
+    fake_img_pad = nn.pad(fake_img, [1, 1, 1, 1, 0, 0, 0, 0])
     fake_img = fake_img_pad.permute(0, 2, 3, 1).contiguous()[grid_batch, grid_x, grid_y].permute(0, 3, 1, 2).contiguous()
-    label_pad = F.pad(label, [1, 1, 1, 1, 0, 0, 0, 0])
+    label_pad = nn.pad(label, [1, 1, 1, 1, 0, 0, 0, 0])
     label = label_pad.permute(0, 2, 3, 1).contiguous()[grid_batch, grid_x, grid_y].permute(0, 3, 1, 2).contiguous()
     return real_img, fake_img, label
 
 
 # def rand_cutout(x, ratio=0.5):
 #     cutout_size = int(x.size(2) * ratio + 0.5), int(x.size(3) * ratio + 0.5)
-#     offset_x = torch.randint(0, x.size(2) + (1 - cutout_size[0] % 2), size=[x.size(0), 1, 1], device=x.device)
-#     offset_y = torch.randint(0, x.size(3) + (1 - cutout_size[1] % 2), size=[x.size(0), 1, 1], device=x.device)
-#     grid_batch, grid_x, grid_y = torch.meshgrid(
-#         torch.arange(x.size(0), dtype=torch.long, device=x.device),
-#         torch.arange(cutout_size[0], dtype=torch.long, device=x.device),
-#         torch.arange(cutout_size[1], dtype=torch.long, device=x.device),
+#     offset_x = jt.randint(0, x.size(2) + (1 - cutout_size[0] % 2), size=[x.size(0), 1, 1], device=x.device)
+#     offset_y = jt.randint(0, x.size(3) + (1 - cutout_size[1] % 2), size=[x.size(0), 1, 1], device=x.device)
+#     grid_batch, grid_x, grid_y = jt.meshgrid(
+#         jt.arange(x.size(0), dtype=jt.long, device=x.device),
+#         jt.arange(cutout_size[0], dtype=jt.long, device=x.device),
+#         jt.arange(cutout_size[1], dtype=jt.long, device=x.device),
 #     )
-#     grid_x = torch.clamp(grid_x + offset_x - cutout_size[0] // 2, min=0, max=x.size(2) - 1)
-#     grid_y = torch.clamp(grid_y + offset_y - cutout_size[1] // 2, min=0, max=x.size(3) - 1)
-#     mask = torch.ones(x.size(0), x.size(2), x.size(3), dtype=x.dtype, device=x.device)
+#     grid_x = jt.clamp(grid_x + offset_x - cutout_size[0] // 2, min=0, max=x.size(2) - 1)
+#     grid_y = jt.clamp(grid_y + offset_y - cutout_size[1] // 2, min=0, max=x.size(3) - 1)
+#     mask = jt.ones(x.size(0), x.size(2), x.size(3), dtype=x.dtype, device=x.device)
 #     mask[grid_batch, grid_x, grid_y] = 0
 #     x = x * mask.unsqueeze(1)
 #     return x
@@ -167,7 +167,7 @@ def tensor2im(image_tensor, imtype=np.uint8, normalize=True, tile=False):
             image_numpy.append(tensor2im(image_tensor[i], imtype, normalize))
         return image_numpy
 
-    if image_tensor.dim() == 4:
+    if len(image_tensor.shape) == 4:
         # transform each image in the batch
         images_np = []
         for b in range(image_tensor.size(0)):
@@ -181,9 +181,9 @@ def tensor2im(image_tensor, imtype=np.uint8, normalize=True, tile=False):
         else:
             return images_np
 
-    if image_tensor.dim() == 2:
+    if len(image_tensor.shape)  == 2:
         image_tensor = image_tensor.unsqueeze(0)
-    image_numpy = image_tensor.detach().cpu().float().numpy()
+    image_numpy = image_tensor.detach().float().numpy()
     if normalize:
         image_numpy = (np.transpose(image_numpy, (1, 2, 0)) + 1) / 2.0 * 255.0
     else:
@@ -295,25 +295,21 @@ def find_class_in_module(target_cls_name, module):
 
 
 def save_network(net, label, epoch, opt):
-    save_filename = '%s_net_%s.pth' % (epoch, label)
+    save_filename = '%s_net_%s.pkl' % (epoch, label)
     save_path = os.path.join(opt.checkpoints_dir, opt.name, save_filename)
-    torch.save(net.cpu().state_dict(), save_path)
-    if len(opt.gpu_ids) and torch.cuda.is_available():
-        net.cuda()
-
+    net.save(save_path)
 
 def load_network(net, label, epoch, opt):
-    save_filename = '%s_net_%s.pth' % (epoch, label)
+    save_filename = '%s_net_%s.pkl' % (epoch, label)
     save_dir = os.path.join(opt.checkpoints_dir, opt.name)
     save_path = os.path.join(save_dir, save_filename)
-    weights = torch.load(save_path)
-    net.load_state_dict(weights)
+    net.load(save_path)
     return net
 
 
 ###############################################################################
 # Code from
-# https://github.com/ycszen/pytorch-seg/blob/master/transform.py
+# https://github.com/ycszen/pyjt-seg/blob/master/transform.py
 # Modified so it complies with the Citscape label map colors
 ###############################################################################
 def uint82bin(n, count=8):
@@ -364,11 +360,11 @@ def labelcolormap(N):
 class Colorize(object):
     def __init__(self, n=35):
         self.cmap = labelcolormap(n)
-        self.cmap = torch.from_numpy(self.cmap[:n])
+        self.cmap = jt.from_numpy(self.cmap[:n])
 
     def __call__(self, gray_image):
         size = gray_image.size()
-        color_image = torch.ByteTensor(3, size[1], size[2]).fill_(0)
+        color_image = jt.ByteTensor(3, size[1], size[2]).fill_(0)
 
         for label in range(0, len(self.cmap)):
             mask = (label == gray_image[0]).cpu()

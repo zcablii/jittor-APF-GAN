@@ -4,7 +4,8 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 """
 
 import importlib
-import torch.utils.data
+import jittor
+from jittor.dataset.dataset import Dataset
 from data.base_dataset import BaseDataset
 
 
@@ -44,11 +45,10 @@ def create_dataloader(opt):
     instance.initialize(opt)
     print("dataset [%s] of size %d was created" %
           (type(instance).__name__, len(instance)))
-    dataloader = torch.utils.data.DataLoader(
-        instance,
-        batch_size=opt.batchSize,
-        shuffle=not opt.serial_batches,
-        num_workers=int(opt.nThreads),
-        drop_last=opt.isTrain
-    )
+    dataloader = instance.set_attrs(
+    batch_size=opt.batchSize,
+    shuffle= not opt.serial_batches,
+    num_workers=int(opt.nThreads),
+    drop_last=opt.isTrain)
+    
     return dataloader

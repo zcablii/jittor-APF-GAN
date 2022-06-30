@@ -3,3 +3,6 @@ SPADE_master/*.txt
 SPADE_master/results
 SPADE_master/log.txt
 *.pyc
+SPADE_jittor/*.txt
+SPADE_jittor/results
+SPADE_jittor/checkpoints

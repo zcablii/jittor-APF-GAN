@@ -2,14 +2,12 @@
 Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import jittor
+import jittor as jt
+from jittor import nn
 import torchvision
-import torch.nn.utils.spectral_norm as spectral_norm
-from models.networks.normalization import SPADE
-
+from models.networks.normalization import SPADE, spectral_norm
+from jittor import models
 
 # ResNet block that uses SPADE.
 # It differs from the ResNet block of pix2pixHD in that
@@ -45,7 +43,7 @@ class SPADEResnetBlock(nn.Module):
             self.norm_s = SPADE(spade_config_str, fin, opt.semantic_nc, use_pos=opt.use_pos, use_pos_proj=opt.use_pos_proj, add_noise = opt.add_noise)
     # note the resnet block with SPADE also takes in |seg|,
     # the semantic segmentation map as input
-    def forward(self, x, seg):
+    def execute(self, x, seg):
         x_s = self.shortcut(x, seg)
 
         dx = self.conv_0(self.actvn(self.norm_0(x, seg)))
@@ -63,7 +61,7 @@ class SPADEResnetBlock(nn.Module):
         return x_s
 
     def actvn(self, x):
-        return F.leaky_relu(x, 2e-1)
+        return nn.leaky_relu(x, 2e-1)
 
 
 # ResNet block used in pix2pixHD
@@ -81,22 +79,22 @@ class ResnetBlock(nn.Module):
             norm_layer(nn.Conv2d(dim, dim, kernel_size=kernel_size))
         )
 
-    def forward(self, x):
+    def execute(self, x):
         y = self.conv_block(x)
         out = x + y
         return out
 
 
 # VGG architecter, used for the perceptual loss using a pretrained VGG network
-class VGG19(torch.nn.Module):
+class VGG19(nn.Module):
     def __init__(self, requires_grad=False):
         super().__init__()
-        vgg_pretrained_features = torchvision.models.vgg19(pretrained=True).features
-        self.slice1 = torch.nn.Sequential()
-        self.slice2 = torch.nn.Sequential()
-        self.slice3 = torch.nn.Sequential()
-        self.slice4 = torch.nn.Sequential()
-        self.slice5 = torch.nn.Sequential()
+        vgg_pretrained_features = models.vgg19(pretrained=True).features
+        self.slice1 = nn.Sequential()
+        self.slice2 = nn.Sequential()
+        self.slice3 = nn.Sequential()
+        self.slice4 = nn.Sequential()
+        self.slice5 = nn.Sequential()
         for x in range(2):
             self.slice1.add_module(str(x), vgg_pretrained_features[x])
         for x in range(2, 7):
@@ -111,7 +109,7 @@ class VGG19(torch.nn.Module):
             for param in self.parameters():
                 param.requires_grad = False
 
-    def forward(self, X):
+    def execute(self, X):
         h_relu1 = self.slice1(X)
         h_relu2 = self.slice2(h_relu1)
         h_relu3 = self.slice3(h_relu2)
@@ -121,11 +119,11 @@ class VGG19(torch.nn.Module):
         return out
 
 
-class InceptionV3(torch.nn.Module):
+class InceptionV3(nn.Module):
     def __init__(self, requires_grad=False):
         super().__init__()
         r"""Get inception v3 layers"""
-        inception = torchvision.models.inception_v3(pretrained=True)
+        inception = models.inception_v3(pretrained=True)
         network = nn.Sequential(inception.Conv2d_1a_3x3,
                                 inception.Conv2d_2a_3x3,
                                 inception.Conv2d_2b_3x3,
@@ -156,7 +154,7 @@ class InceptionV3(torch.nn.Module):
             for param in self.parameters():
                 param.requires_grad = False
 
-    def forward(self, x):
+    def execute(self, x):
         r"""Extract perceptual features."""
         out = []
         for i, layer in enumerate(self.network):

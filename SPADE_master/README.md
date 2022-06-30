@@ -162,9 +162,19 @@ CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --batchSize=24 --label
 
 #### Progressive growing training
 
-CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --pg_strategy=1 ------niter=150 --pg_niter=120 --niter_decay=30 --num_D=3
+CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --pg_strategy=1 --niter=150 --pg_niter=120 --niter_decay=30 --num_D=3
 
 explain by example: if num_D=3, pg_niter=120, pg start with 128 pix, stabilise 128 for 30 eps, fade into 256 in 30 eps, stablilise 256 for 30 eps, fade into 512 for 30 eps. All other ongoing epochs are only for stabilising 512pix output. Add --lr=0.005 --pg_lr_decay=0.5 to use larger lr at lower reolution phase and lower lr at higher resolution phase.
+
+
+#### 54.68 script
+
+CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --pg_strategy=1 --niter=200 --pg_niter=180 --niter_decay=20 --num_D=4
+
+
+#### PG+inception loss+diffaug+logger training
+
+CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --niter=260 --pg_niter=180 --niter_decay=20 --pg_strategy=1 --num_D=4 --diff_aug='color,crop,translation' --inception_loss 
 
 #### Test
 

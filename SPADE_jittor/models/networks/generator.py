@@ -2,16 +2,14 @@
 Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
-
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import jittor as jt
+from jittor import init
+from jittor import nn
 from models.networks.base_network import BaseNetwork
 from models.networks.normalization import get_nonspade_norm_layer
 from models.networks.architecture import ResnetBlock as ResnetBlock
 from models.networks.architecture import SPADEResnetBlock as SPADEResnetBlock
 
-torch.backends.cudnn.benchmark = True
 class SPADEGenerator(BaseNetwork):
     @staticmethod
     def modify_commandline_options(parser, is_train):
@@ -48,21 +46,19 @@ class SPADEGenerator(BaseNetwork):
             W = opt.crop_size // 2**(self.layer_level+1)
             H = int(W / opt.aspect_ratio)
 
-            self.pos_emb_head = nn.Parameter(torch.zeros(1, 16 * nf, H, W), requires_grad=True).cuda()
-            self.pos_emb_middle = nn.Parameter(torch.zeros(1, 16 * nf, H*2, W*2), requires_grad=True).cuda()
+            self.pos_emb_head = nn.Parameter(jt.zeros(1, 16 * nf, H, W), requires_grad=True).cuda()
+            self.pos_emb_middle = nn.Parameter(jt.zeros(1, 16 * nf, H*2, W*2), requires_grad=True).cuda()
         self.head_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
         self.G_middle_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
-        # self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
+        self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
         for i in range(self.layer_level):
             if opt.use_interFeature_pos:
-                self.register_parameter('pos_emb_%d' % i, nn.Parameter(torch.zeros(1, int(2**(3-i) * nf), H*2**(i+2), W*2**(i+2), device="cuda"), requires_grad=True))
+                self.register_parameter('pos_emb_%d' % i, nn.Parameter(jt.zeros(1, int(2**(3-i) * nf), H*2**(i+2), W*2**(i+2), device="cuda"), requires_grad=True))
             if i < self.layer_level - self.opt.sr_scale:
-                self.add_module('up_%d' % i, SPADEResnetBlock(int(2**(4-i) * nf), int(2**(3-i) * nf), opt))
+                exec('self.up_%d = SPADEResnetBlock(int(2**(4-i) * nf), int(2**(3-i) * nf), opt)'% i)
             else:
                 norm_layer = get_nonspade_norm_layer(opt, opt.norm_G)
-                self.add_module('up_%d' % i, nn.Sequential(norm_layer(nn.ConvTranspose2d(int(2**(4-i) * nf), int(2**(3-i) * nf),
-                                                    kernel_size=3, stride=2,
-                                                    padding=1, output_padding=1)), nn.ReLU(False)))
+                exec('self.up_%d = nn.Sequential(norm_layer(nn.ConvTranspose2d(int(2**(4-i) * nf), int(2**(3-i) * nf), kernel_size=3, stride=2,padding=1, output_padding=1)), nn.ReLU(False))' % i)
             if i == self.layer_level - self.opt.sr_scale:
                 self.res_blocks = nn.Sequential(*[ResnetBlock(int(2**(3-i) * nf),
                                   norm_layer=norm_layer,
@@ -98,10 +94,10 @@ class SPADEGenerator(BaseNetwork):
         return sw, sh
     
     def pg_merge(self, low_res, high_res, alpha):
-        up_res =  F.interpolate(low_res, high_res.shape[-2:])
+        up_res =  nn.interpolate(low_res, high_res.shape[-2:])
         return high_res*alpha + up_res*(1-alpha)
 
-    def forward(self, input, epoch=0, z=None):
+    def execute(self, input, epoch=0, z=None):
         seg = input
         print_inf = False
         if self.cur_ep != epoch:
@@ -115,13 +111,13 @@ class SPADEGenerator(BaseNetwork):
             else:
                 # we sample z from unit normal and reshape the tensor
                 if z is None:
-                    z = torch.randn(input.size(0), self.opt.z_dim,
-                                    dtype=torch.float32, device=input.get_device())
+                    z = jt.randn(input.size(0), self.opt.z_dim,
+                                    dtype=jt.float32, device=input.get_device())
                 x = self.fc(z)
                 x = x.view(-1, 16 * self.opt.ngf, self.sh, self.sw)
         else:
             # we downsample segmap and run convolution
-            x = F.interpolate(seg, size=(self.sh, self.sw))
+            x = nn.interpolate(seg, size=(self.sh, self.sw))
             x = self.fc(x)
 
         x = self.head_0(x, seg)
@@ -129,7 +125,7 @@ class SPADEGenerator(BaseNetwork):
         x = self.up(x)
         x = self.G_middle_0(x, seg)
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_middle
-        # x = self.G_middle_1(x, seg) 
+        x = self.G_middle_1(x, seg) 
 
         # if self.opt.num_upsampling_layers == 'more' or \
         #    self.opt.num_upsampling_layers == 'most':
@@ -159,17 +155,18 @@ class SPADEGenerator(BaseNetwork):
                             print('del')
                         del self.inter_conv_img[self.opt.num_D - 1- lowest_D_level]
                     if self.layer_level - i - 2< self.num_mid_supervision_D and i < self.layer_level-1:
-                        mid_res = self.inter_conv_img[self.layer_level - i - 2](F.leaky_relu(x, 2e-1))
+                        mid_res = self.inter_conv_img[self.layer_level - i - 2](nn.leaky_relu(x, 2e-1))
                         if print_inf:
                             print('lowest_D_level: ', lowest_D_level,'inter D index: ',self.layer_level - i - 2, 'mid_res shape: ',mid_res.shape)
-                        results.append(F.tanh(mid_res))
+                        results.append(jt.tanh(mid_res))
 
 
-            if self.opt.isTrain and self.opt.pg_strategy==1:
+            if self.opt.isTrain and (self.opt.pg_strategy in [1,3,4]):
                 assert self.opt.pg_niter > 0 and self.opt.num_D - 1 > 0
                
                 if epoch>=self.opt.pg_niter:
                     if hasattr(self, 'inter_conv_img'):
+                        print('del inter_conv_img')
                         del self.inter_conv_img
                     continue
                 current_level = epoch // (self.opt.pg_niter//(self.opt.num_D - 1))
@@ -178,8 +175,8 @@ class SPADEGenerator(BaseNetwork):
                 relative_level = self.opt.num_D - current_level - 1
                 
                 if i == self.layer_level - relative_level - 1 and i + 1 - self.layer_level < 0:
-                    mid_res = self.inter_conv_img[self.opt.num_D - current_level - 2](F.leaky_relu(x, 2e-1))
-                    results.append(F.tanh(mid_res))
+                    mid_res = self.inter_conv_img[self.opt.num_D - current_level - 2](nn.leaky_relu(x, 2e-1))
+                    results.append(jt.tanh(mid_res))
                     if alpha>0:
                         # print('epoch,alpha', epoch,alpha)
                         if i+1 == self.layer_level - self.opt.sr_scale: 
@@ -192,23 +189,23 @@ class SPADEGenerator(BaseNetwork):
                             pos_emb = eval(f'self.pos_emb_{i+1}')
                             x = x + pos_emb
                         if self.opt.num_D - current_level - 3>=0:
-                            mid_res = F.tanh(self.inter_conv_img[self.opt.num_D - current_level - 3](F.leaky_relu(x, 2e-1)))
+                            mid_res = jt.tanh(self.inter_conv_img[self.opt.num_D - current_level - 3](nn.leaky_relu(x, 2e-1)))
                             results[0] = self.pg_merge(results[0], mid_res, alpha)
                         else:
-                            mid_res = F.tanh(self.out_conv_img(F.leaky_relu(x, 2e-1)))
+                            mid_res = jt.tanh(self.out_conv_img(nn.leaky_relu(x, 2e-1)))
                             results[0] = self.pg_merge(results[0], mid_res, alpha)
                     break
         
-        if self.opt.isTrain and self.opt.pg_strategy==1:
+        if self.opt.isTrain and (self.opt.pg_strategy in [1,3,4]):
             if len(results) > 0:
                 return results  # list of rgb from low res to high
             else:
-                x = self.out_conv_img(F.leaky_relu(x, 2e-1))
-                x = F.tanh(x)
+                x = self.out_conv_img(nn.leaky_relu(x, 2e-1))
+                x = jt.tanh(x)
                 return x
 
-        x = self.out_conv_img(F.leaky_relu(x, 2e-1))
-        x = F.tanh(x)
+        x = self.out_conv_img(nn.leaky_relu(x, 2e-1))
+        x = jt.tanh(x)
         if len(results)>0:
             results.append(x)
             return results
@@ -276,5 +273,5 @@ class Pix2PixHDGenerator(BaseNetwork):
 
         self.model = nn.Sequential(*model)
 
-    def forward(self, input, z=None):
+    def execute(self, input, z=None):
         return self.model(input)

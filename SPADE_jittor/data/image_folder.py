@@ -9,7 +9,10 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 # Modified the original code so that it also loads images from the current
 # directory as well as the subdirectories
 ###############################################################################
-import torch.utils.data as data
+import jittor as jt
+from jittor.dataset.dataset import Dataset
+from jittor import init
+from jittor import nn
 from PIL import Image
 import os
 
@@ -136,16 +139,14 @@ def default_loader(path):
     return Image.open(path).convert('RGB')
 
 
-class ImageFolder(data.Dataset):
+class ImageFolder(Dataset):
 
-    def __init__(self, root, transform=None, return_paths=False,
-                 loader=default_loader):
+    def __init__(self, root, transform=None, return_paths=False, loader=default_loader):
         imgs = make_dataset(root)
-        if len(imgs) == 0:
+        if (len(imgs) == 0):
             raise(RuntimeError("Found 0 images in: " + root + "\n"
                                "Supported image extensions are: " +
                                ",".join(IMG_EXTENSIONS)))
-
         self.root = root
         self.imgs = imgs
         self.transform = transform
@@ -155,10 +156,10 @@ class ImageFolder(data.Dataset):
     def __getitem__(self, index):
         path = self.imgs[index]
         img = self.loader(path)
-        if self.transform is not None:
+        if (self.transform is not None):
             img = self.transform(img)
         if self.return_paths:
-            return img, path
+            return (img, path)
         else:
             return img
 

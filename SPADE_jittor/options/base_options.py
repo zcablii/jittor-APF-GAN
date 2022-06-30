@@ -7,7 +7,6 @@ import sys
 import argparse
 import os
 from util import util
-import torch
 import models
 import data
 import pickle
@@ -20,7 +19,8 @@ class BaseOptions():
     def initialize(self, parser):
         # experiment specifics
         parser.add_argument('--name', type=str, default='label2img', help='name of the experiment. It decides where to store samples and models')
-
+        parser.add_argument('--USE_AMP', action='store_true', help='enable fp16')
+        parser.set_defaults(USE_AMP=False) 
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
         parser.add_argument('--model', type=str, default='pix2pix', help='which model to use')
@@ -92,6 +92,7 @@ class BaseOptions():
 
         # get the basic options
         opt, unknown = parser.parse_known_args()
+        print('opt',opt.model,opt)
 
         # modify model-related parser options
         model_name = opt.model
@@ -182,7 +183,7 @@ class BaseOptions():
             if id >= 0:
                 opt.gpu_ids.append(id)
         if len(opt.gpu_ids) > 0:
-            torch.cuda.set_device(opt.gpu_ids[0])
+            pass
 
         assert len(opt.gpu_ids) == 0 or opt.batchSize % len(opt.gpu_ids) == 0, \
             "Batch size %d is wrong. It must be a multiple of # GPUs %d." \

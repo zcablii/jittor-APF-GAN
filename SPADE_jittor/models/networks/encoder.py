@@ -3,9 +3,10 @@ Copyright (C) 2019 NVIDIA Corporation.  All rights reserved.
 Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 """
 
-import torch.nn as nn
+import jittor as jt
+from jittor import init
+from jittor import nn
 import numpy as np
-import torch.nn.functional as F
 from models.networks.base_network import BaseNetwork
 from models.networks.normalization import get_nonspade_norm_layer
 
@@ -40,29 +41,29 @@ class ConvEncoder(BaseNetwork):
         self.actvn = nn.LeakyReLU(0.2, False)
         self.opt = opt
 
-    def forward(self, x):
+    def execute(self, x):
         if self.opt.encode_mask:
             x = self.layer1(x)
-            x = self.layer2(self.actvn(x))
-            x = self.layer3(self.actvn(x))
-            x = self.layer4(self.actvn(x))
-            x = self.layer5(self.actvn(x))
-            x = self.layer6(self.actvn(x))
-            x = self.actvn(x)
+            x = self.layer2(nn.leaky_relu(x,0.2))
+            x = self.layer3(nn.leaky_relu(x,0.2))
+            x = self.layer4(nn.leaky_relu(x,0.2))
+            x = self.layer5(nn.leaky_relu(x,0.2))
+            x = self.layer6(nn.leaky_relu(x,0.2))
+            x = nn.leaky_relu(x,0.2)
 
             return x
         else:
             if x.size(2) != 256 or x.size(3) != 256:
-                x = F.interpolate(x, size=(256, 256), mode='bilinear', align_corners=False)
+                x = nn.interpolate(x, size=(256, 256), mode='bilinear', align_corners=False)
 
             x = self.layer1(x)
-            x = self.layer2(self.actvn(x))
-            x = self.layer3(self.actvn(x))
-            x = self.layer4(self.actvn(x))
-            x = self.layer5(self.actvn(x))
+            x = self.layer2(nn.leaky_relu(x,0.2))
+            x = self.layer3(nn.leaky_relu(x,0.2))
+            x = self.layer4(nn.leaky_relu(x,0.2))
+            x = self.layer5(nn.leaky_relu(x,0.2))
             if self.opt.crop_size >= 256:
-                x = self.layer6(self.actvn(x))
-            x = self.actvn(x)
+                x = self.layer6(nn.leaky_relu(x,0.2))
+            x = nn.leaky_relu(x,0.2)
 
             x = x.view(x.size(0), -1)
             mu = self.fc_mu(x)
