@@ -52,7 +52,7 @@ class SPADEGenerator(BaseNetwork):
             self.pos_emb_middle = nn.Parameter(torch.zeros(1, 16 * nf, H*2, W*2), requires_grad=True).cuda()
         self.head_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
         self.G_middle_0 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
-        # self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
+        self.G_middle_1 = SPADEResnetBlock(16 * nf, 16 * nf, opt)
         for i in range(self.layer_level):
             if opt.use_interFeature_pos:
                 self.register_parameter('pos_emb_%d' % i, nn.Parameter(torch.zeros(1, int(2**(3-i) * nf), H*2**(i+2), W*2**(i+2), device="cuda"), requires_grad=True))
@@ -129,7 +129,7 @@ class SPADEGenerator(BaseNetwork):
         x = self.up(x)
         x = self.G_middle_0(x, seg)
         if self.opt.use_interFeature_pos: x = x + self.pos_emb_middle
-        # x = self.G_middle_1(x, seg) 
+        x = self.G_middle_1(x, seg) 
 
         # if self.opt.num_upsampling_layers == 'more' or \
         #    self.opt.num_upsampling_layers == 'most':

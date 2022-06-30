@@ -23,8 +23,10 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(aspect_ratio=4/3)
         parser.set_defaults(display_winsize=256)
 
-        parser.add_argument('--remove_gray_imgs', action='store_true', help='ignore gray training imgs')
-        parser.set_defaults(remove_gray_imgs=True) 
+        parser.add_argument('--remove_hard_imgs', action='store_true', help='ignore gray training imgs')
+        parser.set_defaults(remove_hard_imgs=True) 
+        parser.add_argument('--remove_img_txt_path', type=str, default='./remove_130_imgs.txt',
+                            help='txt file of hard img names')
         parser.add_argument('--brightness', type=tuple, default=(1,1), help='training image brightness augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--contrast', type=tuple, default=(1,1), help='training image contrast augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--saturation', type=tuple, default=(1,1), help='training image saturation augment. Tuple of float (min, max) in range(0,inf)')
@@ -56,14 +58,14 @@ class CustomDataset(Pix2pixDataset):
 
     def get_paths(self, opt):
         label_dir = opt.label_dir
-        label_paths = make_dataset(label_dir, recursive=False, read_cache=True, remove_gray_imgs = opt.remove_gray_imgs,is_image=False)
+        label_paths = make_dataset(label_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,is_image=False,remove_img_txt_path=opt.remove_img_txt_path)
 
         image_dir = opt.image_dir
-        image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_gray_imgs = opt.remove_gray_imgs)
+        image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,remove_img_txt_path=opt.remove_img_txt_path)
 
         if len(opt.instance_dir) > 0:
             instance_dir = opt.instance_dir
-            instance_paths = make_dataset(instance_dir, recursive=False, read_cache=True, remove_gray_imgs = opt.remove_gray_imgs,is_image=False)
+            instance_paths = make_dataset(instance_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,is_image=False,remove_img_txt_path=opt.remove_img_txt_path)
         else:
             instance_paths = []
 
