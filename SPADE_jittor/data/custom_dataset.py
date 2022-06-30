@@ -23,7 +23,7 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(aspect_ratio=4/3)
         parser.set_defaults(display_winsize=256)
 
-        parser.add_argument('--remove_gray_imgs', action='store_false', help='ignore gray training imgs')
+        parser.add_argument('--remove_gray_imgs', action='store_true', help='ignore gray training imgs')
         parser.set_defaults(remove_gray_imgs=True) 
         parser.add_argument('--brightness', type=tuple, default=(1,1), help='training image brightness augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--contrast', type=tuple, default=(1,1), help='training image contrast augment. Tuple of float (min, max) in range(0,inf)')

@@ -23,7 +23,7 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(aspect_ratio=4/3)
         parser.set_defaults(display_winsize=256)
 
-        parser.add_argument('--remove_gray_imgs', action='store_false', help='ignore gray training imgs')
+        parser.add_argument('--remove_gray_imgs', action='store_true', help='ignore gray training imgs')
         parser.set_defaults(remove_gray_imgs=True) 
         parser.add_argument('--brightness', type=tuple, default=(1,1), help='training image brightness augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--contrast', type=tuple, default=(1,1), help='training image contrast augment. Tuple of float (min, max) in range(0,inf)')
@@ -43,7 +43,7 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(no_instance=True)
         parser.add_argument('--label_dir', type=str, default='../data/train/labels', required=True,
                             help='path to the directory that contains label images')
-        parser.add_argument('--image_dir', type=str, default='../data/train/imgs', required=True,
+        parser.add_argument('--image_dir', type=str, default='../data/train/imgs',
                             help='path to the directory that contains photo images')
         parser.add_argument('--instance_dir', type=str, default='',
                             help='path to the directory that contains instance maps. Leave black if not exists')
@@ -58,8 +58,11 @@ class CustomDataset(Pix2pixDataset):
         label_dir = opt.label_dir
         label_paths = make_dataset(label_dir, recursive=False, read_cache=True, remove_gray_imgs = opt.remove_gray_imgs,is_image=False)
 
-        image_dir = opt.image_dir
-        image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_gray_imgs = opt.remove_gray_imgs)
+        if not opt.isTrain:
+            image_paths = label_paths
+        else:
+            image_dir = opt.image_dir
+            image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_gray_imgs = opt.remove_gray_imgs)
 
         if len(opt.instance_dir) > 0:
             instance_dir = opt.instance_dir

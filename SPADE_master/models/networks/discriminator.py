@@ -111,7 +111,7 @@ class MultiscaleDiscriminator(BaseNetwork):
                     if alpha == 0:
                         assert len(input) == 1
                         input = input[0]
-                        for i in range( current_level,-1,-1):
+                        for i in range( current_level,-1,-1): # range( current_level+1)
                             D = eval(f'self.multiscale_discriminator_{i}')
                             out = D(input)
                             if not get_intermediate_features:
@@ -136,7 +136,7 @@ class MultiscaleDiscriminator(BaseNetwork):
                             out = [out]
                         result.append(out)
                         input = self.downsample(input)
-                        for i in range( current_level,-1,-1):
+                        for i in range( current_level,-1,-1): # range( current_level+1)
                             if self.opt.one_pg_D:
                                 break
                             D = eval(f'self.multiscale_discriminator_{i}')
