@@ -32,7 +32,7 @@ class TrainOptions(BaseOptions):
                             help='number of discriminators to be used in multiscale') 
         parser.add_argument('--one_pg_D', action='store_true', help='Only use one last D in pg training')
         parser.set_defaults(one_pg_D=False) 
-        
+        parser.add_argument('--reverse_map_D', action='store_true', help='Only use one last D in pg training')
 
         parser.add_argument('--optimizer', type=str, default='adam')
         parser.add_argument('--beta1', type=float, default=0.0, help='momentum term of adam')
