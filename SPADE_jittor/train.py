@@ -89,7 +89,7 @@ for epoch in iter_counter.training_epochs():
             visualizer.print_current_errors(epoch, iter_counter.epoch_iter, losses, iter_counter.time_per_iter,extra=msg)
             visualizer.plot_current_errors(losses, iter_counter.total_steps_so_far)
             print(('saving the lowest GAN_Feat loss model (epoch %d, total_steps %d)' % (epoch, iter_counter.total_steps_so_far)))
-            trainer.save('%d_GAN_Feat'%(epoch))
+            trainer.save('GAN_Feat')
             iter_counter.record_current_iter()
         if ep_acc_VGG_loss < glb_VGG_loss:
             glb_VGG_loss = ep_acc_VGG_loss
@@ -97,7 +97,7 @@ for epoch in iter_counter.training_epochs():
             visualizer.print_current_errors(epoch, iter_counter.epoch_iter, losses, iter_counter.time_per_iter,extra=msg)
             visualizer.plot_current_errors(losses, iter_counter.total_steps_so_far)
             print(('saving the lowest perceptual loss model (epoch %d, total_steps %d)' % (epoch, iter_counter.total_steps_so_far)))
-            trainer.save('%d_perceptual'%(epoch))
+            trainer.save('perceptual')
             iter_counter.record_current_iter()
         if ep_acc_GAN_Feat_perceptual < glb_GAN_Feat_perceptual:
             glb_GAN_Feat_perceptual = ep_acc_GAN_Feat_perceptual
@@ -105,7 +105,7 @@ for epoch in iter_counter.training_epochs():
             visualizer.print_current_errors(epoch, iter_counter.epoch_iter, losses, iter_counter.time_per_iter,extra=msg)
             visualizer.plot_current_errors(losses, iter_counter.total_steps_so_far)
             print(('saving the lowest GAN_Feat + perceptual loss model (epoch %d, total_steps %d)' % (epoch, iter_counter.total_steps_so_far)))
-            trainer.save('%d_GAN_Feat_percpt'%(epoch))
+            trainer.save('GAN_Feat_percpt')
             iter_counter.record_current_iter()
 
     if jt.rank==0 and (epoch % opt.save_epoch_freq == 0 or \
