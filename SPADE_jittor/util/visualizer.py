@@ -146,7 +146,7 @@ class Visualizer():
         ims = []
         txts = []
         links = []
-
+        util.mkdirs(self.opt.out_path)
         for label, image_numpy in visuals.items():
             image_name = os.path.join('%s.jpg' % (name))
             save_path = os.path.join(self.opt.out_path, image_name)
