@@ -139,7 +139,6 @@ class Visualizer():
     def save_images(self, webpage, visuals, image_path):        
         visuals = self.convert_visuals_to_numpy(visuals)        
         
-        image_dir = webpage.get_image_dir()
         short_path = ntpath.basename(image_path[0])
         name = os.path.splitext(short_path)[0]
 
@@ -149,8 +148,8 @@ class Visualizer():
         links = []
 
         for label, image_numpy in visuals.items():
-            image_name = os.path.join(label, '%s.jpg' % (name))
-            save_path = os.path.join(image_dir, image_name)
+            image_name = os.path.join('%s.jpg' % (name))
+            save_path = os.path.join(self.opt.out_path, image_name)
             if 'input_label' == label:
                 util.save_image(image_numpy, save_path, create_dir=True, is_img = False)
             else:

@@ -424,11 +424,6 @@ class SPADE(nn.Module):
             self.seg_noise_var = nn.Conv2d(label_nc, norm_nc, k, padding=(k-1)//2)
             init.constant_(self.seg_noise_var.weight, 0.0)
             init.constant_(self.seg_noise_var.bias, 0.0)
-            print('use seg noise var!!!! initialize all 0, use kernel:', opt.use_seg_noise_kernel)
-        # if use_pos:
-        #     print('use_pos true!!!!!!!!')
-        #     if use_pos_proj:
-        #         print('use_pos_proj true!!!!!!!!')
 
         # The dimension of the intermediate embedding space. Yes, hardcoded.
         nhidden = 128

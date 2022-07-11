@@ -15,6 +15,8 @@ from jittor import init
 from jittor import nn
 from PIL import Image
 import os
+import cv2
+import numpy as np
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
@@ -213,7 +215,10 @@ def make_dataset(dir, recursive=False, read_cache=False, write_cache=False, remo
 
 
 def default_loader(path):
-    return Image.open(path).convert('RGB')
+    img_B = Image.open(path)
+    img_B = np.array(img_B).astype("uint8")
+    img_B = cv2.cvtColor(img_B, cv2.COLOR_BGR2RGB)
+    return img_B
 
 
 class ImageFolder(Dataset):

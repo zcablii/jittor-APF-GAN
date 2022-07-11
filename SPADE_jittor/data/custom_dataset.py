@@ -43,8 +43,12 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(cache_filelist_write=True)
 
         parser.set_defaults(no_instance=True)
-        parser.add_argument('--label_dir', type=str, default='../data/train/labels', required=True,
+        parser.add_argument('--label_dir', type=str, default='../data/train/labels',
                             help='path to the directory that contains label images')
+        
+        parser.add_argument('--input_path', type=str, default='',
+                            help='path to the directory that contains label images')
+
         parser.add_argument('--image_dir', type=str, default='../data/train/imgs',
                             help='path to the directory that contains photo images')
         parser.add_argument('--instance_dir', type=str, default='',
@@ -57,6 +61,8 @@ class CustomDataset(Pix2pixDataset):
 
 
     def get_paths(self, opt):
+        if len(opt.input_path)>0:
+            opt.label_dir = opt.input_path
         label_dir = opt.label_dir
         label_paths = make_dataset(label_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,is_image=False,remove_img_txt_path=opt.remove_img_txt_path)
 
