@@ -1,4 +1,4 @@
-# Semantic Image Synthesis with PG-SPADE
+# Semantic Image Synthesis with PG-SPADE (Jittor implementation)
 
 ![1656585143029](image/README/1656585143029.png)
 
@@ -138,6 +138,10 @@ CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/t
 
 CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --niter=340 --pg_niter=240 --niter_decay=20 --pg_strategy=1 --num_D=4 --diff_aug='color,crop,translation' --inception_loss --use_seg_noise --continue_train --which_epoch=240
 
-#### Test
+## Test
 
-CUDA_VISIBLE_DEVICES=0 python test.py --name='label2img' --batchSize=32 --label_dir='../data/eval/gray_label' --image_dir='../data/eval/gray_label'
+CUDA_VISIBLE_DEVICES=0 python test.py --name='label2img' --batchSize=32 --label_dir='../data/eval/gray_label'
+
+###### Test with pure label replacement
+
+CUDA_VISIBLE_DEVICES=0 python test.py --name='label2imgpretrain_280_finetun' --label_dir='../../CGAN/data/test/gray_label' --batchSize=40 --use_seg_noise --use_pure --train_img_ref_path='../../CGAN/data/train/imgs/' --train_label_ref_path='../../CGAN/data/train/labels/' --which_epoch=340

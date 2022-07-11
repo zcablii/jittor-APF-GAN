@@ -45,7 +45,7 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(no_instance=True)
         parser.add_argument('--label_dir', type=str, default='../data/train/labels', required=True,
                             help='path to the directory that contains label images')
-        parser.add_argument('--image_dir', type=str, default='../data/train/imgs', required=True,
+        parser.add_argument('--image_dir', type=str, default='../data/train/imgs',
                             help='path to the directory that contains photo images')
         parser.add_argument('--instance_dir', type=str, default='',
                             help='path to the directory that contains instance maps. Leave black if not exists')
@@ -60,15 +60,18 @@ class CustomDataset(Pix2pixDataset):
         label_dir = opt.label_dir
         label_paths = make_dataset(label_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,is_image=False,remove_img_txt_path=opt.remove_img_txt_path)
 
-        image_dir = opt.image_dir
-        image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,remove_img_txt_path=opt.remove_img_txt_path)
+        if not opt.isTrain:
+            image_paths = label_paths
+        else:
+            image_dir = opt.image_dir
+            image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,remove_img_txt_path=opt.remove_img_txt_path)
 
         if len(opt.instance_dir) > 0:
             instance_dir = opt.instance_dir
             instance_paths = make_dataset(instance_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,is_image=False,remove_img_txt_path=opt.remove_img_txt_path)
         else:
             instance_paths = []
-
-        assert len(label_paths) == len(image_paths), "The #images in %s and %s do not match. Is there something wrong?"
+        if opt.isTrain:
+            assert len(label_paths) == len(image_paths), "The #images in %s and %s do not match. Is there something wrong?"
 
         return label_paths, image_paths, instance_paths

@@ -4,18 +4,25 @@ import os
 import numpy as np
 import cv2
 from PIL import Image
-root = '../data'
-modes = ['train', 'eval'] # train dataset and test dataset
-for mode in modes:
-    labels = sorted(glob.glob(os.path.join(root, mode, "labels") + "/*.*"))
-    # os.path.join(root, mode, "train_label"),labels
+from argparse import ArgumentParser
 
-    for label_path in labels:
-        label_path      
-        photo_id = label_path.split('/')[-1][:-4]
-        img_B = Image.open(label_path)
-        img_B = np.array(img_B).astype("uint8")
-        
-        img_B = cv2.cvtColor(img_B, cv2.COLOR_BGR2RGB)
-        out_path = os.path.join(root, mode, "gray_label",photo_id+'.png')
-        cv2.imwrite(out_path,img_B)
+from util import util
+parser = ArgumentParser()
+parser.add_argument('label_path', type=str,
+                    help=('Path to the label directory'))
+parser.add_argument('gray_label_path', type=str,
+                    help=('Path to the converted unit8 encoding label directory'))
+
+args = parser.parse_args()
+label_path = args.label_path
+gray_label_path = args.gray_label_path
+labels = sorted(glob.glob(label_path + "/*.*"))
+util.mkdirs(gray_label_path)
+
+for label_path in labels:
+    photo_id = os.path.split(label_path)[-1][:-4]
+    img_B = Image.open(label_path)
+    img_B = np.array(img_B).astype("uint8")
+    img_B = cv2.cvtColor(img_B, cv2.COLOR_BGR2RGB)
+    out_path = os.path.join(gray_label_path,photo_id+'.png')
+    cv2.imwrite(out_path,img_B)

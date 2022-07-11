@@ -15,6 +15,7 @@ import argparse
 import dill as pickle
 import util.coco
 import random
+import glob
 
 def DiffAugment(real_img, fake_img, label, policy=''):
     if policy:
@@ -373,3 +374,36 @@ class Colorize(object):
             color_image[2][mask] = self.cmap[label][2]
 
         return color_image
+
+def get_pure_ref_dics(ref_img_dir, test_dir):
+    labels = sorted(glob.glob(ref_img_dir+ "/*.*"))
+    ref_dict = {}
+    for label_path in labels:
+        img_B = Image.open(label_path)
+        img_B = np.array(img_B).astype("uint8").flatten()
+        addtolist = True
+        for pix in img_B:
+            if img_B[0]!= pix:
+                addtolist = False
+                break
+        if addtolist:
+            if pix in ref_dict.keys():
+                ref_dict[pix].append(os.path.split(label_path)[-1].split('.')[0]+'.jpg')
+            else:
+                ref_dict[pix] = [os.path.split(label_path)[-1].split('.')[0]+'.jpg']
+    labels = sorted(glob.glob(test_dir+ "/*.*"))
+    test_single_dict = {}
+    for label_path in labels:
+        img_B = Image.open(label_path)
+        img_B = np.array(img_B).astype("uint8").flatten()
+        addtolist = True
+        for pix in img_B:
+            if img_B[0]!= pix:
+                addtolist = False
+                break
+        if addtolist:
+            if pix in test_single_dict.keys():
+                test_single_dict[pix].append(os.path.split(label_path)[-1])
+            else:
+                test_single_dict[pix] = [os.path.split(label_path)[-1]]
+    return ref_dict, test_single_dict
