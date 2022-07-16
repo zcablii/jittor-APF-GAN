@@ -379,17 +379,15 @@ def get_pure_ref_dics(ref_img_dir,ref_label_dir,stat_save_path):
     if os.path.exists(os.path.join(stat_save_path,'pure_img.npy')):
         print('pure_img.npy already exsits')
         return
+    print('calculating train statistics')
     labels = sorted(glob.glob(ref_label_dir+ "/*.*"))
     ref_dict = {}
     for label_path in labels:
         img_B = Image.open(label_path)
         img_B = np.array(img_B).astype("uint8").flatten()
-        addtolist = True
-        for pix in img_B:
-            if img_B[0]!= pix:
-                addtolist = False
-                break
+        addtolist = np.ptp(img_B) == 0
         if addtolist:
+            pix = img_B[0]
             img_name = os.path.join(ref_img_dir,os.path.split(label_path)[-1][:-4]+'.jpg')
             im = Image.open(img_name)
             out = im.resize((512,384), Image.BICUBIC) 
@@ -407,15 +405,9 @@ def get_pure_img_names(test_dir):
     for label_path in labels:
         img_B = Image.open(label_path)
         img_B = np.array(img_B).astype("uint8").flatten() 
-        this_stat = {}
-        for pix in img_B:
-            if not pix in this_stat:
-                this_stat[pix]=1
-            else:
-                this_stat[pix]+=1
-    
-        max_per = max(this_stat.values())/len(img_B)
-        max_label = max(this_stat,key=this_stat.get)
+        
+        max_label = np.argmax(np.bincount(img_B))
+        max_per = np.count_nonzero(img_B==max_label) / len(img_B)
         pct_list.append(max_per)
         label_NO_list.append(max_label)
         name_list.append(os.path.split(label_path)[-1])
@@ -450,20 +442,12 @@ def pure_img_replacement(label_dir,selected_label_l,selected_name_l,ref_dic, tar
         if len(label.shape)>2:
             label = label[:,:,0]
         label_n = selected_label_l[idx]
-        img_shape = label.shape
-        label = label.flatten()
+
         train_img_mask = np.ones(label.shape)
         train_gen_mask = np.ones(label.shape)
-        for i, pix in enumerate(label) :
-            if pix ==label_n:
-                train_img_mask[i] = 1
-                train_gen_mask[i] = 0
-            else:
-                train_img_mask[i] = 0
-                train_gen_mask[i] = 1
+        train_img_mask[label!=label_n]=0
+        train_gen_mask[label==label_n]=0
 
-        train_img_mask = train_img_mask.reshape(img_shape)
-        train_gen_mask = train_gen_mask.reshape(img_shape)
         gen_img = Image.open(img_path)
         gen_img = np.array(gen_img).astype("uint8")
         ref_img = train_ref_dic[label_n].pop()

@@ -263,13 +263,23 @@ test_path = sys.argv[2]
 ckpts_path = sys.argv[3]
 ckpts_to_test_fid = []
 for i in range(4, len(sys.argv)):
-    ckpts_to_test_fid.append(str(sys.argv[i]))
+    ckpt = str(sys.argv[i])
+    print(ckpt.split('-'))
+    if len(ckpt.split('-'))>1:
+        ckpts = list(range(eval(ckpt.split('-')[0]),eval(ckpt.split('-')[1])+1))
+        ckpts = [str(x) for x in ckpts]
+        ckpts_to_test_fid = ckpts_to_test_fid+ckpts
+        continue
+    ckpts_to_test_fid.append(ckpt)
 checkpoints_dir,name = os.path.split(ckpts_path)
 
 if not os.path.exists('./temp'):
     os.makedirs('./temp')
+
 for ep in ckpts_to_test_fid:
     which_epoch = os.path.join(ckpts_path,ep)
+    if not os.path.exists(which_epoch+'_net_G.pkl'):
+        continue
     print(("python test.py --input_path=%s --checkpoints_dir=%s --name=%s --out_path='./temp' --which_epoch=%s" % (test_path,checkpoints_dir,name,ep)))
     os.system("python test.py --input_path=%s --checkpoints_dir=%s --name=%s --out_path='./temp' --which_epoch=%s" % (test_path,checkpoints_dir,name,ep))
     fid = get_offline_fid(train_path, './temp')

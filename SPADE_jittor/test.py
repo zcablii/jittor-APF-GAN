@@ -51,31 +51,19 @@ for i, data_i in enumerate(dataloader):
                 label_map = label_map[:,:,0]
             img_shape = label_map.shape
             label_map = label_map.flatten() 
-            this_stat = {}
-            for pix in label_map:
-                if not pix in this_stat:
-                    this_stat[pix]=1
-                else:
-                    this_stat[pix]+=1
-            max_per = max(this_stat.values())/len(label_map)
-            max_label = max(this_stat,key=this_stat.get)
-            if max_per>0.98:
-                train_img_mask = np.ones(label_map.shape)
-                train_gen_mask = np.ones(label_map.shape)
-                for i, pix in enumerate(label_map) :
-                    if pix ==max_label:
-                        train_img_mask[i] = 1
-                        train_gen_mask[i] = 0
-                    else:
-                        train_img_mask[i] = 0
-                        train_gen_mask[i] = 1
+            max_label = np.argmax(np.bincount(label_map))
+            max_per = np.count_nonzero(label_map==max_label) / len(label_map)
 
-                train_img_mask = train_img_mask.reshape(img_shape)
-                train_gen_mask = train_gen_mask.reshape(img_shape)
+            if max_per>0.98:
+                label_map = label_map.reshape(img_shape)
+                train_img_mask = np.ones(img_shape)
+                train_gen_mask = np.ones(img_shape)
+                train_img_mask[label_map!=max_label]=0
+                train_gen_mask[label_map==max_label]=0
+
                 ref_img = ref_dic[max_label].pop()
                 ref_img = np.array(ref_img).astype("uint8")
                 generated_img = np_multi(train_gen_mask, generated_img) + np_multi(train_img_mask,ref_img)  
-
 
         short_path = ntpath.basename(img_path[b:(b + 1)][0])
         name = os.path.splitext(short_path)[0]
