@@ -5,7 +5,7 @@ Licensed under the CC BY-NC-SA 4.0 license (https://creativecommons.org/licenses
 
 from data.pix2pix_dataset import Pix2pixDataset
 from data.image_folder import make_dataset
-
+import os
 
 class CustomDataset(Pix2pixDataset):
     """ Dataset that loads images from directories
@@ -30,9 +30,6 @@ class CustomDataset(Pix2pixDataset):
         parser.add_argument('--brightness', type=tuple, default=(1,1), help='training image brightness augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--contrast', type=tuple, default=(1,1), help='training image contrast augment. Tuple of float (min, max) in range(0,inf)')
         parser.add_argument('--saturation', type=tuple, default=(1,1), help='training image saturation augment. Tuple of float (min, max) in range(0,inf)')
-        # parser.set_defaults(brightness=(0.8,1.25))
-        # parser.set_defaults(contrast=(0.8,1.25))
-        # parser.set_defaults(saturation=(0.8,1.25))
 
         parser.set_defaults(label_nc=29)
         parser.set_defaults(batchSize=20) # 32 or 10 for diff. input size
@@ -43,13 +40,13 @@ class CustomDataset(Pix2pixDataset):
         parser.set_defaults(cache_filelist_write=True)
 
         parser.set_defaults(no_instance=True)
-        parser.add_argument('--label_dir', type=str, default='../data/train/labels',
+        parser.add_argument('--label_dir', type=str, default='',
                             help='path to the directory that contains label images')
         
         parser.add_argument('--input_path', type=str, default='',
                             help='path to the directory that contains label images')
 
-        parser.add_argument('--image_dir', type=str, default='../data/train/imgs',
+        parser.add_argument('--image_dir', type=str, default='',
                             help='path to the directory that contains photo images')
         parser.add_argument('--instance_dir', type=str, default='',
                             help='path to the directory that contains instance maps. Leave black if not exists')
@@ -62,7 +59,11 @@ class CustomDataset(Pix2pixDataset):
 
     def get_paths(self, opt):
         if len(opt.input_path)>0:
-            opt.label_dir = opt.input_path
+            if opt.isTrain:
+                # opt.label_dir = os.path.join(opt.input_path,'labels')
+                opt.image_dir = os.path.join(opt.input_path,'imgs')
+            # else:
+            #     opt.label_dir = opt.input_path
         label_dir = opt.label_dir
         label_paths = make_dataset(label_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,is_image=False,remove_img_txt_path=opt.remove_img_txt_path)
 
@@ -70,6 +71,7 @@ class CustomDataset(Pix2pixDataset):
             image_paths = label_paths
         else:
             image_dir = opt.image_dir
+            print(image_dir)
             image_paths = make_dataset(image_dir, recursive=False, read_cache=True, remove_hard_imgs = opt.remove_hard_imgs,remove_img_txt_path=opt.remove_img_txt_path)
 
         if len(opt.instance_dir) > 0:

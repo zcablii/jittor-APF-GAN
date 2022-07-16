@@ -218,6 +218,7 @@ def default_loader(path):
     img_B = Image.open(path)
     img_B = np.array(img_B).astype("uint8")
     img_B = cv2.cvtColor(img_B, cv2.COLOR_BGR2RGB)
+    print('img_B',type(img_B),img_B)
     return img_B
 
 

@@ -79,7 +79,7 @@ class BaseOptions():
         parser.add_argument('--add_noise', action='store_true', help='enable training with an image encoder to encode mask.')
 
         parser.add_argument('--use_seg_noise', action='store_true', help='use noise in spade seg map.')
-        parser.add_argument('--use_seg_noise_kernel', type=int, default=3, help='use noise in spade seg map, conv kernel.')
+        parser.add_argument('--use_seg_noise_kernel', type=int, default=1, help='use noise in spade seg map, conv kernel.')
         parser.set_defaults(use_vae=True) 
         parser.set_defaults(encode_mask=True) 
         parser.set_defaults(add_noise=False) 

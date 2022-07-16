@@ -19,28 +19,29 @@ python3.7 -m pip install jittor
 pip install -r requirements.txt
 ```
 
-## Dataset Preparation
-
-Convert official provided dataset labels into unit8 encoding by
-
-```bash
-python preprocess_label.py path_to_label path_to_converted_label
-```
-
 ## Train new model
 
 #### PG Strategy1 pretrain (with 572 crop aug)
 
-CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --remove_img_txt_path='./remove_130_imgs.txt' --niter=180--pg_niter=180 --pg_strategy=1 --num_D=4
+python train_phase.py --input_path='./data/train/' --batchSize=10 --niter=180 --pg_niter=180 --pg_strategy=1 --num_D=4
 
 #### With above checkpoint, add inception loss, diff aug and spatial noise:
 
-CUDA_VISIBLE_DEVICES=0 python train.py --name='label2img' --label_dir='../data/train/gray_label' --image_dir='../data/train/imgs' --remove_img_txt_path='./remove_130_imgs.txt' --niter=340 --pg_niter=180 --pg_strategy=1 --num_D=4 --diff_aug='color,crop,translation' --inception_loss --use_seg_noise --continue_train --which_epoch=180
+python train_phase.py --input_path='./data/train/' --batchSize=5 --niter=340 --pg_niter=180 --pg_strategy=1 --save_epoch_freq=5 --num_D=4 --diff_aug='color,crop,translation' --inception_loss --use_seg_noise --continue_train --which_epoch=180
+
+#### Or directly run below command in one step
+
+python train.py --input_path='./data/train/' 
+
 
 ## Test
 
-CUDA_VISIBLE_DEVICES=0 python test.py --name='label2img' --label_dir='../data/eval/gray_label' --use_seg_noise --which_epoch=340
+#### Evaluate checkpoint FID with train set
+python util/fid.py /data/train/imgs/ ./data/test/labels ./checkpoints/label2img 260 265 270 275 280 
 
-###### Test with pure label replacement
+#### Merge two checkpoints with relatively low FID value (e.g. checkpoint 265 and 280) 
+python util/merge_ckpt.py ./checkpoints/label2img 265 280
 
-CUDA_VISIBLE_DEVICES=0 python test.py --name='label2imgpretrain_280_finetun' --label_dir='../../CGAN/data/test/gray_label' --use_seg_noise --use_pure --train_img_ref_path='../../CGAN/data/train/imgs/' --train_label_ref_path='../../CGAN/data/train/labels/' --which_epoch=340
+#### Test merged checkpoint
+python test.py --input_path='../data/test/labels' --which_epoch=avg_265_280
+

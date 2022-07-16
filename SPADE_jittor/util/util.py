@@ -16,7 +16,7 @@ import dill as pickle
 import util.coco
 import random
 import glob
-
+import cv2
 def DiffAugment(real_img, fake_img, label, policy=''):
     if policy:
         for p in policy.split(','):
@@ -375,8 +375,11 @@ class Colorize(object):
 
         return color_image
 
-def get_pure_ref_dics(ref_img_dir, test_dir):
-    labels = sorted(glob.glob(ref_img_dir+ "/*.*"))
+def get_pure_ref_dics(ref_img_dir,ref_label_dir,stat_save_path):
+    if os.path.exists(os.path.join(stat_save_path,'pure_img.npy')):
+        print('pure_img.npy already exsits')
+        return
+    labels = sorted(glob.glob(ref_label_dir+ "/*.*"))
     ref_dict = {}
     for label_path in labels:
         img_B = Image.open(label_path)
@@ -387,23 +390,105 @@ def get_pure_ref_dics(ref_img_dir, test_dir):
                 addtolist = False
                 break
         if addtolist:
+            img_name = os.path.join(ref_img_dir,os.path.split(label_path)[-1][:-4]+'.jpg')
+            im = Image.open(img_name)
+            out = im.resize((512,384), Image.BICUBIC) 
             if pix in ref_dict.keys():
-                ref_dict[pix].append(os.path.split(label_path)[-1].split('.')[0]+'.jpg')
+                ref_dict[pix].append(out)
             else:
-                ref_dict[pix] = [os.path.split(label_path)[-1].split('.')[0]+'.jpg']
+                ref_dict[pix] = [out]
+    np.save(os.path.join(stat_save_path,'pure_img.npy'),[ref_dict])
+
+def get_pure_img_names(test_dir):
     labels = sorted(glob.glob(test_dir+ "/*.*"))
-    test_single_dict = {}
+    pct_list = []
+    label_NO_list = []
+    name_list = []
     for label_path in labels:
         img_B = Image.open(label_path)
-        img_B = np.array(img_B).astype("uint8").flatten()
-        addtolist = True
+        img_B = np.array(img_B).astype("uint8").flatten() 
+        this_stat = {}
         for pix in img_B:
-            if img_B[0]!= pix:
-                addtolist = False
-                break
-        if addtolist:
-            if pix in test_single_dict.keys():
-                test_single_dict[pix].append(os.path.split(label_path)[-1])
+            if not pix in this_stat:
+                this_stat[pix]=1
             else:
-                test_single_dict[pix] = [os.path.split(label_path)[-1]]
-    return ref_dict, test_single_dict
+                this_stat[pix]+=1
+    
+        max_per = max(this_stat.values())/len(img_B)
+        max_label = max(this_stat,key=this_stat.get)
+        pct_list.append(max_per)
+        label_NO_list.append(max_label)
+        name_list.append(os.path.split(label_path)[-1])
+    selected_label_l = []
+    selected_name_l = []
+    for i, each in enumerate(pct_list):
+        if each>0.98:
+            selected_label_l.append(label_NO_list[i])
+            selected_name_l.append(name_list[i])
+
+    return selected_label_l,selected_name_l
+
+    
+def pure_img_replacement(label_dir,selected_label_l,selected_name_l,ref_dic, target):
+    label_name_l = [os.path.join(label_dir, name) for name in selected_name_l]
+    img_name_l = [os.path.join(target, name[:-4]+'.jpg') for name in selected_name_l]
+
+    train_ref_dic = {}
+    for l in set(selected_label_l):
+        n = selected_label_l.count(l)
+        train_ref_dic[l] = random.sample(ref_dic[l],n)
+
+    def np_multi(a,b):
+        for x in range(b.shape[-1]):
+            b[:,:,x] = a*b[:,:,x]
+        return b
+
+    for idx,(label_path,img_path) in enumerate(zip(label_name_l,img_name_l)) :
+        label = Image.open(label_path)
+        label = label.resize((512,384), Image.NEAREST)
+        label = np.array(label).astype("uint8")
+        if len(label.shape)>2:
+            label = label[:,:,0]
+        label_n = selected_label_l[idx]
+        img_shape = label.shape
+        label = label.flatten()
+        train_img_mask = np.ones(label.shape)
+        train_gen_mask = np.ones(label.shape)
+        for i, pix in enumerate(label) :
+            if pix ==label_n:
+                train_img_mask[i] = 1
+                train_gen_mask[i] = 0
+            else:
+                train_img_mask[i] = 0
+                train_gen_mask[i] = 1
+
+        train_img_mask = train_img_mask.reshape(img_shape)
+        train_gen_mask = train_gen_mask.reshape(img_shape)
+        gen_img = Image.open(img_path)
+        gen_img = np.array(gen_img).astype("uint8")
+        ref_img = train_ref_dic[label_n].pop()
+        ref_img = np.array(ref_img).astype("uint8")
+        img = np_multi(train_gen_mask, gen_img) + np_multi(train_img_mask,ref_img)  
+        img = Image.fromarray(img)
+        out_name = os.path.join(target, os.path.split(img_path)[-1])
+        img.save(out_name)
+
+def get_gray_label(label_path,for_test=True,temp_dir='./post_label'):
+    
+    if for_test:
+        labels = sorted(glob.glob(label_path + "/*.*"))
+        gray_label_path = temp_dir #os.path.join(os.path.dirname(label_path),'post_label')
+    else: 
+        labels = sorted(glob.glob(os.path.join(label_path,'labels') + "/*.*"))
+        gray_label_path = temp_dir #os.path.join(label_path,'post_label')
+    if os.path.exists(gray_label_path):
+        return gray_label_path
+    mkdirs(gray_label_path)
+    for label_path in labels:
+        photo_id = os.path.split(label_path)[-1][:-4]
+        img_B = Image.open(label_path)
+        img_B = np.array(img_B).astype("uint8")
+        img_B = cv2.cvtColor(img_B, cv2.COLOR_BGR2RGB)
+        out_path = os.path.join(gray_label_path,photo_id+'.png')
+        cv2.imwrite(out_path,img_B)
+    return gray_label_path

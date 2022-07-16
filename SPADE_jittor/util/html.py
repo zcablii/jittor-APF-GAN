@@ -19,10 +19,10 @@ class HTML:
         self.web_dir = web_dir
         self.html_name = html_name
         self.img_dir = os.path.join(self.web_dir, 'images')
-        if len(self.web_dir) > 0 and not os.path.exists(self.web_dir):
-            os.makedirs(self.web_dir)
-        if len(self.web_dir) > 0 and not os.path.exists(self.img_dir):
-            os.makedirs(self.img_dir)
+        # if len(self.web_dir) > 0 and not os.path.exists(self.web_dir):
+        #     os.makedirs(self.web_dir)
+        # if len(self.web_dir) > 0 and not os.path.exists(self.img_dir):
+        #     os.makedirs(self.img_dir)
 
         self.doc = dominate.document(title=title)
         with self.doc:
@@ -55,10 +55,7 @@ class HTML:
                             p(txt.encode('utf-8'))
 
     def save(self):
-        html_file = os.path.join(self.web_dir, self.html_name)
-        f = open(html_file, 'wt')
-        f.write(self.doc.render())
-        f.close()
+        pass
 
 
 if __name__ == '__main__':
